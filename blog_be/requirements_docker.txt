@@ -1,0 +1,11 @@
+dj-rest-auth
+Django
+django-allauth
+django-cors-headers
+djangorestframework
+django-heroku
+django-rest-swagger
+django-rest-swagger-django3fix
+drf-spectacular
+faker
+psycopg2-binary

@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+  db:
+    container_name: postgres
+    image: postgres
+    environment:
+      - POSTGRES_DB=cvt_blog
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - TZ=Europe/Warsaw
+#    volumes:
+#      - c:/Users/mstaw/container_db/aloha_way:/var/lib/postgresql/data
+    ports:
+      - "5450:5432"
+  blog-be:
+    container_name: blog_be
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8000"
+    environment:
+      - TZ=Europe/Warsaw
+#    volumes:
+#      - ./:/./
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
