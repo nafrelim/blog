@@ -1,7 +1,6 @@
 import pytest
-from rest_framework.test import APIClient
-
 from api_server.utils import create_posts
+from rest_framework.test import APIClient
 
 
 @pytest.fixture

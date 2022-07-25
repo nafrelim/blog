@@ -1,6 +1,6 @@
 dj-rest-auth
 django
-django-allauth
+django-allapip install pre-commituth
 django-cors-headers
 djangorestframework
 django-heroku

@@ -1,9 +1,9 @@
 from django.contrib.auth.models import User
 from rest_framework import generics
-from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
+from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 
 from .permissions import IsAdminUserOrLoggedIn
-from .serializers import RegisterSerializer, UserSerializer, ChangePasswordSerializer
+from .serializers import ChangePasswordSerializer, RegisterSerializer, UserSerializer
 
 
 class RegisterView(generics.CreateAPIView):
