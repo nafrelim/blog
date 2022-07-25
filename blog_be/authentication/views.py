@@ -1,9 +1,9 @@
 from django.contrib.auth.models import User
 from rest_framework import generics
-from rest_framework.generics import RetrieveAPIView
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 
-from .serializers import RegisterSerializer, UserSerializer
+from .permissions import IsAdminUserOrLoggedIn
+from .serializers import RegisterSerializer, UserSerializer, ChangePasswordSerializer
 
 
 class RegisterView(generics.CreateAPIView):
@@ -16,13 +16,28 @@ class RegisterView(generics.CreateAPIView):
     serializer_class = RegisterSerializer
 
 
-class UserAPIView(RetrieveAPIView):
+class ChangePasswordView(generics.UpdateAPIView):
+
+    queryset = User.objects.all()
+    permission_classes = (IsAuthenticated,)
+    serializer_class = ChangePasswordSerializer
+
+
+class UserListView(generics.ListAPIView):
     """
-    This view is used to get the user's details.
+    This view is used to get the list of all users.
     """
 
-    permission_classes = (IsAuthenticated,)
+    permission_classes = [IsAdminUser]  # only for admin users
+    queryset = User.objects.all()
     serializer_class = UserSerializer
 
-    def get_object(self):
-        return self.request.user
+
+class UserDetailView(generics.RetrieveAPIView):
+    """
+    This view is used to get the details of a user.
+    """
+
+    permission_classes = [IsAdminUserOrLoggedIn]  # only logged in author or admin
+    queryset = User.objects.all()
+    serializer_class = UserSerializer

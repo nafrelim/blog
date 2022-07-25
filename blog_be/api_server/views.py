@@ -1,7 +1,9 @@
 from django.db.models import F
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 # from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser, IsAuthenticated
+# from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAuthenticatedOrReadOnly
+
 from rest_framework import mixins
 
 from rest_framework.decorators import api_view
@@ -14,7 +16,7 @@ from .serializers import PostSerializer, CountViewsSerializer
 
 
 class PostViewSet(ModelViewSet):
-    authentication_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticatedOrReadOnly]
     permission_classes = [IsAuthenticatedAndAuthorPost]
     queryset = Post.objects.all()
     serializer_class = PostSerializer
@@ -22,8 +24,8 @@ class PostViewSet(ModelViewSet):
 
 
 class ViewViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.ListModelMixin, GenericViewSet):
-    authentication_classes = [IsAuthenticated]
-    permission_classes = [IsAuthenticatedAndAuthorView]
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    # permission_classes = [IsAuthenticatedAndAuthorPost]
     queryset = Post.objects.all()
     serializer_class = CountViewsSerializer
 
