@@ -1,29 +1,22 @@
 from django.db.models import F
 from rest_framework import mixins
 from rest_framework.decorators import api_view
-
-# from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
-# from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser, IsAuthenticated
-from rest_framework.permissions import (
-    AllowAny,
-    IsAuthenticated,
-    IsAuthenticatedOrReadOnly,
-)
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 from .models import Post
-from .permissions import IsAuthenticatedAndAuthorPost, IsAuthenticatedAndAuthorView
+from .permissions import IsAuthenticatedAndAuthorPost
 from .serializers import CountViewsSerializer, PostSerializer
 
 
 class PostViewSet(ModelViewSet):
-    # permission_classes = [IsAuthenticatedOrReadOnly]
     permission_classes = [IsAuthenticatedAndAuthorPost]
-    queryset = Post.objects.all()
     serializer_class = PostSerializer
     view_name = "post"
+
+    def get_queryset(self):
+        return Post.objects.select_related("author").all()
 
 
 class ViewViewSet(
@@ -32,8 +25,7 @@ class ViewViewSet(
     mixins.ListModelMixin,
     GenericViewSet,
 ):
-    permission_classes = [IsAuthenticatedOrReadOnly]
-    # permission_classes = [IsAuthenticatedAndAuthorPost]
+    permission_classes = [IsAuthenticatedAndAuthorPost]
     queryset = Post.objects.all()
     serializer_class = CountViewsSerializer
 

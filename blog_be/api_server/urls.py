@@ -1,7 +1,7 @@
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import path
 
-from .views import PostViewSet, ViewViewSet, api_root
+from .views import PostViewSet, ViewViewSet
 
 # Determining what methods are available on each endpoint
 post_list = PostViewSet.as_view({"get": "list", "post": "create"})
