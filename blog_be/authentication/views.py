@@ -3,27 +3,35 @@ from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 
 from .permissions import IsAdminUserOrLoggedIn
-from .serializers import ChangePasswordSerializer, RegisterSerializer, UserSerializer
+from .serializers import (
+    ChangePasswordSerializer,
+    RegisterUserSerializer,
+    UpdateUserSerializer,
+    UserSerializer,
+)
 
 
-class RegisterView(generics.CreateAPIView):
+class RegisterUserView(generics.CreateAPIView):
     """
     Register a new user.
     """
 
     queryset = User.objects.all()
     permission_classes = (AllowAny,)
-    serializer_class = RegisterSerializer
+    serializer_class = RegisterUserSerializer
 
 
-class ChangePasswordView(generics.UpdateAPIView):
+class UpdateUserView(generics.UpdateAPIView):
+    """
+    Update the user.
+    """
 
     queryset = User.objects.all()
     permission_classes = (IsAuthenticated,)
-    serializer_class = ChangePasswordSerializer
+    serializer_class = UpdateUserSerializer
 
 
-class UserListView(generics.ListAPIView):
+class ListUserView(generics.ListAPIView):
     """
     This view is used to get the list of all users.
     """
@@ -33,7 +41,7 @@ class UserListView(generics.ListAPIView):
     serializer_class = UserSerializer
 
 
-class UserDetailView(generics.RetrieveAPIView):
+class DetailUserView(generics.RetrieveAPIView):
     """
     This view is used to get the details of a user.
     """
@@ -41,3 +49,13 @@ class UserDetailView(generics.RetrieveAPIView):
     permission_classes = [IsAdminUserOrLoggedIn]  # only logged in author or admin
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+
+class ChangePasswordView(generics.UpdateAPIView):
+    """
+    This view is used to change the password of a user.
+    """
+
+    queryset = User.objects.all()
+    permission_classes = (IsAuthenticated,)
+    serializer_class = ChangePasswordSerializer

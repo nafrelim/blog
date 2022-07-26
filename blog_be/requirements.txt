@@ -1,6 +1,6 @@
 dj-rest-auth
 django
-django-allapip install pre-commituth
+pre-commit
 django-cors-headers
 djangorestframework
 django-heroku
@@ -11,3 +11,4 @@ faker
 psycopg2-binary
 gunicorn
 dj-database-url
+django-allauth

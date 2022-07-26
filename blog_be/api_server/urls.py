@@ -1,11 +1,7 @@
 from django.contrib import admin
 from django.urls import include, path
 
-# from accounts.views import UserViewSet
 from .views import PostViewSet, ViewViewSet, api_root
-
-# from dj_rest_auth.views import PasswordResetConfirmView, LogoutView, LoginView, UserDetailsView
-
 
 # Determining what methods are available on each endpoint
 post_list = PostViewSet.as_view({"get": "list", "post": "create"})
@@ -31,7 +27,7 @@ view_detail = ViewViewSet.as_view(
 admin.autodiscover()
 
 urlpatterns = [
-    path("", api_root),
+    # path("", api_root),
     path("post/", post_list, name="post-list"),
     path("post/<int:pk>/", post_detail, name="post-detail"),
     path("view/", view_list, name="view-list"),
