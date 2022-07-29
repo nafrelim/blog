@@ -34,6 +34,8 @@ class ReportSerializer(serializers.Serializer):
     min_views = serializers.IntegerField()
     avg_views = serializers.IntegerField()
     sum_views = serializers.IntegerField()
+    top_5 = serializers.ListField()
+    last_5 = serializers.ListField()
     max_sub_15 = serializers.ListField()
     min_add_15 = serializers.ListField()
     number_of_posts_views = serializers.ListField()
