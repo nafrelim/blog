@@ -5,19 +5,19 @@ from .models import Post
 
 
 def post_report():
-    data = []
-    max_views = Post.objects.all().aggregate(max_views=Max("views"))["max_views"]
-    min_views = Post.objects.all().aggregate(min_views=Min("views"))["min_views"]
-    avg_views = Post.objects.all().aggregate(avg_views=Avg("views"))["avg_views"]
-    sum_views = Post.objects.all().aggregate(sum_views=Sum("views"))["sum_views"]
-    views = Post.objects.all()
+    posts = Post.objects.all()
+    max_views = posts.aggregate(max_views=Max("views"))["max_views"]
+    min_views = posts.aggregate(min_views=Min("views"))["min_views"]
+    avg_views = posts.aggregate(avg_views=Avg("views"))["avg_views"]
+    sum_views = posts.aggregate(sum_views=Sum("views"))["sum_views"]
+
     max_sub_15 = list(
-        views.filter(views__gte=(0.85 * max_views))
+        posts.filter(views__gte=(0.85 * max_views))
         .order_by("-views")
         .values("id", "title", "views")
     )
     min_add_15 = list(
-        views.filter(views__lte=(0.15 * max_views))
+        posts.filter(views__lte=(0.15 * max_views))
         .order_by("-views")
         .values("id", "title", "views")
     )
@@ -29,25 +29,7 @@ def post_report():
         .values("id", "username", "post_count", "total_views")
     )
 
-    # result_max_15 = []
-    # for item in max_sub_15:
-    #     result_max_15.append(
-    #         {
-    #             'id': item.pk,
-    #             'title': item.title,
-    #             'views': item.views,
-    #         }
-    #     )
-    # result_min_15 = []
-    # for item in min_add_15:
-    #     result_min_15.append(
-    #         {
-    #             'id': item.pk,
-    #             'title': item.title,
-    #             'views': item.views,
-    #         }
-    #     )
-    data.append(
+    data = [
         {
             "max_views": max_views,
             "min_views": min_views,
@@ -57,6 +39,6 @@ def post_report():
             "max_sub_15": max_sub_15,
             "min_add_15": min_add_15,
         }
-    )
+    ]
 
     return data
