@@ -16,7 +16,6 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
         verbose_name = "Post"
         model = Post
         fields = ["url", "id", "title", "content", "created", "updated", "author"]
-        # exclude = ['views']
 
 
 class CountViewsSerializer(serializers.HyperlinkedModelSerializer):
