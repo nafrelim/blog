@@ -27,3 +27,12 @@ class CountViewsSerializer(serializers.HyperlinkedModelSerializer):
         verbose_name = "CountViews"
         model = Post
         fields = ["url", "id", "views"]
+
+
+class ReportSerializer(serializers.Serializer):
+    max_views = serializers.IntegerField()
+    min_views = serializers.IntegerField()
+    avg_views = serializers.IntegerField()
+    sum_views = serializers.IntegerField()
+    max_sub_15 = serializers.ListField()
+    min_add_15 = serializers.ListField()

@@ -1,3 +1,5 @@
+import random
+
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from faker import Factory
@@ -35,11 +37,38 @@ def create_author(author):
 
 
 def create_posts(number_of_posts):
-    author = create_author("author1")
-    for post in range(0, int(number_of_posts / 2)):
+    total_posts = 0
+
+    author = create_author("admin")
+    posts = int(number_of_posts * 0.1)
+    total_posts += posts
+    for post in range(0, posts):
         title, content, views = create_post()
         Post.objects.create(title=title, content=content, views=views, author=author)
+
+    author = create_author("author1")
+    posts = random.randrange(10, int(number_of_posts / 3))
+    total_posts += posts
+    for post in range(0, posts):
+        title, content, views = create_post()
+        Post.objects.create(title=title, content=content, views=views, author=author)
+
     author = create_author("author2")
-    for post in range(0, number_of_posts - int(number_of_posts / 2)):
+    posts = random.randrange(10, int(number_of_posts / 3))
+    total_posts += posts
+    for post in range(0, posts):
+        title, content, views = create_post()
+        Post.objects.create(title=title, content=content, views=views, author=author)
+
+    author = create_author("author3")
+    posts = random.randrange(10, int(number_of_posts / 3))
+    total_posts += posts
+    for post in range(0, posts):
+        title, content, views = create_post()
+        Post.objects.create(title=title, content=content, views=views, author=author)
+
+    author = create_author("author4")
+    posts = number_of_posts - total_posts
+    for post in range(0, posts):
         title, content, views = create_post()
         Post.objects.create(title=title, content=content, views=views, author=author)

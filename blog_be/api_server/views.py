@@ -1,4 +1,4 @@
-from django.db.models import Avg, F, Max, Min, Sum
+from django.db.models import F
 from rest_framework import mixins
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAdminUser
@@ -9,7 +9,8 @@ from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 from .models import Post
 from .permissions import IsAuthenticatedAndAuthorPost
-from .serializers import CountViewsSerializer, PostSerializer
+from .reports import post_report
+from .serializers import CountViewsSerializer, PostSerializer, ReportSerializer
 
 
 class PostViewSet(ModelViewSet):
@@ -39,21 +40,20 @@ class ViewViewSet(
 
 class ReportView(APIView):
     permission_classes = (IsAdminUser,)
-    max_views = Post.objects.all().aggregate(max_views=Max("views"))["max_views"]
-    min_views = Post.objects.all().aggregate(min_views=Min("views"))["min_views"]
-    avg_views = Post.objects.all().aggregate(avg_views=Avg("views"))["avg_views"]
-    sum_views = Post.objects.all().aggregate(sum_views=Sum("views"))["sum_views"]
+
+    """
+    Dodać:
+    - kto ma nawięcej w sumie wyświetleń we wszystkich postach i o ile
+    - kto ma najmniej w sumie wyświetleń we wszystkich postach i o ile
+    - liczba postów -20% od max
+    - liczba postów +10% od min
+    - link do 3 postów min i max
+    """
 
     def get(self, request):
-
-        return Response(
-            {
-                "max": self.max_views,
-                "min": self.min_views,
-                "avg": self.avg_views,
-                "sum": self.sum_views,
-            }
-        )
+        data = post_report()
+        serializer = ReportSerializer(instance=data, many=True)
+        return Response(data=serializer.data)
 
 
 # View "collecting" ulrs for post and views in DJANGO REST API app
