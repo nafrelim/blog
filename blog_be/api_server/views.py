@@ -1,6 +1,7 @@
 from django.db.models import F
 from rest_framework import mixins
 from rest_framework.decorators import api_view
+from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
@@ -8,13 +9,17 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 from .models import Post
-from .permissions import IsAuthenticatedAndAuthorPost
+from .permissions import IsAuthenticatedAndAuthorPost, IsAuthenticatedAndAuthorView
 from .reports import post_report
 from .serializers import CountViewsSerializer, PostSerializer, ReportSerializer
 
 
 class PostViewSet(ModelViewSet):
     permission_classes = [IsAuthenticatedAndAuthorPost]
+    filter_backends = (SearchFilter, OrderingFilter)
+    search_fields = ("title",)
+    ordering_fields = ("created", "updated", "author")
+    filterset_fields = ("author__username",)
     serializer_class = PostSerializer
     view_name = "post"
 
@@ -28,7 +33,9 @@ class ViewViewSet(
     mixins.ListModelMixin,
     GenericViewSet,
 ):
-    permission_classes = [IsAuthenticatedAndAuthorPost]
+    permission_classes = [IsAuthenticatedAndAuthorView]
+    filter_backends = (OrderingFilter,)
+    ordering_fields = ("views",)
     queryset = Post.objects.all()
     serializer_class = CountViewsSerializer
 
@@ -39,7 +46,7 @@ class ViewViewSet(
 
 
 class ReportView(APIView):
-    permission_classes = (IsAdminUser,)
+    permission_classes = [IsAdminUser]
 
     def get(self, request):
         data = post_report()
