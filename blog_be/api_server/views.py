@@ -41,15 +41,6 @@ class ViewViewSet(
 class ReportView(APIView):
     permission_classes = (IsAdminUser,)
 
-    """
-    Dodać:
-    - kto ma nawięcej w sumie wyświetleń we wszystkich postach i o ile
-    - kto ma najmniej w sumie wyświetleń we wszystkich postach i o ile
-    - liczba postów -20% od max
-    - liczba postów +10% od min
-    - link do 3 postów min i max
-    """
-
     def get(self, request):
         data = post_report()
         serializer = ReportSerializer(instance=data, many=True)
