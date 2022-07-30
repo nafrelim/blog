@@ -34,11 +34,11 @@ const PostList = () => {
                 headers: {
                     'accept': 'application/json',
                     'content-Type': 'application/json',
-                    'authorization': 'token ' + localStorage.getItem('token'),
+                    'authorization': 'Bearer ' + localStorage.getItem('token'),
                     // 'token': localStorage.getItem('token')
                 },
             })
-                .then(response => setPosts(response.data))
+                .then(response => setPosts(response.data.results))
                 .catch(error => setError(prevState => {
                     return [...prevState, [0, 'Network error']]
                 }))
@@ -47,8 +47,9 @@ const PostList = () => {
 
     return (
         <Box>
-           {/* Displaying a list of posts */}
-           {posts.map((post) =>
+            {/* Displaying a list of posts */}
+           {
+               posts.map((post) =>
                     <Accordion key={post.id}>
                         <AccordionSummary
                             expandIcon={<ExpandMoreIcon />}
@@ -72,7 +73,8 @@ const PostList = () => {
                             </Box>
                         </AccordionDetails>
                     </Accordion>
-                )}
+               )
+           }
             {/*Displaying a possible list of errors*/}
             <Grid item xs={12}>
                 {

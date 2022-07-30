@@ -20,25 +20,24 @@ const StartPage = () => {
     const [logged, setLogged] = useState(false);
 
     useEffect(() => {
-        axios(`${API}/post/`, {
-            method: "OPTIONS",
+        axios(`${API}/api/post/`, {
+            method: "HEAD",
             mode: 'same-origin',
             headers: {
                 'accept': 'application/json',
                 'content-Type': 'application/json',
+                'authorization': 'Bearer ' + localStorage.getItem('token'),
             }
         })
             .then(response => {
                 console.log(logged)
-                if (localStorage.getItem('username') !== null) {
-                    setLogged(true);
-                }
+                setLogged(true);
                 console.log(logged)
             })
-            .catch(error => setError(prevState => {
-                return ([...prevState, [0, 'Network error: ' + error.message +
-                '. Log in. If the error persists - there is a network or server error.']])
-            }))
+            // .catch(error => setError(prevState => {
+            //     return ([...prevState, [0, 'Network error: ' + error.message +
+            //     '. Log in. If the error persists - there is a network or server error.']])
+            // }))
     }, []);
 
     return (
@@ -61,7 +60,7 @@ const StartPage = () => {
                     1. Frontend application - blog_fe<br/>
                     2. Backend application - blog_be<br/>
                     3. Database<br/><br/>
-                    The whole project on <Link href="https://github.com/nafrelim/cvt-blog"> {"github"}</Link>
+                    The whole project on <Link href="https://github.com/nafrelim/blog"> {"github"}</Link>
                 </Typography>
             </Container>
             {

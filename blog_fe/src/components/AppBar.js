@@ -54,12 +54,12 @@ const ResponsiveAppBar = () => {
         setAnchorElUser(navigate("/login", { replace: true }));
     };
 
-    const handleCloseUserMenuSignUp = () => {
+    const handleCloseUserMenuSignOut = () => {
         setAnchorElUser(navigate("/logout", { replace: true }));
     };
 
-    const handleCloseUserRegistration = () => {
-        setAnchorElUser(navigate("/registration", { replace: true }));
+    const handleCloseUserMenuSignUp = () => {
+        setAnchorElUser(navigate("/register", { replace: true }));
     };
 
     return (
@@ -151,6 +151,9 @@ const ResponsiveAppBar = () => {
 
                             <MenuItem onClick={handleCloseUserMenuSignIn}>
                                 <Typography textAlign="center">Sign in</Typography>
+                            </MenuItem>
+                            <MenuItem onClick={handleCloseUserMenuSignOut}>
+                                <Typography textAlign="center">Sign out</Typography>
                             </MenuItem>
                             <MenuItem onClick={handleCloseUserMenuSignUp}>
                                 <Typography textAlign="center">Sign up</Typography>

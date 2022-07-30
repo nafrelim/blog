@@ -26,7 +26,7 @@ const ShowPost = () => {
                 headers: {
                     'accept': 'application/json',
                     'content-Type': 'application/json',
-                    'authorization': 'token ' + localStorage.getItem('token'),
+                    'authorization': 'Bearer ' + localStorage.getItem('token'),
                 }
                 })
                     .then(response => setPost(response.data))
@@ -41,7 +41,7 @@ const ShowPost = () => {
                 headers: {
                     'accept': 'application/json',
                     'content-Type': 'application/json',
-                    'authorization': 'token ' + localStorage.getItem('token'),
+                    'authorization': 'Bearer ' + localStorage.getItem('token'),
                 }
                 })
             .then(response => {

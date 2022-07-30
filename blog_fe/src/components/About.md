@@ -2,7 +2,7 @@
 
 The purpose of this task is to prepare an E2E experience of a Blog.
 
-The application is called **cvt-blog** and includes three main components:
+The application is called **blog** and includes three main components:
 
 1. Frontend application - **blog_fe**
 2. Backend application - **blog_be**

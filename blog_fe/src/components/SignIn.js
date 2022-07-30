@@ -23,7 +23,7 @@ function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
-      <Link color="inherit" href="https://github.com/nafrelim/cvt-blog">
+      <Link color="inherit" href="https://github.com/nafrelim/blog">
         Blog
       </Link>{' '}
       {new Date().getFullYear()}
@@ -45,7 +45,7 @@ export default function signIn() {
     event.preventDefault();
     setError([])
     if (username.length > 0 && password.length > 0) {
-      axios(`${API}/rest-auth/login/`, {
+      axios(`${API}/auth/login/`, {
         method: 'POST',
         mode: 'same-origin',
         headers: {
@@ -59,7 +59,9 @@ export default function signIn() {
       })
           .then(response => {
             setData(true)
-            localStorage.setItem('token', response.data.key)
+            console.log(response.data)
+            localStorage.setItem('token', response.data.access)
+            localStorage.setItem('refresh', response.data.refresh)
             localStorage.setItem('username', username)
             navigate("/post", {replace: true});
           })
@@ -137,7 +139,7 @@ export default function signIn() {
                       </Link>
                     </Grid>
                     <Grid item>
-                      <Link href="/registration" variant="body2">
+                      <Link href="/register" variant="body2">
                         {"Don't have an account? Sign Up"}
                       </Link>
                     </Grid>

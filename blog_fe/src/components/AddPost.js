@@ -41,7 +41,7 @@ const AddPost = () => {
                 headers: {
                         'accept': 'application/json',
                         'content-Type': 'application/json',
-                        'authorization': 'token ' + localStorage.getItem('token'),
+                        'authorization': 'Bearer ' + localStorage.getItem('token'),
                 },
                 data: {
                     'title': title,

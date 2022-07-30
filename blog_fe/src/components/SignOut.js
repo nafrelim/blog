@@ -1,6 +1,3 @@
-//Login component prototype
-
-
 import React, {useState} from 'react';
 import axios from "axios";
 import {API, csrfToken, token} from "../blog_be";
@@ -15,11 +12,12 @@ const SignOut = () => {
     const [error, setError] = useState([]);
     let navigate = useNavigate();
 
-    axios(`${API}/rest-auth/logout/`, {
+    axios(`${API}/auth/logout_all/`, {
         method: 'POST',
         headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
+                'authorization': 'Bearer ' + localStorage.getItem('token'),
             },
         })
       .then(response => {

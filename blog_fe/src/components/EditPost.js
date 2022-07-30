@@ -30,7 +30,7 @@ const EditPost = () => {
             headers: {
                 'accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': `Token ${localStorage.getItem('token')}`
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
         })
             .then(response => {
@@ -56,7 +56,7 @@ const EditPost = () => {
                     headers: {
                         'accept': 'application/json',
                         'content-Type': 'application/json',
-                        'authorization': 'token ' + localStorage.getItem('token'),
+                        'authorization': 'Bearer ' + localStorage.getItem('token'),
                     },
                     data: {
                         title: title,

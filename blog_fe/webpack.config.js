@@ -26,6 +26,7 @@ module.exports = {
     allowedHosts: [
       '.heroku.com',
       'nafrelim-blog-fe.herokuapp.com',
+      'localhost',
     ],
     historyApiFallback: true,
     hot: true,

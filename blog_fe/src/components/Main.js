@@ -36,7 +36,7 @@ const Main = () => {
                         <SignOut />
                     </Container>
                 }/>
-                <Route exact path="/registration" element={
+                <Route exact path="/register" element={
                     <Container sx={{'center': 'center'}}>
                         <SignUp />
                     </Container>
