@@ -10,12 +10,15 @@ import Button from "@mui/material/Button";
 import {Stack} from "@mui/material";
 import Grid from "@mui/material/Grid";
 
+import axios from "axios";
+import {useNavigate} from "react-router-dom";
+
 import {API} from "../blog_be";
 import Error from "./Error";
-
-import axios from "axios";
+import Copyright from "./Copyright";
 
 const PostList = () => {
+    let navigate = useNavigate();
     const [posts, setPosts] = useState([]);
     const [error, setError] = useState([]);
 
@@ -40,10 +43,10 @@ const PostList = () => {
             })
                 .then(response => setPosts(response.data.results))
                 .catch(error => setError(prevState => {
+                    navigate("/#", {replace: true});
                     return [...prevState, [0, 'Network error']]
                 }))
-        }, []
-    );
+        });
 
     return (
         <Box>
@@ -85,6 +88,7 @@ const PostList = () => {
                     </Stack>
                 }
             </Grid>
+            <Copyright sx={{mt: 8, mb: 4}}/>
         </Box>
     );
 };

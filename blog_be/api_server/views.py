@@ -24,7 +24,7 @@ class PostViewSet(ModelViewSet):
     view_name = "post"
 
     def get_queryset(self):
-        return Post.objects.select_related("author").all()
+        return Post.objects.select_related("author").all().order_by("-created")
 
 
 class ViewViewSet(

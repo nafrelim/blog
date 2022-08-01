@@ -14,6 +14,7 @@ import axios from "axios";
 
 import {API} from "../blog_be";
 import Error from "./Error";
+import Copyright from "./Copyright";
 
 const theme = createTheme();
 
@@ -143,6 +144,7 @@ const EditPost = () => {
                         </Button>
                     </Box>
                 </Box>
+                <Copyright sx={{mt: 8, mb: 4}}/>
             </Container>
         </ThemeProvider>
     );

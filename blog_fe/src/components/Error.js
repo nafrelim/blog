@@ -15,8 +15,5 @@ const Error = ({error}) => {
     );
 };
 
-Error.propTypes = {
-
-};
 
 export default Error;

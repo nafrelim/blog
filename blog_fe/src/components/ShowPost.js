@@ -10,9 +10,11 @@ import Grid from "@mui/material/Grid";
 import {Stack} from "@mui/material";
 
 import Error from "./Error";
+import Copyright from "./Copyright";
 import {API} from "../blog_be";
 
 import axios from "axios";
+
 
 const ShowPost = () => {
     const [post, setPost] = useState({});
@@ -87,6 +89,7 @@ const ShowPost = () => {
                     </Stack>
                 }
             </Grid>
+            <Copyright sx={{mt: 8, mb: 4}}/>
         </Box>
 )}
 

@@ -18,7 +18,7 @@ class Post(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ["created"]
+        ordering = ["-created"]
 
     def __str__(self):
         d = self.created.strftime("%Y-%m-%d")

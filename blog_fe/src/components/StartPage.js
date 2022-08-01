@@ -30,14 +30,8 @@ const StartPage = () => {
             }
         })
             .then(response => {
-                console.log(logged)
                 setLogged(true);
-                console.log(logged)
             })
-            // .catch(error => setError(prevState => {
-            //     return ([...prevState, [0, 'Network error: ' + error.message +
-            //     '. Log in. If the error persists - there is a network or server error.']])
-            // }))
     }, []);
 
     return (
@@ -68,7 +62,7 @@ const StartPage = () => {
                 &&
                 <Container sx={{mt: 1, mb: 2}} maxWidth="sm">
                     <Typography variant="h5" color="inherit" paragraph>
-                        <Link href="#/login/">
+                        <Link href="#/login">
                             {"Sign in"}
                         </Link>
                         <br/>

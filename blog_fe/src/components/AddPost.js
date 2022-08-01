@@ -13,13 +13,13 @@ import {Stack, TextareaAutosize} from "@mui/material";
 
 import axios from "axios";
 
+import {API} from "../blog_be";
+import Copyright from "./Copyright";
 import Error from "./Error";
 
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 axios.defaults.xsrfCookieName = 'csrftoken';
-// axios.defaults.withCredentials = true;
 
-import {API} from "../blog_be";
 
 const theme = createTheme();
 
@@ -36,7 +36,7 @@ const AddPost = () => {
 
         // Save a post when fields are not empty
         if (title.length > 0 && content.length > 0) {
-            await axios(`${API}/post/`, {
+            await axios(`${API}/api/post/`, {
                 method: 'POST',
                 headers: {
                         'accept': 'application/json',
@@ -130,6 +130,7 @@ const AddPost = () => {
                         </Button>
                     </Box>
                 </Box>
+                <Copyright sx={{mt: 8, mb: 4}}/>
             </Container>
         </ThemeProvider>
     );
