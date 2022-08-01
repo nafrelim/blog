@@ -20,6 +20,7 @@ const ShowPost = () => {
     const [post, setPost] = useState({});
     const [count, setCount] = useState('');
     const [error, setError] = useState([]);
+    const [author, setAuthor] = useState(false);
     let { id } = useParams();
 
     useEffect(() => {
@@ -31,7 +32,12 @@ const ShowPost = () => {
                     'authorization': 'Bearer ' + localStorage.getItem('token'),
                 }
                 })
-                    .then(response => setPost(response.data))
+                    .then(response => {
+                        setPost(response.data)
+                        if (response.data['author'] == localStorage.getItem('username') || localStorage.getItem('username') == 'admin') {
+                            setAuthor(true)
+                        }
+                    })
                     .catch(error => setError(prevState => {
                         return [...prevState, [0, 'Network error']]
                     }));
@@ -75,10 +81,14 @@ const ShowPost = () => {
                     Data: {post.created?.slice(8,10)+post.created?.slice(4,8)+post.created?.slice(0,4)}
                 </Typography>
             </Box>
-            <ButtonGroup variant="contained" aria-label="outlined primary button group">
-                <Button href={"#/edit/"+post.id}> Edit </Button>
-                <DeletePost id={post.id} />
-            </ButtonGroup>
+            {
+                author
+                &&
+                <ButtonGroup variant="contained" aria-label="outlined primary button group">
+                    <Button href={"#/edit/" + post.id}> Edit </Button>
+                    <DeletePost id={post.id}/>
+                </ButtonGroup>
+            }
             {/*Displaying a possible list of errors*/}
             <Grid item xs={12}>
                 {

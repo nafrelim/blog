@@ -45,7 +45,8 @@ const StartPage = () => {
             <CssBaseline/>
             <Container sx={{mt: 8, mb: 2}} maxWidth="sm">
                 <Typography variant="h4" component="h1">
-                    Blog - this is what I can do ;-)
+                    Blog - represents the ability to combine: <br/>
+                    Python, Django, DRF, JWT, JavaScript, React... <br />technologies
                 </Typography>
                 <Typography variant="h5" color="inherit" paragraph>
                     <br/>
@@ -54,7 +55,7 @@ const StartPage = () => {
                     1. Frontend application - blog_fe<br/>
                     2. Backend application - blog_be<br/>
                     3. Database<br/><br/>
-                    The whole project on <Link href="https://github.com/nafrelim/blog"> {"github"}</Link>
+                    <Link href="https://github.com/nafrelim/blog"> {"Source code of the project, description of functionalities and a list of technologies used."}</Link>
                 </Typography>
             </Container>
             {
@@ -67,7 +68,7 @@ const StartPage = () => {
                         </Link>
                         <br/>
                         - username: admin, author2, author2<br/>
-                        - password:! 234567890<br/>
+                        - password: !234567890<br/>
                     </Typography>
                 </Container>
             }
