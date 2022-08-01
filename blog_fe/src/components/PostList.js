@@ -7,10 +7,12 @@ import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Box from '@mui/material/Box';
 import Button from "@mui/material/Button";
-import {Stack} from "@mui/material";
 import Grid from "@mui/material/Grid";
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
+
 
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
@@ -18,6 +20,7 @@ import {useNavigate} from "react-router-dom";
 import {API} from "../blog_be";
 import Error from "./Error";
 import Copyright from "./Copyright";
+import CssBaseline from "@mui/material/CssBaseline";
 
 const ordering = [
   {
@@ -48,6 +51,8 @@ const PostList = () => {
     const [error, setError] = useState([]);
     const [search, setSearch] = useState("");
     const [order, setOrder] = useState('-created');
+    const [pages, setPages] = useState(0);
+    const [page, setPage] = React.useState(1);
 
     if (localStorage.getItem('username') === '') {
         return (
@@ -56,16 +61,19 @@ const PostList = () => {
             </div>
         )
     }
+    const handleChangePage = (event, value) => {
+        console.log('vaule: ', value);
+        setPage(value);
+    };
 
-    // aading the list of posts only when mounting a component
+    // ading the list of posts only when mounting a component
     useEffect(() => {
-            axios.get(`${API}/api/post/?search=` + search + '&ordering=' + order, {
+            axios.get(`${API}/api/post/?search=` + search + '&ordering=' + order + '&page=' + page, {
                 mode: 'same-origin',
                 headers: {
                     'accept': 'application/json',
                     'content-Type': 'application/json',
                     'authorization': 'Bearer ' + localStorage.getItem('token'),
-                    // 'token': localStorage.getItem('token')
                 },
             })
                 .then(response => setPosts(response.data.results))
@@ -73,7 +81,27 @@ const PostList = () => {
                     navigate("/#", {replace: true});
                     return [...prevState, [0, 'Network error']]
                 }))
-        });
+        }, [page]);
+
+    useEffect(() => {
+            axios.get(`${API}/api/report`, {
+                mode: 'same-origin',
+                headers: {
+                    'accept': 'application/json',
+                    'content-Type': 'application/json',
+                    'authorization': 'Bearer ' + localStorage.getItem('token'),
+                },
+            })
+                .then(response => {
+                    console.log(response.data[0]);
+                    setPages(Math.ceil(response.data[0].number_of_posts/parseInt(response.data[0].posts_on_page)));
+                    // setPages(Math.ceil(response.data[0].number_of_posts/response.data[0].posts_on_pages))
+                    // setPages(7)
+                })
+                .catch(error => setError(prevState => {
+                    return [...prevState, [0, 'Network error']]
+                }))
+        }, [pages]);
 
     return (
         <Box>
@@ -133,8 +161,21 @@ const PostList = () => {
                             </Box>
                         </AccordionDetails>
                     </Accordion>
+
                )
            }
+           {/*<Container component="main" maxWidth="xs">*/}
+                <Box
+                    sx={{
+                        marginTop: 8,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                    }}
+                >
+                <Pagination count={pages} page={page} onChange={handleChangePage} />
+                </Box>
+           {/*</Container>*/}
             {/*Displaying a possible list of errors*/}
             <Grid item xs={12}>
                 {

@@ -1,3 +1,6 @@
+from math import ceil
+
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db.models import Avg, Count, Max, Min, Sum
 
@@ -52,6 +55,12 @@ def post_report():
         .values("id", "username", "post_count", "total_views")
     )
     result["number_of_posts_views"] = number_of_posts_views
+
+    number_of_posts = posts.count()
+    posts_on_page = settings.REST_FRAMEWORK["PAGE_SIZE"]
+    result["number_of_posts"] = number_of_posts
+    result["posts_on_page"] = posts_on_page
+
     data = [result]
 
     return data
