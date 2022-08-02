@@ -10,7 +10,7 @@ from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 from .models import Post
 from .permissions import IsAuthenticatedAndAuthorPost, IsAuthenticatedAndAuthorView
-from .reports import post_report
+from .reports import get_report
 from .serializers import CountViewsSerializer, PostSerializer, ReportSerializer
 
 
@@ -19,12 +19,15 @@ class PostViewSet(ModelViewSet):
     filter_backends = (SearchFilter, OrderingFilter)
     search_fields = ("title",)
     ordering_fields = ("created", "updated", "author")
-    filterset_fields = ("author__username",)
     serializer_class = PostSerializer
     view_name = "post"
 
     def get_queryset(self):
-        return Post.objects.select_related("author").all().order_by("-created")
+        queryset = Post.objects.select_related("author").all().order_by("-created")
+        username = self.request.query_params.get("author")
+        if username != "all":
+            queryset = queryset.filter(author__username=username)
+        return queryset
 
 
 class ViewViewSet(
@@ -49,7 +52,7 @@ class ReportView(APIView):
     permission_classes = [IsAdminUser]
 
     def get(self, request):
-        data = post_report()
+        data = get_report()
         serializer = ReportSerializer(instance=data, many=True)
         return Response(data=serializer.data)
 

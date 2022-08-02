@@ -3,11 +3,12 @@ from math import ceil
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db.models import Avg, Count, Max, Min, Sum
+from django.db.models.functions import Coalesce
 
 from .models import Post
 
 
-def post_report():
+def get_report():
     """
     Preparation of data for the report.
 
@@ -41,7 +42,7 @@ def post_report():
     )
     result["max_sub_15"] = max_sub_15
 
-    min_add_15 = list(
+    min_add_15 = (
         posts.filter(views__lte=(1.15 * result["min_views"]))
         .order_by("-views")
         .values("id", "title", "views")
@@ -50,7 +51,7 @@ def post_report():
 
     number_of_posts_views = list(
         User.objects.annotate(post_count=Count("post"))
-        .annotate(total_views=Sum("post__views"))
+        .annotate(total_views=Coalesce(Sum("post__views"), 0))
         .order_by("-total_views")
         .values("id", "username", "post_count", "total_views")
     )

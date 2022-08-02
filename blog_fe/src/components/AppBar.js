@@ -19,9 +19,10 @@ import {API} from "../blog_be";
 
 
 const ResponsiveAppBar = () => {
-    const [logged, setLogged] = useState(false);
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
+    const [logged, setLogged] = useState(false);
+    const [isAdmin, setAdmin] = useState(false);
 
     const navigate = useNavigate();
 
@@ -38,6 +39,10 @@ const ResponsiveAppBar = () => {
 
     const handleCloseNavMenuAdd = () => {
         setAnchorElNav(navigate("add", { replace: true }));
+    };
+
+    const handleCloseNavMenuReport = () => {
+        setAnchorElNav(navigate("report", { replace: true }));
     };
 
     const handleCloseNavMenu = () => {
@@ -77,11 +82,18 @@ const ResponsiveAppBar = () => {
                 'content-Type': 'application/json',
                 'authorization': 'Bearer ' + localStorage.getItem('token'),
             }
+
         })
             .then(response => {
+                if (localStorage.getItem('username') === 'admin') {
+                    setAdmin(true);
+                } else {
+                    setAdmin(false);
+                }
                 setLogged(true);
             })
     });
+
     return (
         <AppBar position="static">
             <Container maxWidth="xl">
@@ -132,6 +144,15 @@ const ResponsiveAppBar = () => {
                                     <Typography textAlign="center">Add post</Typography>
                                 </MenuItem>
                             }
+                            {
+                                logged
+                                &&
+                                isAdmin
+                                &&
+                                <MenuItem onClick={handleCloseNavMenuReport}>
+                                    <Typography textAlign="center">Report</Typography>
+                                </MenuItem>
+                            }
                         </Menu>
                     </Box>
                         <Typography
@@ -155,6 +176,15 @@ const ResponsiveAppBar = () => {
                                 &&
                                 <Button href={"/#/add"} sx={{my: 2, color: 'white', display: 'block'}}>
                                     Add post
+                                </Button>
+                            }
+                            {
+                                logged
+                                &&
+                                isAdmin
+                                &&
+                                <Button href={"/#/report"} sx={{my: 2, color: 'white', display: 'block'}}>
+                                    Report
                                 </Button>
                             }
                         </Box>

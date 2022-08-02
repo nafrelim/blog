@@ -11,6 +11,7 @@ import PostList from "./PostList";
 import ShowPost from "./ShowPost";
 import AddPost from "./AddPost";
 import EditPost from "./EditPost";
+import Report from "./Report";
 import NotFound from "./NotFound";
 
 const Main = () => {
@@ -59,6 +60,11 @@ const Main = () => {
                 <Route path="/edit/:id" element={
                     <Container sx={{'center': 'center'}}>
                         <EditPost />
+                    </Container>
+                }/>
+                <Route path="/report" element={
+                    <Container sx={{'center': 'center'}}>
+                        <Report />
                     </Container>
                 }/>
                 <Route path="*" element={

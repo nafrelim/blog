@@ -48,11 +48,14 @@ const ordering = [
 const PostList = () => {
     let navigate = useNavigate();
     const [posts, setPosts] = useState([]);
+    const [number_of_posts, setNumber_of_posts] = useState(0);
     const [error, setError] = useState([]);
     const [search, setSearch] = useState("");
     const [order, setOrder] = useState('-created');
-    const [pages, setPages] = useState(0);
+    const [posts_on_page, setPosts_on_page] = useState(0);
     const [page, setPage] = React.useState(1);
+    const [authors, setAuthors] = useState({})
+    const [author, setAuthor] = useState('all');
 
     if (localStorage.getItem('username') === '') {
         return (
@@ -68,7 +71,7 @@ const PostList = () => {
 
     // ading the list of posts only when mounting a component
     useEffect(() => {
-            axios.get(`${API}/api/post/?search=` + search + '&ordering=' + order + '&page=' + page, {
+            axios.get(`${API}/api/post/?search=` + search + '&ordering=' + order + '&page=' + page + '&author=' + author, {
                 mode: 'same-origin',
                 headers: {
                     'accept': 'application/json',
@@ -76,12 +79,15 @@ const PostList = () => {
                     'authorization': 'Bearer ' + localStorage.getItem('token'),
                 },
             })
-                .then(response => setPosts(response.data.results))
+                .then(response => {
+                    setPosts(response.data.results)
+                    setNumber_of_posts(response.data.count)
+                })
                 .catch(error => setError(prevState => {
                     navigate("/#", {replace: true});
                     return [...prevState, [0, 'Network error']]
                 }))
-        }, [page]);
+        }, [order, page, search, author]);
 
     useEffect(() => {
             axios.get(`${API}/api/report`, {
@@ -93,15 +99,13 @@ const PostList = () => {
                 },
             })
                 .then(response => {
-                    console.log(response.data[0]);
-                    setPages(Math.ceil(response.data[0].number_of_posts/parseInt(response.data[0].posts_on_page)));
-                    // setPages(Math.ceil(response.data[0].number_of_posts/response.data[0].posts_on_pages))
-                    // setPages(7)
+                    setPosts_on_page(parseInt(response.data[0].posts_on_page));
+                    setAuthors(response.data[0].number_of_posts_views)
                 })
                 .catch(error => setError(prevState => {
                     return [...prevState, [0, 'Network error']]
                 }))
-        }, [pages]);
+        }, [order, page, search, author]);
 
     return (
         <Box>
@@ -131,6 +135,23 @@ const PostList = () => {
                           {option.label}
                         </MenuItem>
                     ))}
+                </TextField>
+                <TextField
+                    id="authors"
+                    select
+                    label="Filter by authors"
+                    value={author}
+                    onChange={e => setAuthor(e.target.value)}
+                >
+
+                    <MenuItem value={'all'}> {'all'} </MenuItem>
+                    {
+                        Array.from(authors).map((author) => (
+                            <MenuItem key={author.id} value={author.username}>
+                                {author.username}
+                            </MenuItem>
+                        ))
+                    }
                 </TextField>
 
             </Box>
@@ -173,7 +194,7 @@ const PostList = () => {
                         alignItems: 'center',
                     }}
                 >
-                <Pagination count={pages} page={page} onChange={handleChangePage} />
+                <Pagination count={Math.ceil(number_of_posts/posts_on_page)} page={page} onChange={handleChangePage} />
                 </Box>
            {/*</Container>*/}
             {/*Displaying a possible list of errors*/}
