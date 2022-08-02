@@ -71,7 +71,7 @@ const AddPost = () => {
     }
 
     return (
-        // Wyświetlenie formularza wprowadzania postu
+        // Display the post entry form
         <ThemeProvider theme={theme}>
             <Container component="main" maxWidth="xs">
                 <CssBaseline />

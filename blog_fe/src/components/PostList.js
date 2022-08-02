@@ -69,9 +69,9 @@ const PostList = () => {
         setPage(value);
     };
 
-    // ading the list of posts only when mounting a component
+    // ading the list of posts
     useEffect(() => {
-            axios.get(`${API}/api/post/?search=` + search + '&ordering=' + order + '&page=' + page + '&author=' + author, {
+            axios.get(`${API}/api/post/?search=`+search+'&ordering='+order+'&page='+page+'&author='+author, {
                 mode: 'same-origin',
                 headers: {
                     'accept': 'application/json',
@@ -84,7 +84,9 @@ const PostList = () => {
                     setNumber_of_posts(response.data.count)
                 })
                 .catch(error => setError(prevState => {
-                    navigate("/#", {replace: true});
+                    if (error.response.status == 401) {
+                            navigate("/#", {replace: true});
+                        }
                     return [...prevState, [0, 'Network error']]
                 }))
         }, [order, page, search, author]);

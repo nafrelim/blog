@@ -19,10 +19,10 @@ const Report = () => {
 
     const [report, setReport] = useState({});
     const [error, setError] = useState([]);
-    const [top5, setTop5] = useState([]);
-    const [last5, setLast5] = useState({});
-    const [maxSub15, setMaxSub15] = useState({});
-    const [minAdd15, setMinAdd15] = useState({});
+    const [top_5, setTop_5] = useState([]);
+    const [last_5, setLast_5] = useState({});
+    const [max_sub_15, setMax_sub_15] = useState({});
+    const [min_add_15, setMin_add_15] = useState({});
     const [authors, setAuthors] = useState({});
 
     useEffect(() => {
@@ -36,17 +36,17 @@ const Report = () => {
                 })
                     .then(response => {
                         setReport(response.data[0])
-                        setTop5(response.data[0].top_5)
-                        setLast5(response.data[0].last_5)
-                        setMaxSub15(response.data[0].max_sub_15)
-                        setMinAdd15(response.data[0].min_add_15)
+                        setTop_5(response.data[0].top_5)
+                        setLast_5(response.data[0].last_5)
+                        setMax_sub_15(response.data[0].max_sub_15)
+                        setMin_add_15(response.data[0].min_add_15)
                         setAuthors(response.data[0].number_of_posts_views)
                     })
                     .catch(error => setError(prevState => {
-                        console.log('error: ', error)
                         if (error.response.status == 401) {
                             navigate("/#", {replace: true});
                         }
+                        return [...prevState, [0, 'Network error']]
                     }));
     }, []);
 
@@ -78,7 +78,7 @@ const Report = () => {
                 Most viewed posts:
                 </Typography >
                 {
-                    Array.from(top5).map(post => {
+                    Array.from(top_5).map(post => {
                         return (
                             <Typography  key={post.id} variant="body2" sx={{marginX: 2, height: 18}}>
                                 "{post.title}", {post.views} views, <Button href={"#/post/"+post.id}> Show me </Button>
@@ -92,7 +92,7 @@ const Report = () => {
                 Least viewed posts:
                 </Typography >
                 {
-                    Array.from(last5).map(post => {
+                    Array.from(last_5).map(post => {
                         return (
                             <Typography  key={post.id} variant="body2" sx={{marginX: 2, height: 18}}>
                                 "{post.title}", {post.views} views, <Button href={"#/post/"+post.id}> Show me </Button>
@@ -106,7 +106,7 @@ const Report = () => {
                 Posts up to 15% less than the maximum number of views:
                 </Typography >
                 {
-                    Array.from(maxSub15).map(post => {
+                    Array.from(max_sub_15).map(post => {
                         return (
                             <Typography  key={post.id} variant="body2" sx={{marginX: 2, height: 18}}>
                                 "{post.title}", {post.views} views, <Button href={"#/post/"+post.id}> Show me </Button>
@@ -120,7 +120,7 @@ const Report = () => {
                 Posts with views up to 15% above the minimum number of views:
                 </Typography >
                 {
-                    Array.from(minAdd15).map(post => {
+                    Array.from(min_add_15).map(post => {
                         return (
                             <Typography  key={post.id} variant="body2" sx={{marginX: 2, height: 18}}>
                                 "{post.title}", {post.views} views, <Button href={"#/post/"+post.id}> Show me </Button>
