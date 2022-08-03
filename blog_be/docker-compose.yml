@@ -4,27 +4,30 @@ services:
   db:
     container_name: postgres
     image: postgres
+    restart: always
     environment:
       - POSTGRES_DB=blog
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - TZ=Europe/Warsaw
-#    volumes:
-#      - c:/Users/mstaw/container_db/aloha_way:/var/lib/postgresql/data
+    volumes:
+      - db:/var/lib/postgresql/data
     ports:
-      - "5450:5432"
-  blog-be:
+      - "9000:5432"
+  blog:
     container_name: blog_be
     build:
       context: .
       dockerfile: ./Dockerfile
-    command: >
-      sh -c "python manage.py runserver 0.0.0.0:8000"
+    command: python manage.py runserver 0.0.0.0:8888
     environment:
       - TZ=Europe/Warsaw
-#    volumes:
-#      - ./:/./
+    volumes:
+      - .:/blog-be
     ports:
-      - "8000:8000"
+      - "8000:8888"
     depends_on:
       - db
+volumes:
+  db:
+    driver: local

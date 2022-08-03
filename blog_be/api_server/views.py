@@ -22,10 +22,14 @@ class PostViewSet(ModelViewSet):
     serializer_class = PostSerializer
     view_name = "post"
 
+    def get_object(self):
+        queryset = self.get_queryset()
+        return queryset.get(pk=self.kwargs.get("pk"))
+
     def get_queryset(self):
         queryset = Post.objects.select_related("author").all().order_by("-created")
         username = self.request.query_params.get("author")
-        if username != "all":
+        if username != "all" and username is not None:
             queryset = queryset.filter(author__username=username)
         return queryset
 
@@ -49,7 +53,7 @@ class ViewViewSet(
 
 
 class ReportView(APIView):
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticatedAndAuthorPost]
 
     def get(self, request):
         data = get_report()

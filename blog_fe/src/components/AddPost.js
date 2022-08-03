@@ -56,7 +56,7 @@ const AddPost = () => {
             navigate("/post", { replace: true });
         }
         else {
-            // Clearing the list of errors only before the next field validation
+            // Clearing the list
             setError([])
             if (title.length ===0) {
                 setError(prevState => {

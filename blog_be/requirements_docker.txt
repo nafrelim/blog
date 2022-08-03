@@ -3,9 +3,12 @@ Django
 django-allauth
 django-cors-headers
 djangorestframework
+djangorestframework-simplejwt
 django-heroku
 django-rest-swagger
 django-rest-swagger-django3fix
+django-silk
 drf-spectacular
 faker
 psycopg2-binary
+pyjwt

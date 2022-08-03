@@ -31,9 +31,6 @@ SECRET_KEY = "django-insecure-27eedis5lf*uy@q8w09@fu@p&d*d%&_73nk2_3^edb52y-m2y)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -98,7 +95,8 @@ WSGI_APPLICATION = "blog_be.wsgi.application"
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 try:
-    from .local_settings_local_postgres_settings import DATABASES
+    # from .local_settings_local_postgres_settings import DATABASES
+    from .local_settings_docker import DATABASES
 except ModuleNotFoundError:
     print("No database configuration in local_settings.py!")
     print("Fill in the details and try again!")
@@ -147,7 +145,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 REST_FRAMEWORK = {
-    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
+    # "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework_simplejwt.authentication.JWTAuthentication",
