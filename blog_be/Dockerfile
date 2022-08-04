@@ -13,7 +13,7 @@ COPY . .
 #RUN python manage.py makemigrations
 #RUN python manage.py migrate
 #RUN python manage.py populateblog 100
-EXPOSE 8888
+EXPOSE ${DOCKER_BE_PORT}
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8888"]
 #RUN python manage.py runserver
 

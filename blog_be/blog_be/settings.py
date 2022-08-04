@@ -15,21 +15,27 @@ from pathlib import Path
 
 import dj_database_url
 import django_heroku
+import environ
 from django.conf.global_settings import CSRF_TRUSTED_ORIGINS
+
+env = environ.Env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Take environment variables from .env file
+environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-27eedis5lf*uy@q8w09@fu@p&d*d%&_73nk2_3^edb52y-m2y)"
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
+DEBUG = env.bool("DEBUG")
 
 # Application definition
 
@@ -94,13 +100,16 @@ WSGI_APPLICATION = "blog_be.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-try:
-    # from .local_settings_local_postgres_settings import DATABASES
-    from .local_settings_docker import DATABASES
-except ModuleNotFoundError:
-    print("No database configuration in local_settings.py!")
-    print("Fill in the details and try again!")
-    exit(0)
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "HOST": env("DB_HOST"),
+        "PORT": env("DB_PORT"),
+        "NAME": env("DB_NAME"),
+        "USER": env("DB_USER"),
+        "PASSWORD": env("DB_PASSWORD"),
+    }
+}
 
 
 # Password validation
@@ -168,7 +177,7 @@ JSON_EDITOR = True
 SHOW_REQUEST_HEADERS = True
 
 ALLOWED_HOSTS = ["*"]
-CSRF_TRUSTED_ORIGINS = ["http://localhost:8080", "http://localhost"]
+CSRF_TRUSTED_ORIGINS = ["http://localhost"]
 CSRF_COOKIE_HTTPONLY = False
 CSRF_USE_SESSIONS = False
 

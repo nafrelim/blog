@@ -13,19 +13,19 @@ services:
     volumes:
       - db:/var/lib/postgresql/data
     ports:
-      - "5050:5432"
+      - ${DB_PORT}:${DOCKER_DB_PORT}
   blog:
     container_name: blog_be
     build:
       context: .
       dockerfile: ./Dockerfile
-    command: python manage.py runserver 0.0.0.0:8888
+    command: python manage.py runserver 0.0.0.0:${DOCKER_BE_PORT}
     environment:
       - TZ=Europe/Warsaw
     volumes:
       - .:/blog-be
     ports:
-      - "8000:8888"
+      - ${BE_PORT}:${DOCKER_BE_PORT}
     depends_on:
       - db
 volumes:

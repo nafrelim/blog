@@ -20,7 +20,7 @@ import {useNavigate} from "react-router-dom";
 import {API} from "../blog_be";
 import Error from "./Error";
 import Copyright from "./Copyright";
-import CssBaseline from "@mui/material/CssBaseline";
+import TokenRefresh from "./TokenRefresh";
 
 const ordering = [
   {
@@ -67,6 +67,33 @@ const PostList = () => {
     const handleChangePage = (event, value) => {
         setPage(value);
     };
+
+    useEffect(() => {
+        axios.post(`${API}/api/refresh/`,
+            {
+                'refresh': localStorage.getItem('refresh'),
+            },
+            {
+                headers: {
+                    'accept': 'application/json',
+                    'content-Type': 'application/json',
+                },
+            }
+        )
+            .then(response => {
+                localStorage.setItem('token', response.data.access)
+                localStorage.setItem('refresh', response.data.refresh)
+            })
+            .catch(e => {
+                if (e.response.status === 401) {
+                    setError(prevState => {
+                        return ([...prevState, [0, e.response.data.detail]])
+                    })
+                }
+            })
+    }, [])
+
+
 
     // ading the list of posts
     useEffect(() => {
