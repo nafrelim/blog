@@ -5,16 +5,16 @@ import {API} from "../blog_be";
 const TokenRefresh = () => {
     const [error, setError] = useState([]);
 
-    axios(`${API}/api/refresh/`,
+    axios.post(`${API}/auth/refresh/`,
         {
-            method: 'POST',
+                'refresh': localStorage.getItem('refresh')
+            },
+        {
             headers: {
                 'accept': 'application/json',
                 'content-Type': 'application/json',
             },
-            data: {
-                refresh: localStorage.getItem('refresh')
-            }
+
         })
         .then(response => {
           localStorage.setItem('token', response.data.access)

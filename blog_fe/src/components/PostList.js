@@ -68,53 +68,50 @@ const PostList = () => {
         setPage(value);
     };
 
+    // list of posts
     useEffect(() => {
-        axios.post(`${API}/api/refresh/`,
-            {
-                'refresh': localStorage.getItem('refresh'),
+
+        axios.post(`${API}/auth/refresh/`,
+        {
+                'refresh': localStorage.getItem('refresh')
             },
-            {
-                headers: {
-                    'accept': 'application/json',
-                    'content-Type': 'application/json',
-                },
-            }
-        )
+        {
+            headers: {
+                'accept': 'application/json',
+                'content-Type': 'application/json',
+            },
+
+        })
+        .then(response => {
+          localStorage.setItem('token', response.data.access)
+          localStorage.setItem('refresh', response.data.refresh)
+        })
+        .catch(e => {
+          if (e.response.status === 401) {
+              setError(prevState => {
+                  return ([...prevState, [0, e.response.data.detail]])
+              })
+          }
+      });
+
+      axios.get(`${API}/api/post/?search=`+search+'&ordering='+order+'&page='+page+'&author='+author, {
+            mode: 'same-origin',
+            headers: {
+                'accept': 'application/json',
+                'content-Type': 'application/json',
+                'authorization': 'Bearer ' + localStorage.getItem('token'),
+            },
+        })
             .then(response => {
-                localStorage.setItem('token', response.data.access)
-                localStorage.setItem('refresh', response.data.refresh)
+                setPosts(response.data.results)
+                setNumber_of_posts(response.data.count)
             })
-            .catch(e => {
-                if (e.response.status === 401) {
-                    setError(prevState => {
-                        return ([...prevState, [0, e.response.data.detail]])
-                    })
+            .catch(error => setError(prevState => {
+                if (error.response.status == 401 || error.response.status == 403) {
+                    navigate("/#", {replace: true});
                 }
-            })
-    }, [])
-
-
-
-    // ading the list of posts
-    useEffect(() => {
-            axios.get(`${API}/api/post/?search=`+search+'&ordering='+order+'&page='+page+'&author='+author, {
-                mode: 'same-origin',
-                headers: {
-                    'accept': 'application/json',
-                    'content-Type': 'application/json',
-                    'authorization': 'Bearer ' + localStorage.getItem('token'),
-                },
-            })
-                .then(response => {
-                    setPosts(response.data.results)
-                    setNumber_of_posts(response.data.count)
-                })
-                .catch(error => setError(prevState => {
-                    if (error.response.status == 401 || error.response.status == 403) {
-                        navigate("/#", {replace: true});
-                    }
-                    return [...prevState, [0, 'Network error']]
-                }))
+                return [...prevState, [0, 'Network error']]
+            }))
         }, [order, page, search, author]);
 
         useEffect(() => {
