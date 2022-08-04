@@ -13,7 +13,7 @@ services:
     volumes:
       - db:/var/lib/postgresql/data
     ports:
-      - "9000:5432"
+      - "5050:5432"
   blog:
     container_name: blog_be
     build:

@@ -20,17 +20,38 @@ def create_admin():
         user = User.objects.get(username="admin")
         return user
     except ObjectDoesNotExist:
-        user = User.objects.create_superuser(username="admin", password="!234567890")
+        fake = Factory.create("en_US")
+        first_name = fake.first_name()
+        last_name = fake.last_name()
+        email = fake.email()
+        user = User.objects.create_superuser(
+            username="admin",
+            password="!234567890",
+            email=email,
+            first_name=first_name,
+            last_name=last_name,
+        )
         user.save()
         return user
 
 
 def create_author(author):
     try:
+        fake = Factory.create("en_US")
         author = User.objects.get(username=author)
         return author
     except ObjectDoesNotExist:
-        author = User.objects.create(username=author, is_staff=False)
+        fake = Factory.create("en_US")
+        first_name = fake.first_name()
+        last_name = fake.last_name()
+        email = fake.email()
+        author = User.objects.create(
+            username=author,
+            is_staff=False,
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
+        )
         author.set_password("!234567890")
         author.save()
         return author

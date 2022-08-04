@@ -18,7 +18,7 @@ def login_admin(client):
 @pytest.mark.django_db
 def login_author(client):
     create_author("author1")
-    client.login(username="author", password="!234567890")
+    client.login(username="author1", password="!234567890")
 
 
 @pytest.mark.django_db
@@ -29,12 +29,11 @@ def login_not_author(client):
 
 @pytest.mark.django_db
 def test_get_post_list_author_logged(client, set_up):
-    # login_author(client)
     user = User.objects.get(username="author1")
     client.force_authenticate(user=user, token=None)
     response = client.get("/api/post/", format="json")
     assert response.status_code == 200
-    assert Post.objects.count() == len(response.data)
+    assert Post.objects.count() == response.data["count"]
 
 
 @pytest.mark.django_db
@@ -52,7 +51,7 @@ def test_get_post_detail_logged(client, set_up):
     assert response.status_code == 200
     for field in ("author", "title", "content", "created", "updated"):
         assert field in response.data
-    # The views field should not be available on /api/ post
+    # The views field should not be available on /api/post
     assert "views" not in response.data
 
 

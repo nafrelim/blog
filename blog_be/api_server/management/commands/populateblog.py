@@ -10,10 +10,15 @@ class Command(BaseCommand):
         parser.add_argument("new_number_of_views", nargs="+", type=int)
 
     def handle(self, *args, **options):
-        create_admin()
-        create_posts(options["new_number_of_views"][0])
-        self.stdout.write(
-            self.style.SUCCESS(
-                f"Succesfully blog with {options['new_number_of_views'][0]} posts"
+        if options["new_number_of_views"][0] >= 100:
+            create_admin()
+            create_posts(options["new_number_of_views"][0])
+            self.stdout.write(
+                self.style.SUCCESS(
+                    f"Succesfully blog with {options['new_number_of_views'][0]} posts"
+                )
             )
-        )
+        else:
+            self.stdout.write(
+                self.style.SUCCESS(f"Too few posts! You must enter 100 or more.")
+            )
