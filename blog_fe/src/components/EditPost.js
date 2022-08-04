@@ -39,6 +39,9 @@ const EditPost = () => {
                 setPost_content(response.data.content);
             })
             .catch(error => setError(prevState => {
+                if (error.response.status == 401 || error.response.status == 403) {
+                    navigate("/#", {replace: true});
+                }
                 return [...prevState, [0, 'Network error']]
             }))
         },

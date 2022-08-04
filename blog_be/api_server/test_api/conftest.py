@@ -1,6 +1,6 @@
 import pytest
 from api_server.models import Post
-from api_server.utils import create_author, create_post
+from api_server.utils import create_admin, create_author, create_post
 from rest_framework.test import APIClient
 
 
@@ -12,7 +12,7 @@ def client():
 
 @pytest.fixture
 def set_up():
-    create_author("admin")
+    create_admin()
     author = create_author("author1")
     for _ in range(0, 10):
         title, content, views = create_post()

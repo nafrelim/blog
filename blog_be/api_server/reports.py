@@ -58,9 +58,7 @@ def get_report():
     result["number_of_posts_views"] = number_of_posts_views
 
     number_of_posts = posts.count()
-    posts_on_page = settings.REST_FRAMEWORK["PAGE_SIZE"]
     result["number_of_posts"] = number_of_posts
-    result["posts_on_page"] = posts_on_page
 
     data = [result]
 

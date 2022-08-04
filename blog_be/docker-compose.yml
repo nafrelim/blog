@@ -6,9 +6,9 @@ services:
     image: postgres
     restart: always
     environment:
-      - POSTGRES_DB=blog
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
       - TZ=Europe/Warsaw
     volumes:
       - db:/var/lib/postgresql/data

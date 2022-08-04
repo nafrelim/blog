@@ -63,7 +63,7 @@ export default function SignUp() {
                       navigate("/login", {replace: true});
                   })
                   .catch(e => {
-                      if (e.response.status === 401) {
+                      if (e.response.status === 401 || e.response.status === 403) {
                           setError(prevState => {
                               return ([...prevState, [0, e.response.data.detail]])
                           })
@@ -94,8 +94,12 @@ export default function SignUp() {
                   })
           // }, [])
       } else {
-          // Clearing the list of errors only before the next field validation
-          // setError([])
+          if (username < 1) {
+              setError(prevState => {
+                  return ([...prevState, [1, "Username cannot be empty."]])
+              })
+          }
+
           if (firstname < 1) {
               setError(prevState => {
                   return ([...prevState, [1, "First name cannot be empty."]])
@@ -106,9 +110,9 @@ export default function SignUp() {
                   return ([...prevState, [1, "Last name cannot be empty."]])
               })
           }
-          if (username < 1) {
+          if (email < 1) {
               setError(prevState => {
-                  return ([...prevState, [1, "Username cannot be empty."]])
+                  return ([...prevState, [1, "Email cannot be empty."]])
               })
           }
           if (password < 1) {

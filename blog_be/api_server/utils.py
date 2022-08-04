@@ -30,6 +30,7 @@ def create_admin():
             email=email,
             first_name=first_name,
             last_name=last_name,
+            is_staff=True,
         )
         user.save()
         return user

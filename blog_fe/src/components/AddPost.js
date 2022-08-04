@@ -51,6 +51,9 @@ const AddPost = () => {
             })
                 .then(response => {setData(true)})
                 .catch(error => setError(prevState => {
+                    if (error.response.status == 401 || error.response.status == 403) {
+                            navigate("/#", {replace: true});
+                        }
                     return [...prevState, [0, 'Network error']]
                 }));
             navigate("/post", { replace: true });

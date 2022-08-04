@@ -43,7 +43,7 @@ const Report = () => {
                         setAuthors(response.data[0].number_of_posts_views)
                     })
                     .catch(error => setError(prevState => {
-                        if (error.response.status == 401) {
+                        if (error.response.status == 401 || error.response.status == 403) {
                             navigate("/#", {replace: true});
                         }
                         return [...prevState, [0, 'Network error']]

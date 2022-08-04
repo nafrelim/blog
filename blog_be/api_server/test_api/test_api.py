@@ -217,7 +217,7 @@ def test_get_view_list_author_logged(client, set_up):
     client.force_authenticate(user=user, token=None)
     response = client.get("/api/view/", {}, format="json")
     assert response.status_code == 200
-    assert Post.objects.count() == len(response.data)
+    assert Post.objects.count() == response.data["count"]
 
 
 @pytest.mark.django_db
@@ -306,8 +306,8 @@ def test_put_views_admin_logged(client, set_up):
     views_data["views"] = new_number_of_views
     response = client.put(f"/api/view/{post.id}/", views_data, format="json")
     post_obj = Post.objects.get(id=post.id)
-    assert post_obj.views == new_number_of_views
     assert response.status_code == 200
+    assert post_obj.views == new_number_of_views
 
 
 @pytest.mark.django_db

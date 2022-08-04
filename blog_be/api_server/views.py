@@ -1,8 +1,10 @@
+from django.conf import settings
+from django.contrib.auth.models import User
 from django.db.models import F
 from rest_framework import mixins
 from rest_framework.decorators import api_view
 from rest_framework.filters import OrderingFilter, SearchFilter
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework.views import APIView
@@ -11,11 +13,17 @@ from rest_framework.viewsets import GenericViewSet, ModelViewSet
 from .models import Post
 from .permissions import IsAuthenticatedAndAuthorPost, IsAuthenticatedAndAuthorView
 from .reports import get_report
-from .serializers import CountViewsSerializer, PostSerializer, ReportSerializer
+from .serializers import (
+    CountViewsSerializer,
+    ParametersSerializer,
+    PostSerializer,
+    ReportSerializer,
+)
 
 
 class PostViewSet(ModelViewSet):
     permission_classes = [IsAuthenticatedAndAuthorPost]
+    # permission_classes = [IsAuthenticated && IsAuthenticatedAndAuthorPost]
     filter_backends = (SearchFilter, OrderingFilter)
     search_fields = ("title",)
     ordering_fields = ("created", "updated", "author")
@@ -23,8 +31,9 @@ class PostViewSet(ModelViewSet):
     view_name = "post"
 
     def get_object(self):
-        queryset = self.get_queryset()
-        return queryset.get(pk=self.kwargs.get("pk"))
+        post = Post.objects.get(pk=self.kwargs.get("pk"))
+        self.check_object_permissions(self.request, post)
+        return post
 
     def get_queryset(self):
         queryset = Post.objects.select_related("author").all().order_by("-created")
@@ -53,11 +62,23 @@ class ViewViewSet(
 
 
 class ReportView(APIView):
-    permission_classes = [IsAuthenticatedAndAuthorPost]
+    permission_classes = [IsAdminUser & IsAuthenticated]
 
     def get(self, request):
         data = get_report()
         serializer = ReportSerializer(instance=data, many=True)
+        return Response(data=serializer.data)
+
+
+class ParametersView(APIView):
+    permission_classes = [IsAuthenticatedAndAuthorPost]
+
+    def get(self, request):
+        result = {
+            "posts_on_page": settings.REST_FRAMEWORK["PAGE_SIZE"],
+            "authors": [author.username for author in User.objects.all()],
+        }
+        serializer = ParametersSerializer(instance=[result], many=True)
         return Response(data=serializer.data)
 
 

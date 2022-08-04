@@ -54,7 +54,7 @@ const PostList = () => {
     const [order, setOrder] = useState('-created');
     const [posts_on_page, setPosts_on_page] = useState(0);
     const [page, setPage] = React.useState(1);
-    const [authors, setAuthors] = useState({})
+    const [authors, setAuthors] = useState([])
     const [author, setAuthor] = useState('all');
 
     if (localStorage.getItem('username') === '') {
@@ -65,7 +65,6 @@ const PostList = () => {
         )
     }
     const handleChangePage = (event, value) => {
-        console.log('vaule: ', value);
         setPage(value);
     };
 
@@ -84,15 +83,15 @@ const PostList = () => {
                     setNumber_of_posts(response.data.count)
                 })
                 .catch(error => setError(prevState => {
-                    if (error.response.status == 401) {
-                            navigate("/#", {replace: true});
-                        }
+                    if (error.response.status == 401 || error.response.status == 403) {
+                        navigate("/#", {replace: true});
+                    }
                     return [...prevState, [0, 'Network error']]
                 }))
         }, [order, page, search, author]);
 
-    useEffect(() => {
-            axios.get(`${API}/api/report`, {
+        useEffect(() => {
+            axios.get(`${API}/api/parameters`, {
                 mode: 'same-origin',
                 headers: {
                     'accept': 'application/json',
@@ -102,7 +101,7 @@ const PostList = () => {
             })
                 .then(response => {
                     setPosts_on_page(parseInt(response.data[0].posts_on_page));
-                    setAuthors(response.data[0].number_of_posts_views)
+                    setAuthors(response.data[0].authors);
                 })
                 .catch(error => setError(prevState => {
                     return [...prevState, [0, 'Network error']]
@@ -148,9 +147,9 @@ const PostList = () => {
 
                     <MenuItem value={'all'}> {'all'} </MenuItem>
                     {
-                        Array.from(authors).map((author) => (
-                            <MenuItem key={author.id} value={author.username}>
-                                {author.username}
+                        authors.map((author) => (
+                            <MenuItem key={author} value={author}>
+                                {author}
                             </MenuItem>
                         ))
                     }
@@ -196,7 +195,7 @@ const PostList = () => {
                         alignItems: 'center',
                     }}
                 >
-                <Pagination count={Math.ceil(number_of_posts/posts_on_page)} page={page} onChange={handleChangePage} />
+                <Pagination count={parseInt(Math.ceil(number_of_posts/posts_on_page))} page={page} onChange={handleChangePage} />
                 </Box>
            {/*</Container>*/}
             {/*Displaying a possible list of errors*/}

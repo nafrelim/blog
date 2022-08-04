@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 
-from .views import PostViewSet, ReportView, ViewViewSet
+from .views import ParametersView, PostViewSet, ReportView, ViewViewSet
 
 # Determining what methods are available on each endpoint
 post_list = PostViewSet.as_view({"get": "list", "post": "create"})
@@ -33,4 +33,5 @@ urlpatterns = [
     path("view/", view_list, name="view-list"),
     path("view/<int:pk>/", view_detail, name="view-detail"),
     path("report/", ReportView.as_view(), name="report"),
+    path("parameters/", ParametersView.as_view(), name="report"),
 ]

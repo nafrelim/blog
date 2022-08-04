@@ -30,7 +30,6 @@ class CountViewsSerializer(serializers.HyperlinkedModelSerializer):
 
 class ReportSerializer(serializers.Serializer):
     number_of_posts = serializers.IntegerField()
-    posts_on_page = serializers.IntegerField()
     max_views = serializers.IntegerField()
     min_views = serializers.IntegerField()
     avg_views = serializers.IntegerField()
@@ -40,3 +39,8 @@ class ReportSerializer(serializers.Serializer):
     max_sub_15 = serializers.ListField()
     min_add_15 = serializers.ListField()
     number_of_posts_views = serializers.ListField()
+
+
+class ParametersSerializer(serializers.Serializer):
+    posts_on_page = serializers.IntegerField()
+    authors = serializers.ListField()
