@@ -15,6 +15,7 @@ import axios from "axios";
 import {API} from "../blog_be";
 import Error from "./Error";
 import Copyright from "./Copyright";
+import TokenRefresh from "./TokenRefresh";
 
 const theme = createTheme();
 
@@ -22,11 +23,14 @@ const EditPost = () => {
     const [title, setPost_title] = useState("");
     const [content, setPost_content] = useState("");
     const [error, setError] = useState([]);
-    const [data, setData] = useState(false);
     let { id } = useParams();
     let navigate = useNavigate();
 
-    useEffect(() => {axios(`${API}/api/post/${id}/`, {
+    useEffect(() => {
+
+        TokenRefresh();
+
+        axios(`${API}/api/post/${id}/`, {
             method: 'GET',
             headers: {
                 'accept': 'application/json',
@@ -49,7 +53,6 @@ const EditPost = () => {
 
     async function handleSubmit (event) {
         event.preventDefault();
-        // const data = new FormData(event.currentTarget);
 
         // Save a post when fields are not empty
         if (title.length > 0 && content.length > 0) {
@@ -67,7 +70,6 @@ const EditPost = () => {
                         content: content,
                     },
                 })
-                .then(response => {setData(true)})
                 .catch(error => setError(prevState => {
                     return ([...prevState, [0, 'Network error: ' + error.message +
                     '. If the error persists - there is a network or server error.']])
@@ -90,6 +92,7 @@ const EditPost = () => {
         }
 
     return (
+        // Display the post-entry form
         <ThemeProvider theme={theme}>
             <Container component="main" maxWidth="xs">
                 <CssBaseline />

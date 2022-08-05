@@ -46,7 +46,6 @@ export default function signIn() {
       })
           .then(response => {
             setData(true)
-            console.log(response.data)
             localStorage.setItem('token', response.data.access)
             localStorage.setItem('refresh', response.data.refresh)
             localStorage.setItem('username', username)
@@ -134,9 +133,9 @@ export default function signIn() {
                   </Button>
                   <Grid container>
                     <Grid item xs>
-                      <Link href="#" variant="body2">
-                        Forgot password?
-                      </Link>
+                      {/*<Link href="#" variant="body2">*/}
+                      {/*  Forgot password?*/}
+                      {/*</Link>*/}
                     </Grid>
                     <Grid item>
                       <Link href="#/register" variant="body2">

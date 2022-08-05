@@ -8,8 +8,6 @@ axios.defaults.xsrfCookieName = 'csrftoken'
 axios.defaults.withCredentials = true
 
 const SignOut = () => {
-    const [username, setUsername] = useState("");
-    const [error, setError] = useState([]);
     let navigate = useNavigate();
 
     useEffect(() => {
@@ -26,7 +24,7 @@ const SignOut = () => {
                 localStorage.setItem('username', null)
                 navigate("/#", {replace: true});
             })
-            .catch(error => navigate("/#", {replace: true}))
+            .catch(() => {navigate("/#", {replace: true})})
     })
 }
 

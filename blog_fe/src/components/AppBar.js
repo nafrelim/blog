@@ -92,6 +92,7 @@ const ResponsiveAppBar = () => {
                 }
                 setLogged(true);
             })
+            .catch(() => {setLogged(false)})
     });
 
     return (

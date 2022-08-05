@@ -3,7 +3,6 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Grid from "@mui/material/Grid";
 import {Stack} from "@mui/material";
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 
 import Error from "./Error";
@@ -12,12 +11,14 @@ import {API} from "../blog_be";
 import axios from "axios";
 import CssBaseline from "@mui/material/CssBaseline";
 import Link from "@mui/material/Link";
-
-const theme = createTheme();
+import Copyright from "./Copyright";
+import TokenRefresh from "./TokenRefresh";
 
 const StartPage = () => {
     const [error, setError] = useState([]);
     const [logged, setLogged] = useState(false);
+
+    TokenRefresh();
 
     useEffect(() => {
         axios(`${API}/api/post/`, {
@@ -31,6 +32,11 @@ const StartPage = () => {
         })
             .then(response => {
                 setLogged(true);
+            })
+            .catch(error => {
+                if (error.response.status == 500) {
+                    setError('Network error: ' + error.message)
+                }
             })
     }, []);
 
@@ -84,6 +90,7 @@ const StartPage = () => {
                     }
                 </Grid>
             </Container>
+            <Copyright sx={{mt: 8, mb: 4}}/>
         </Box>
     )
 }

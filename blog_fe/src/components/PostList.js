@@ -52,8 +52,8 @@ const PostList = () => {
     const [error, setError] = useState([]);
     const [search, setSearch] = useState("");
     const [order, setOrder] = useState('-created');
-    const [posts_on_page, setPosts_on_page] = useState(0);
-    const [page, setPage] = React.useState(1);
+    const [posts_on_page, setPosts_on_page] = useState(1);
+    const [page, setPage] = useState(1);
     const [authors, setAuthors] = useState([])
     const [author, setAuthor] = useState('all');
 
@@ -71,30 +71,9 @@ const PostList = () => {
     // list of posts
     useEffect(() => {
 
-        axios.post(`${API}/auth/refresh/`,
-        {
-                'refresh': localStorage.getItem('refresh')
-            },
-        {
-            headers: {
-                'accept': 'application/json',
-                'content-Type': 'application/json',
-            },
+        TokenRefresh();
 
-        })
-        .then(response => {
-          localStorage.setItem('token', response.data.access)
-          localStorage.setItem('refresh', response.data.refresh)
-        })
-        .catch(e => {
-          if (e.response.status === 401) {
-              setError(prevState => {
-                  return ([...prevState, [0, e.response.data.detail]])
-              })
-          }
-      });
-
-      axios.get(`${API}/api/post/?search=`+search+'&ordering='+order+'&page='+page+'&author='+author, {
+        axios.get(`${API}/api/post/?search=`+search+'&ordering='+order+'&page='+page+'&author='+author, {
             mode: 'same-origin',
             headers: {
                 'accept': 'application/json',
@@ -114,23 +93,23 @@ const PostList = () => {
             }))
         }, [order, page, search, author]);
 
-        useEffect(() => {
-            axios.get(`${API}/api/parameters`, {
-                mode: 'same-origin',
-                headers: {
-                    'accept': 'application/json',
-                    'content-Type': 'application/json',
-                    'authorization': 'Bearer ' + localStorage.getItem('token'),
-                },
+    useEffect(() => {
+        axios.get(`${API}/api/parameters`, {
+            mode: 'same-origin',
+            headers: {
+                'accept': 'application/json',
+                'content-Type': 'application/json',
+                'authorization': 'Bearer ' + localStorage.getItem('token'),
+            },
+        })
+            .then(response => {
+                setPosts_on_page(parseInt(response.data[0].posts_on_page));
+                setAuthors(response.data[0].authors);
             })
-                .then(response => {
-                    setPosts_on_page(parseInt(response.data[0].posts_on_page));
-                    setAuthors(response.data[0].authors);
-                })
-                .catch(error => setError(prevState => {
-                    return [...prevState, [0, 'Network error']]
-                }))
-        }, [order, page, search, author]);
+            .catch(() => setError(prevState => {
+                return [...prevState, [0, 'Network error']]
+            }))
+    }, [order, page, search, author]);
 
     return (
         <Box>
@@ -168,7 +147,6 @@ const PostList = () => {
                     value={author}
                     onChange={e => setAuthor(e.target.value)}
                 >
-
                     <MenuItem value={'all'}> {'all'} </MenuItem>
                     {
                         authors.map((author) => (
@@ -178,7 +156,6 @@ const PostList = () => {
                         ))
                     }
                 </TextField>
-
             </Box>
 
             {/* Displaying a list of posts */}
@@ -210,18 +187,16 @@ const PostList = () => {
 
                )
            }
-           {/*<Container component="main" maxWidth="xs">*/}
-                <Box
-                    sx={{
-                        marginTop: 8,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                    }}
-                >
+            <Box
+                sx={{
+                    marginTop: 8,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                }}
+            >
                 <Pagination count={parseInt(Math.ceil(number_of_posts/posts_on_page))} page={page} onChange={handleChangePage} />
-                </Box>
-           {/*</Container>*/}
+            </Box>
             {/*Displaying a possible list of errors*/}
             <Grid item xs={12}>
                 {

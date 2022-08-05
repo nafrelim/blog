@@ -16,6 +16,7 @@ import axios from "axios";
 import {API} from "../blog_be";
 import Copyright from "./Copyright";
 import Error from "./Error";
+import TokenRefresh from "./TokenRefresh";
 
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 axios.defaults.xsrfCookieName = 'csrftoken';
@@ -28,12 +29,12 @@ const AddPost = () => {
     const [title, setPost_title] = useState("");
     const [content, setPost_content] = useState("");
     const [error, setError] = useState([]);
-    const [data, setData] = useState(false);
     let navigate = useNavigate();
+
+    TokenRefresh();
 
     async function handleSubmit (event) {
         event.preventDefault();
-
         // Save a post when fields are not empty
         if (title.length > 0 && content.length > 0) {
             await axios(`${API}/api/post/`, {
@@ -59,7 +60,7 @@ const AddPost = () => {
             navigate("/post", { replace: true });
         }
         else {
-            // Clearing the list
+            // Clearing error list
             setError([])
             if (title.length ===0) {
                 setError(prevState => {
@@ -74,7 +75,7 @@ const AddPost = () => {
     }
 
     return (
-        // Display the post entry form
+        // Display the post-entry form
         <ThemeProvider theme={theme}>
             <Container component="main" maxWidth="xs">
                 <CssBaseline />

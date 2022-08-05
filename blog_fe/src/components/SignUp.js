@@ -32,13 +32,12 @@ export default function SignUp() {
   const [data, setData] = useState(false);
   let navigate = useNavigate();
 
-  const handleSubmit = (event) => {
+  async function handleSubmit (event) {
       event.preventDefault();
       setError([])
       if (firstname.length > 0 && lastname.length > 0 && username.length > 0 && password.length > 0
           && password === password2) {
-          // useEffect(() => {
-              axios(`${API}/auth/register/`, {
+              await axios(`${API}/auth/register/`, {
                   method: 'POST',
                   mode: 'same-origin',
                   headers: {
@@ -92,14 +91,12 @@ export default function SignUp() {
                           })
                       }
                   })
-          // }, [])
       } else {
           if (username < 1) {
               setError(prevState => {
                   return ([...prevState, [1, "Username cannot be empty."]])
               })
           }
-
           if (firstname < 1) {
               setError(prevState => {
                   return ([...prevState, [1, "First name cannot be empty."]])
@@ -129,6 +126,7 @@ export default function SignUp() {
   }
 
   return (
+    // Display the user datata form
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />

@@ -14,6 +14,7 @@ import Copyright from "./Copyright";
 import {API} from "../blog_be";
 
 import axios from "axios";
+import TokenRefresh from "./TokenRefresh";
 
 
 const ShowPost = () => {
@@ -24,6 +25,9 @@ const ShowPost = () => {
     let { id } = useParams();
 
     useEffect(() => {
+
+        TokenRefresh();
+
         axios.get(`${API}/api/post/${id}/`, {
                 mode: 'same-origin',
                 headers: {
