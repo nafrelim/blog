@@ -69,6 +69,10 @@ class ChangePasswordView(generics.UpdateAPIView):
 
 
 class LogoutView(APIView):
+    """
+    This view is used to logout a user.
+    """
+
     permission_classes = (IsAuthenticated,)
 
     def post(self, request):
@@ -76,18 +80,20 @@ class LogoutView(APIView):
             refresh_token = request.data["refresh_token"]
             token = RefreshToken(refresh_token)
             token.blacklist()
-
             return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class LogoutAllView(APIView):
+    """
+    This view is used to logout all users.
+    """
+
     permission_classes = (IsAuthenticated,)
 
     def post(self, request):
         tokens = OutstandingToken.objects.filter(user_id=request.user.id)
         for token in tokens:
             t, _ = BlacklistedToken.objects.get_or_create(token=token)
-
         return Response(status=status.HTTP_205_RESET_CONTENT)

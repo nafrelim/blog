@@ -3,7 +3,6 @@
 1. Introduction - the purpose of the project
 2. Technologies used
 3. Local deployment
-4. Functional and technical deficiencies
 
 # 1. Introduction - the purpose of the project
 
@@ -43,9 +42,10 @@ The application is based on the Python language and the following additional mod
 * django framework
 * django rest framework
 * psycopg2-binary
+* JWT - authorization, authentication
 * spectacular + swagger - OpenAPI documentation
-* dj-rest-auth - authorization
 * faker - generating data for tests and filling the database with sample records
+* silk - bakcend and http debugger
 
 ### 2.3 Database
 
@@ -73,13 +73,16 @@ In order to run cvt-blog locally, you need to have at least the following skills
 2. Log in to the database server through the application manages the server **psql**
 3. Create a database with any name
 
-Remember all your login details in order to use them later to configure the blog_be application:
+Remember all your login details in order to use them later to configure the blog_be application.
+Set the parameters of the lase in the .env.dev file, located in the /blog_be folder. 
+After setting the parameters, the name of the ma .env file should be changed.
+Here are the basic parameters to be set:
 
-* server - default is **localhost**
+* server - database server url
+* port - Server port number (for example: 5432)
 * database - name provided when creating the database
-* port - **5432** by default
-* username - given when setting up the server, default **postgres**
-* password - given when setting up the server, default **postgres**
+* username - given when setting up the server
+* password - given when setting up the server
 
 ### 3.3 Preparation of the project's repository
 
@@ -89,7 +92,7 @@ The project repository can be located anywhere in the working folders.
 
 #### Download the project's repository
 
-The project's repository is on the GitBub platform at [https://github.com/nafrelim/cvt-blog](https://github.com/nafrelim/cvt-blog).
+The project's repository is on the GitBub platform at [https://github.com/nafrelim/blog](https://github.com/nafrelim/blog).
 In order to download the application locally download it locally to the project folder in which it is located (git clone). Two subfolders should appear in the project folder: **blog_be** and **blog_fe**, filled with source code.
 
 ### 3.4 Installing and starting the **blog_be** application
@@ -112,8 +115,8 @@ Follow the steps below one by one to install blog_be apolication.
 
 #### Set the parameters of the database connection
 
-* [ ]  modify the local_settings.py file in the blog_be folder in order to enter the database connection data:
-
+* [ ]  modify the .env.dev (renaming the file to .env) file in order to enter the database connection data,
+for example:
 ```
 DATABASES = {
     'default': {
@@ -137,13 +140,13 @@ Fill in the relevant fields in this file with the data that you saved when creat
 
 * [ ]  from the blog_be folder, run `python manage.py createsuperuser` in the terminal and create a user named **admin**
 * [ ]  run the django **admin application** at [http://localhost:8000/admin](http://localhost:8000/admin), log in, enter sample data into the Posts table
-* [ ]  by running the **Swagger** application at [http://localhost:8000/swagger](http://localhost:8000/swagger) you can check whether the entered data is visible through the REST API interface
+* [ ]  by running the **Swagger** application at [http://localhost:8000/schema/swagger](http://localhost:8000/schema/swagger) you can check whether the entered data is visible through the REST API interface
 
 #### Entering test data into the database
 
 Calling the following procedure is optional and results in introducing 30 posts with sample content to the database and creating an additional test **admin** account (password: !234567890), if the superuser account has been given a different name.
 
-* [ ]  from the blog_be folder, run in the terminal  command `python manage.py populateblog <posts>` , where <posts> is the number of posts generated
+* [ ]  from the blog_be folder, run in the terminal  command `python manage.py populateblog <posts>` , where <posts> is the number of posts generated (min. 100)
 * [ ]  They are created:
 
 * admin user with password !234567890
@@ -186,10 +189,3 @@ From the blog_fe folder, execute the command `npm start` in the terminal - the a
 
 > Warning! If you run the application on a different port, you should change (specify this port) in the **blog_fe\webpack.config.js** file
 
-# 4. Online availability
-
-1. Working applications are accessed through the Heroku website. This is described in the application README.
-
-# The next stages of development
-
-1. Expansion of post author management
