@@ -9,10 +9,8 @@ class Post(models.Model):
 
     # author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Author')
     author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Author")
-    title = models.CharField(
-        max_length=255, null=False, blank=False, verbose_name="Post title"
-    )
-    content = models.TextField(null=False, blank=False, verbose_name="Post content")
+    title = models.CharField(max_length=255, verbose_name="Post title")
+    content = models.TextField(verbose_name="Post content")
     views = models.PositiveIntegerField(default=0, verbose_name="Count post views")
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

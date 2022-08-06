@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   db:
-    container_name: postgres
+    container_name: db
     image: postgres
     restart: always
     environment:
@@ -15,15 +15,16 @@ services:
     ports:
       - ${DB_PORT}:${DOCKER_DB_PORT}
   blog:
-    container_name: blog_be
+    container_name: be
+    image: blog_be
     build:
       context: .
       dockerfile: ./Dockerfile
     command: python manage.py runserver 0.0.0.0:${DOCKER_BE_PORT}
     environment:
       - TZ=Europe/Warsaw
-    volumes:
-      - .:/blog-be
+#    volumes:
+#      - .:/blog
     ports:
       - ${BE_PORT}:${DOCKER_BE_PORT}
     depends_on:

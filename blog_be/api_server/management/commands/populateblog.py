@@ -1,5 +1,5 @@
 from api_server.utils import create_admin, create_posts
-from django.core.management.base import BaseCommand
+from django.core.management import BaseCommand
 
 
 class Command(BaseCommand):

@@ -67,12 +67,10 @@ class UpdateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ("username", "first_name", "last_name", "email")
-        # extra_kwargs = {
-        # "first_name": {"required": True},
-        # "last_name": {"required": True},
-        # "username": {"required": True},
-        # "email": {"required": True},
-        # }
+        extra_kwargs = {
+            "first_name": {"required": True},
+            "last_name": {"required": True},
+        }
 
     def validate_username(self, value):
         # the username must be unique, unless it is already the user's username
@@ -112,8 +110,8 @@ class UserSerializer(serializers.ModelSerializer):
     """
 
     class Meta:
-        model = get_user_model()
-        fields = ("id", "username", "email")
+        model = User
+        fields = ("id", "username", "first_name", "last_name", "email")
 
 
 class ChangePasswordSerializer(serializers.ModelSerializer):

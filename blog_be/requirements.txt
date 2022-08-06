@@ -14,3 +14,6 @@ faker
 psycopg2-binary
 pyjwt
 pytest
+pytest-django
+pytest-drf
+pytest-sugar

@@ -1,7 +1,7 @@
 FROM python:3
 ENV PYTHONUNBUFFERED=1
 
-WORKDIR .
+WORKDIR /blog
 
 COPY requirements.txt .
 RUN pip install -r requirements.txt
@@ -14,6 +14,6 @@ COPY . .
 #RUN python manage.py migrate
 #RUN python manage.py populateblog 100
 EXPOSE ${DOCKER_BE_PORT}
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8888"]
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8888", "pytest"]
 #RUN python manage.py runserver
 
