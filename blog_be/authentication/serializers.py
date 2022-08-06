@@ -67,12 +67,12 @@ class UpdateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ("username", "first_name", "last_name", "email")
-        extra_kwargs = {
-            "first_name": {"required": True},
-            "last_name": {"required": True},
-            "username": {"required": True},
-            "email": {"required": True},
-        }
+        # extra_kwargs = {
+        # "first_name": {"required": True},
+        # "last_name": {"required": True},
+        # "username": {"required": True},
+        # "email": {"required": True},
+        # }
 
     def validate_username(self, value):
         # the username must be unique, unless it is already the user's username
@@ -81,7 +81,8 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         user = self.context["request"].user
         if User.objects.exclude(pk=user.pk).filter(username=value).exists():
             raise serializers.ValidationError(
-                {"username": "This username is already in use."}
+                # {"email": "This email is already in use."},
+                "This username is already in use."
             )
         return value
 
@@ -92,7 +93,7 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         user = self.context["request"].user
         if User.objects.exclude(pk=user.pk).filter(email=value).exists():
             raise serializers.ValidationError(
-                {"email": "This email is already in use."}
+                "This email is already in use.",
             )
         return value
 

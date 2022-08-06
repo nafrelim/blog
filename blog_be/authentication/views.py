@@ -37,6 +37,12 @@ class UpdateUserView(generics.UpdateAPIView):
     queryset = User.objects.all()
     serializer_class = UpdateUserSerializer
 
+    def patch(self, request, *args, **kwargs):
+        return Response(
+            data={"detail": 'Method "PATCH" not allowed.'},
+            status=status.HTTP_405_METHOD_NOT_ALLOWED,
+        )
+
 
 class ListUserView(generics.ListAPIView):
     """
@@ -72,7 +78,7 @@ class ChangePasswordView(generics.UpdateAPIView):
 
 class LogoutView(APIView):
     """
-    This view is used to logout a user.
+    This view is used to log out a user.
     """
 
     permission_classes = (IsAuthenticated,)
@@ -83,13 +89,13 @@ class LogoutView(APIView):
             token = RefreshToken(refresh_token)
             token.blacklist()
             return Response(status=status.HTTP_205_RESET_CONTENT)
-        except Exception as e:
+        except Exception:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class LogoutAllView(APIView):
     """
-    This view is used to logout all users.
+    This view is used to log out all users.
     """
 
     permission_classes = (IsAuthenticated,)
