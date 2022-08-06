@@ -17,7 +17,7 @@ class IsAuthenticatedAndAuthorPost(permissions.BasePermission):
         return obj.author == request.user or request.user.is_staff
 
 
-class IsAuthenticatedAndAuthorView(permissions.BasePermission):
+class IsAuthenticatedAndSafeMethodOrAdmin(permissions.BasePermission):
     def has_permission(self, request, view):
         # Authenticated users only can see list view
         if request.user.is_authenticated:

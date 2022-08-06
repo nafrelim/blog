@@ -11,7 +11,10 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 from .models import Post
-from .permissions import IsAuthenticatedAndAuthorPost, IsAuthenticatedAndAuthorView
+from .permissions import (
+    IsAuthenticatedAndAuthorPost,
+    IsAuthenticatedAndSafeMethodOrAdmin,
+)
 from .reports import get_report
 from .serializers import (
     CountViewsSerializer,
@@ -22,8 +25,11 @@ from .serializers import (
 
 
 class PostViewSet(ModelViewSet):
+    """
+    View for handling the post endpoint.
+    """
+
     permission_classes = [IsAuthenticatedAndAuthorPost]
-    # permission_classes = [IsAuthenticated && IsAuthenticatedAndAuthorPost]
     filter_backends = (SearchFilter, OrderingFilter)
     search_fields = ("title",)
     ordering_fields = ("created", "updated", "author")
@@ -49,7 +55,11 @@ class ViewViewSet(
     mixins.ListModelMixin,
     GenericViewSet,
 ):
-    permission_classes = [IsAuthenticatedAndAuthorView]
+    """
+    A view to support the endpoint of the number of views of post.
+    """
+
+    permission_classes = [IsAuthenticatedAndSafeMethodOrAdmin]
     filter_backends = (OrderingFilter,)
     ordering_fields = ("views",)
     queryset = Post.objects.all()
@@ -62,6 +72,10 @@ class ViewViewSet(
 
 
 class ReportView(APIView):
+    """
+    Report generation view. The report components are created in the get_report function.
+    """
+
     permission_classes = [IsAdminUser & IsAuthenticated]
 
     def get(self, request):
@@ -71,6 +85,10 @@ class ReportView(APIView):
 
 
 class ParametersView(APIView):
+    """
+    Generating parameters needed in the blog_fe application.
+    """
+
     permission_classes = [IsAuthenticatedAndAuthorPost]
 
     def get(self, request):

@@ -12,6 +12,9 @@ def client():
 
 @pytest.fixture
 def set_up():
+    """
+    Set up test data: 1 admin, 1 author, 10 posts.
+    """
     create_admin()
     author = create_author("author1")
     for _ in range(0, 10):

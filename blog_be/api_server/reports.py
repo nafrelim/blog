@@ -1,6 +1,3 @@
-from math import ceil
-
-from django.conf import settings
 from django.contrib.auth.models import User
 from django.db.models import Avg, Count, Max, Min, Sum
 from django.db.models.functions import Coalesce

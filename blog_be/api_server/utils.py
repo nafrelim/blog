@@ -8,6 +8,9 @@ from .models import Post
 
 
 def create_post():
+    """
+    Create one fake post.
+    """
     fake = Factory.create("en_US")
     title = fake.paragraph(nb_sentences=1, variable_nb_sentences=True)
     content = fake.paragraph(nb_sentences=40)
@@ -16,6 +19,9 @@ def create_post():
 
 
 def create_admin():
+    """
+    Create admin user.
+    """
     try:
         user = User.objects.get(username="admin")
         return user
@@ -37,6 +43,9 @@ def create_admin():
 
 
 def create_author(author):
+    """
+    Create fake author.
+    """
     try:
         fake = Factory.create("en_US")
         author = User.objects.get(username=author)
@@ -59,8 +68,10 @@ def create_author(author):
 
 
 def create_posts(number_of_posts):
+    """
+    Create number_of_posts fake posts.
+    """
     total_posts = 0
-
     author = create_author("admin")
     posts = int(number_of_posts * 0.1)
     total_posts += posts

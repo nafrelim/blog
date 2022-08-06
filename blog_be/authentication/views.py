@@ -9,7 +9,7 @@ from rest_framework_simplejwt.token_blacklist.models import (
 )
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .permissions import IsAdminUserOrLoggedIn
+from .permissions import IsAuthenticatedAndAuthorOrAdmin
 from .serializers import (
     ChangePasswordSerializer,
     RegisterUserSerializer,
@@ -33,8 +33,8 @@ class UpdateUserView(generics.UpdateAPIView):
     Update the user.
     """
 
+    permission_classes = (IsAuthenticatedAndAuthorOrAdmin,)
     queryset = User.objects.all()
-    permission_classes = (IsAuthenticated,)
     serializer_class = UpdateUserSerializer
 
 
@@ -43,7 +43,7 @@ class ListUserView(generics.ListAPIView):
     This view is used to get the list of all users.
     """
 
-    permission_classes = [IsAdminUser]  # only for admin users
+    permission_classes = (IsAdminUser,)  # only for admin users
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
@@ -53,7 +53,9 @@ class DetailUserView(generics.RetrieveAPIView):
     This view is used to get the details of a user.
     """
 
-    permission_classes = [IsAdminUserOrLoggedIn]  # only logged in author or admin
+    permission_classes = (
+        IsAuthenticatedAndAuthorOrAdmin,
+    )  # only logged in author or admin
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
@@ -63,8 +65,8 @@ class ChangePasswordView(generics.UpdateAPIView):
     This view is used to change the password of a user.
     """
 
+    permission_classes = (IsAuthenticatedAndAuthorOrAdmin,)
     queryset = User.objects.all()
-    permission_classes = (IsAuthenticated,)
     serializer_class = ChangePasswordSerializer
 
 

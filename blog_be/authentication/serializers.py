@@ -70,19 +70,14 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             "first_name": {"required": True},
             "last_name": {"required": True},
+            "username": {"required": True},
+            "email": {"required": True},
         }
 
-    def validate_email(self, value):
-        # user email have to be unique
-        user = self.context["request"].user
-        if User.objects.exclude(pk=user.pk).filter(email=value).exists():
-            raise serializers.ValidationError(
-                {"email": "This email is already in use."}
-            )
-        return value
-
     def validate_username(self, value):
-        # user username have to be unique
+        # the username must be unique, unless it is already the user's username
+        if value == User.objects.get(pk=self.context["view"].kwargs["pk"]).username:
+            return value
         user = self.context["request"].user
         if User.objects.exclude(pk=user.pk).filter(username=value).exists():
             raise serializers.ValidationError(
@@ -90,21 +85,23 @@ class UpdateUserSerializer(serializers.ModelSerializer):
             )
         return value
 
-    def update(self, instance, validated_data):
+    def validate_email(self, value):
+        # the user's email must be unique, unless it is already the user's email
+        if value == User.objects.get(pk=self.context["view"].kwargs["pk"]).email:
+            return value
         user = self.context["request"].user
-
-        if user.pk != instance.pk:
+        if User.objects.exclude(pk=user.pk).filter(email=value).exists():
             raise serializers.ValidationError(
-                {"authorize": "You dont have permission for this user."}
+                {"email": "This email is already in use."}
             )
+        return value
 
+    def update(self, instance, validated_data):
         instance.first_name = validated_data["first_name"]
         instance.last_name = validated_data["last_name"]
         instance.email = validated_data["email"]
         instance.username = validated_data["username"]
-
         instance.save()
-
         return instance
 
 
