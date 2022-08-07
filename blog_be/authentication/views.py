@@ -63,6 +63,7 @@ class DetailUserView(generics.RetrieveAPIView):
         IsAuthenticatedAndAuthorOrAdmin,
     )  # only logged in author or admin
     queryset = User.objects.all()
+    lookup_field = "username"
     serializer_class = UserSerializer
 
 

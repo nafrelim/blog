@@ -102,7 +102,7 @@ WSGI_APPLICATION = "blog_be.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
         "HOST": env("DB_HOST"),
         "PORT": env("DOCKER_DB_PORT"),
         "NAME": env("DB_NAME"),

@@ -19,7 +19,7 @@ urlpatterns = [
         "update_profile/<int:pk>/", UpdateUserView.as_view(), name="auth_update_profile"
     ),
     path("user/", ListUserView.as_view(), name="users"),
-    path("user/<int:pk>/", DetailUserView.as_view(), name="user_detail"),
+    path("user/<str:username>/", DetailUserView.as_view(), name="user_detail"),
     path(
         "change_password/<int:pk>/",
         ChangePasswordView.as_view(),

@@ -41,6 +41,10 @@ const ResponsiveAppBar = () => {
         setAnchorElNav(navigate("add", { replace: true }));
     };
 
+    const handleCloseNavMenuUpdateProfile = () => {
+        setAnchorElNav(navigate("add", { replace: true }));
+    };
+
     const handleCloseNavMenuReport = () => {
         setAnchorElNav(navigate("report", { replace: true }));
     };
@@ -67,6 +71,10 @@ const ResponsiveAppBar = () => {
 
     const handleCloseUserMenuSignOut = () => {
         setAnchorElUser(navigate("/logout", { replace: true }));
+    };
+
+    const handleCloseUserMenuUpdateProfile = () => {
+        setAnchorElUser(navigate("/update_profile/"+localStorage.getItem('username')+"/", { replace: true }));
     };
 
     const handleCloseUserMenuSignUp = () => {
@@ -148,6 +156,13 @@ const ResponsiveAppBar = () => {
                             {
                                 logged
                                 &&
+                                <MenuItem onClick={handleCloseNavMenuUpdateProfile}>
+                                    <Typography textAlign="center">Update profile</Typography>
+                                </MenuItem>
+                            }
+                            {
+                                logged
+                                &&
                                 isAdmin
                                 &&
                                 <MenuItem onClick={handleCloseNavMenuReport}>
@@ -223,6 +238,10 @@ const ResponsiveAppBar = () => {
                                 <MenuItem onClick={handleCloseUserMenuSignUp}>
                                     <Typography textAlign="center">Sign up</Typography>
                                 </MenuItem>
+                                <MenuItem onClick={handleCloseUserMenuUpdateProfile}>
+                                    <Typography textAlign="center">Update profile</Typography>
+                                </MenuItem>
+
                                 {/*<MenuItem onClick={handleCloseUserRegistration}>*/}
                                 {/*    <Typography textAlign="center">Registration</Typography>*/}
                                 {/*</MenuItem>*/}

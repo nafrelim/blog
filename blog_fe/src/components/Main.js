@@ -13,6 +13,7 @@ import AddPost from "./AddPost";
 import EditPost from "./EditPost";
 import Report from "./Report";
 import NotFound from "./NotFound";
+import UpdateProfil from "./UpdateProfil";
 
 const Main = () => {
     return (
@@ -40,6 +41,11 @@ const Main = () => {
                 <Route exact path="/register" element={
                     <Container sx={{'center': 'center'}}>
                         <SignUp />
+                    </Container>
+                }/>
+                <Route exact path="/update_profile/:user" element={
+                    <Container sx={{'center': 'center'}}>
+                        <UpdateProfil />
                     </Container>
                 }/>
                 <Route exact path="/post" element={
