@@ -57,7 +57,6 @@ export default function SignUp() {
 
   }, []);
 
-
   function handleSubmit (event) {
       event.preventDefault();
       setError([])

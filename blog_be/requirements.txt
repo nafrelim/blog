@@ -11,6 +11,7 @@ django-silk
 dj-rest-auth
 drf-spectacular
 faker
+gunicorn
 psycopg2-binary
 pyjwt
 pytest

@@ -25,7 +25,7 @@ module.exports = {
     port: process.env.PORT || 8080,
     allowedHosts: [
       '.heroku.com',
-      'nafrelim-blog-fe.herokuapp.com',
+      'nafrelim-blog.herokuapp.com',
       // 'localhost',
     ],
     historyApiFallback: true,

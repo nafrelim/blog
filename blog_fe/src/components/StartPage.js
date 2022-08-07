@@ -73,7 +73,7 @@ const StartPage = () => {
                             {"Sign in"}
                         </Link>
                         <br/>
-                        - username: admin, author2, author2<br/>
+                        - username: admin, author1, author2, author4, author4<br/>
                         - password: !234567890<br/>
                     </Typography>
                 </Container>
