@@ -41,16 +41,12 @@ const ResponsiveAppBar = () => {
         setAnchorElNav(navigate("add", { replace: true }));
     };
 
-    const handleCloseNavMenuUpdateProfile = () => {
-        setAnchorElNav(navigate("add", { replace: true }));
-    };
-
     const handleCloseNavMenuReport = () => {
         setAnchorElNav(navigate("report", { replace: true }));
     };
 
     const handleCloseNavMenu = () => {
-        setAnchorElNav(navigate("add", { replace: true }));
+        setAnchorElNav(null);
     };
 
     const handleClosePost = () => {
@@ -108,7 +104,7 @@ const ResponsiveAppBar = () => {
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <Button href={"#/"} sx={{ my: 2, color: 'white', display: 'block' }}>
-                        Blog
+                        Home
                     </Button>
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
                         <IconButton
@@ -143,7 +139,7 @@ const ResponsiveAppBar = () => {
                                 logged
                                 &&
                                 <MenuItem onClick={handleCloseNavMenuPosts}>
-                                    <Typography textAlign="center">Posts</Typography>
+                                    <Typography textAlign="center">Blog</Typography>
                                 </MenuItem>
                             }
                             {
@@ -151,13 +147,6 @@ const ResponsiveAppBar = () => {
                                 &&
                                 <MenuItem onClick={handleCloseNavMenuAdd}>
                                     <Typography textAlign="center">Add post</Typography>
-                                </MenuItem>
-                            }
-                            {
-                                logged
-                                &&
-                                <MenuItem onClick={handleCloseNavMenuUpdateProfile}>
-                                    <Typography textAlign="center">Update profile</Typography>
                                 </MenuItem>
                             }
                             {
@@ -171,26 +160,18 @@ const ResponsiveAppBar = () => {
                             }
                         </Menu>
                     </Box>
-                        <Typography
-                            variant="h6"
-                            noWrap
-                            component="div"
-                            sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
-                        >
-                            LOGO
-                        </Typography>
                         <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                             {
                                 logged
                                 &&
-                                <Button href={"/#/post"} sx={{my: 2, color: 'white', display: 'block'}}>
-                                    Posts
+                                <Button href={"#/post"} sx={{my: 2, color: 'white', display: 'block'}}>
+                                    Blog
                                 </Button>
                             }
                             {
                                 logged
                                 &&
-                                <Button href={"/#/add"} sx={{my: 2, color: 'white', display: 'block'}}>
+                                <Button href={"#/add"} sx={{my: 2, color: 'white', display: 'block'}}>
                                     Add post
                                 </Button>
                             }
@@ -199,7 +180,7 @@ const ResponsiveAppBar = () => {
                                 &&
                                 isAdmin
                                 &&
-                                <Button href={"/#/report"} sx={{my: 2, color: 'white', display: 'block'}}>
+                                <Button href={"#/report"} sx={{my: 2, color: 'white', display: 'block'}}>
                                     Report
                                 </Button>
                             }

@@ -58,8 +58,8 @@ const StartPage = () => {
                     <br/>
                     The purpose of this task is to prepare an E2E experience of a Blog.<br/><br/>
                     The application includes three main components:<br/>
-                    1. Frontend application - blog_fe<br/>
-                    2. Backend application - blog_be<br/>
+                    1. Frontend application<br/>
+                    2. Backend application<br/>
                     3. Database<br/><br/>
                     <Link href="https://github.com/nafrelim/blog"> {"Source code of the project, description of functionalities and a list of technologies used."}</Link>
                 </Typography>

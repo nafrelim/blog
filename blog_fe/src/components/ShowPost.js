@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import DeletePost from "./DeletePost";
 import Grid from "@mui/material/Grid";
 import {Stack} from "@mui/material";
@@ -23,6 +23,7 @@ const ShowPost = () => {
     const [error, setError] = useState([]);
     const [author, setAuthor] = useState(false);
     let { id } = useParams();
+    let navigate = useNavigate();
 
     useEffect(() => {
 
@@ -61,8 +62,8 @@ const ShowPost = () => {
                 setCount(count_tmp);
             })
             .catch(error => setError(prevState => {
-                if (error.response.status == 401 || error.response.status == 403) {
-                        navigate("/#", {replace: true});
+                if (error.response.status == 401 || error.response.status == 403 || error.response.status == 404) {
+                        navigate("/", {replace: true});
                     }
                 return [...prevState, [0, 'Network error']]
             }))

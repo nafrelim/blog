@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db.models import F
+from django.http import Http404
 from rest_framework import mixins
 from rest_framework.decorators import api_view
 from rest_framework.filters import OrderingFilter, SearchFilter
@@ -37,9 +38,12 @@ class PostViewSet(ModelViewSet):
     view_name = "post"
 
     def get_object(self):
-        post = Post.objects.get(pk=self.kwargs.get("pk"))
-        self.check_object_permissions(self.request, post)
-        return post
+        try:
+            post = Post.objects.get(pk=self.kwargs.get("pk"))
+            self.check_object_permissions(self.request, post)
+            return post
+        except Post.DoesNotExist:
+            raise Http404
 
     def get_queryset(self):
         queryset = Post.objects.select_related("author").all().order_by("-created")
@@ -67,7 +71,9 @@ class ViewViewSet(
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
-        Post.objects.filter(id=instance.id).update(views=F("views") + 1)
+        if request.user != instance.author:
+            instance.views = F("views") + 1
+            instance.save()
         return super().retrieve(request, *args, **kwargs)
 
 

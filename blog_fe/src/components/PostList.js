@@ -87,7 +87,7 @@ const PostList = () => {
             })
             .catch(error => setError(prevState => {
                 if (error.response.status == 401 || error.response.status == 403) {
-                    navigate("/#", {replace: true});
+                    navigate("/", {replace: true});
                 }
                 return [...prevState, [0, 'Network error']]
             }))

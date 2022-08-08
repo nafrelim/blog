@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
-import {API, csrfToken, token} from "../blog_be";
+import {API} from "../blog_be";
 import {useNavigate} from "react-router-dom";
 
 axios.defaults.xsrfHeaderName = 'X-CSRFToken'
@@ -20,11 +20,13 @@ const SignOut = () => {
             },
         })
             .then(response => {
-                localStorage.setItem('token', null)
-                localStorage.setItem('username', null)
-                navigate("/#", {replace: true});
+                console.log("wylogowanie")
+                localStorage.removeItem('token')
+                localStorage.removeItem('refresh')
+                localStorage.removeItem('username')
+                navigate("/", {replace: true});
             })
-            .catch(() => {navigate("/#", {replace: true})})
+            .catch(() => {navigate("/", {replace: true})})
     })
 }
 

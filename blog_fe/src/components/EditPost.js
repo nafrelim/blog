@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import {Stack, TextareaAutosize} from "@mui/material";
 import {useParams, useNavigate} from "react-router-dom";
 
@@ -16,6 +17,8 @@ import {API} from "../blog_be";
 import Error from "./Error";
 import Copyright from "./Copyright";
 import TokenRefresh from "./TokenRefresh";
+import Avatar from "@mui/material/Avatar";
+
 
 const theme = createTheme();
 
@@ -43,8 +46,8 @@ const EditPost = () => {
                 setPost_content(response.data.content);
             })
             .catch(error => setError(prevState => {
-                if (error.response.status == 401 || error.response.status == 403) {
-                    navigate("/#", {replace: true});
+                if (error.response.status == 401 || error.response.status == 403 || error.response.status == 404) {
+                    navigate("/", {replace: true});
                 }
                 return [...prevState, [0, 'Network error']]
             }))
@@ -94,20 +97,23 @@ const EditPost = () => {
     return (
         // Display the post-entry form
         <ThemeProvider theme={theme}>
-            <Container component="main" maxWidth="xs">
-                <CssBaseline />
-                <Box
-                    sx={{
-                        marginTop: 8,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                    }}
-                >
-                    <Typography component="h1" variant="h5">
-                        Edit post
-                    </Typography>
-                    <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Container component="main" maxWidth="xs">
+            <CssBaseline />
+            <Box
+              sx={{
+                marginTop: 8,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+            >
+              <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                <ModeEditIcon />
+              </Avatar>
+              <Typography component="h1" variant="h5">
+                  Edit post
+              </Typography>
+             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <TextField

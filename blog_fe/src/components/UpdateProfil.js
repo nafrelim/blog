@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -49,8 +49,8 @@ export default function SignUp() {
                 setEmail(response.data.email)
             })
             .catch(error => setError(prevState => {
-                if (error.response.status == 401 || error.response.status == 403) {
-                    navigate("/#", {replace: true});
+                if (error.response.status == 401 || error.response.status == 403 || error.response.status == 404) {
+                    navigate("/", {replace: true});
                 }
                 return [...prevState, [0, 'Network error']]
             }))
@@ -78,7 +78,7 @@ export default function SignUp() {
               })
                   .then(response => {
                       console.log(response.data)
-                      navigate("/#", {replace: true});
+                      navigate("/", {replace: true});
                   })
                   .catch(e => {
                       if (e.response.status === 401 || e.response.status === 403) {
@@ -143,7 +143,7 @@ export default function SignUp() {
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
+            <ModeEditIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             Edit your profile
