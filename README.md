@@ -146,7 +146,7 @@ Fill in the relevant fields in this file with the data that you saved when creat
 
 Calling the following procedure is optional and results in introducing 30 posts with sample content to the database and creating an additional test **admin** account (password: !234567890), if the superuser account has been given a different name.
 
-* [ ]  from the blog_be folder, run in the terminal  command `python manage.py populateblog <posts>` , where <posts> is the number of posts generated (min. 100)
+* [ ]  from the blog_be folder, run in the terminal  command `python manage.py populateblog <posts>` , where <posts> is the number of posts generated (min. 50)
 * [ ]  They are created:
 
 * admin user with password !234567890

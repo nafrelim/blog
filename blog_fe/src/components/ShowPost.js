@@ -15,6 +15,8 @@ import {API} from "../blog_be";
 
 import axios from "axios";
 import TokenRefresh from "./TokenRefresh";
+import CommentList from "./CommentList";
+import AddComment from "./AddComment";
 
 
 const ShowPost = () => {
@@ -97,6 +99,9 @@ const ShowPost = () => {
                     <DeletePost id={post.id}/>
                 </ButtonGroup>
             }
+
+            <CommentList post_id={id}/>
+
             {/*Displaying a possible list of errors*/}
             <Grid item xs={12}>
                 {

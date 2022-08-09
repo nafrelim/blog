@@ -1,4 +1,4 @@
-from api_server.utils import create_admin, create_posts
+from api_server.utils import create_admin, create_comments, create_posts
 from django.core.management import BaseCommand
 
 
@@ -10,9 +10,10 @@ class Command(BaseCommand):
         parser.add_argument("new_number_of_views", nargs="+", type=int)
 
     def handle(self, *args, **options):
-        if options["new_number_of_views"][0] >= 100:
+        if options["new_number_of_views"][0] >= 50:
             create_admin()
             create_posts(options["new_number_of_views"][0])
+            create_comments()
             self.stdout.write(
                 self.style.SUCCESS(
                     f"Succesfully blog with {options['new_number_of_views'][0]} posts"

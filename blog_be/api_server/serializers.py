@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from .models import Post
+from .models import Comment, Post
 
 
 class PostSerializer(serializers.HyperlinkedModelSerializer):
@@ -9,13 +9,53 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
         slug_field="username", queryset=User.objects.all()
     )
 
+    slug = serializers.SlugField(read_only=True)
+
     class Meta:
         url = serializers.HyperlinkedIdentityField(
             view_name="post-detail",
         )
         verbose_name = "Post"
         model = Post
-        fields = ["url", "id", "title", "content", "created", "updated", "author"]
+        required = ("title", "content", "author")
+        fields = [
+            "url",
+            "id",
+            "slug",
+            "title",
+            "content",
+            "created",
+            "updated",
+            "author",
+        ]
+
+
+class CommentSerializer(serializers.HyperlinkedModelSerializer):
+    comment_author = serializers.SlugRelatedField(
+        slug_field="username", queryset=User.objects.all()
+    )
+
+    class Meta:
+        url = serializers.HyperlinkedIdentityField(
+            view_name="comment-detail",
+        )
+        verbose_name = "Comment"
+        model = Comment
+        fields = ["url", "id", "content", "post", "comment_author", "created"]
+
+
+class PostCommentsSerializer(serializers.HyperlinkedModelSerializer):
+    comment_author = serializers.SlugRelatedField(
+        slug_field="username", queryset=User.objects.all()
+    )
+
+    class Meta:
+        url = serializers.HyperlinkedIdentityField(
+            view_name="comment-detail",
+        )
+        verbose_name = "Comment"
+        model = Comment
+        fields = ["url", "id", "content", "post", "comment_author", "created"]
 
 
 class CountViewsSerializer(serializers.HyperlinkedModelSerializer):

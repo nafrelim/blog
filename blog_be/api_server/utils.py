@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from faker import Factory
 
-from .models import Post
+from .models import Comment, Post
 
 
 def create_post():
@@ -15,7 +15,18 @@ def create_post():
     title = fake.paragraph(nb_sentences=1, variable_nb_sentences=True)
     content = fake.paragraph(nb_sentences=40)
     views = fake.pyint(min_value=0, max_value=100)
-    return title, content, views
+    created = fake.date_time_between(start_date="-30d", end_date="now")
+    return title, content, views, created
+
+
+def create_comment():
+    """
+    Create one fake post.
+    """
+    fake = Factory.create("en_US")
+    content = fake.paragraph(nb_sentences=5)
+    created = fake.date_time_between(start_date="-30d", end_date="now")
+    return content, created
 
 
 def create_admin():
@@ -76,32 +87,56 @@ def create_posts(number_of_posts):
     posts = int(number_of_posts * 0.1)
     total_posts += posts
     for post in range(0, posts):
-        title, content, views = create_post()
-        Post.objects.create(title=title, content=content, views=views, author=author)
+        title, content, views, created = create_post()
+        Post.objects.create(
+            title=title, content=content, views=views, author=author, created=created
+        )
 
     author = create_author("author1")
     posts = random.randrange(10, int(number_of_posts / 3))
     total_posts += posts
     for post in range(0, posts):
-        title, content, views = create_post()
-        Post.objects.create(title=title, content=content, views=views, author=author)
+        title, content, views, created = create_post()
+        Post.objects.create(
+            title=title, content=content, views=views, author=author, created=created
+        )
 
     author = create_author("author2")
     posts = random.randrange(10, int(number_of_posts / 3))
     total_posts += posts
     for post in range(0, posts):
-        title, content, views = create_post()
-        Post.objects.create(title=title, content=content, views=views, author=author)
+        title, content, views, created = create_post()
+        Post.objects.create(
+            title=title, content=content, views=views, author=author, created=created
+        )
 
     author = create_author("author3")
     posts = random.randrange(10, int(number_of_posts / 3))
     total_posts += posts
     for post in range(0, posts):
-        title, content, views = create_post()
-        Post.objects.create(title=title, content=content, views=views, author=author)
+        title, content, views, created = create_post()
+        Post.objects.create(
+            title=title, content=content, views=views, author=author, created=created
+        )
 
     author = create_author("author4")
     posts = number_of_posts - total_posts
     for post in range(0, posts):
-        title, content, views = create_post()
-        Post.objects.create(title=title, content=content, views=views, author=author)
+        title, content, views, created = create_post()
+        Post.objects.create(
+            title=title, content=content, views=views, author=author, created=created
+        )
+
+
+def create_comments():
+    posts = Post.objects.all()
+    user = User.objects.all()
+    for post in posts:
+        for comment in range(0, random.randrange(0, 10)):
+            content, created = create_comment()
+            Comment.objects.create(
+                content=content,
+                post=post,
+                comment_author=user[random.randrange(0, len(user))],
+                created=created,
+            )

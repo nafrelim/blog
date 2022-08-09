@@ -11,15 +11,17 @@ from rest_framework.reverse import reverse
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
-from .models import Post
+from .models import Comment, Post
 from .permissions import (
     IsAuthenticatedAndAuthorPost,
     IsAuthenticatedAndSafeMethodOrAdmin,
 )
 from .reports import get_report
 from .serializers import (
+    CommentSerializer,
     CountViewsSerializer,
     ParametersSerializer,
+    PostCommentsSerializer,
     PostSerializer,
     ReportSerializer,
 )
@@ -50,6 +52,54 @@ class PostViewSet(ModelViewSet):
         username = self.request.query_params.get("author")
         if username != "all" and username is not None:
             queryset = queryset.filter(author__username=username)
+        return queryset
+
+
+class CommentViewSet(ModelViewSet):
+    """
+    View for handling the comment endpoint.
+    """
+
+    permission_classes = [IsAuthenticatedAndAuthorPost]
+    ordering_fields = ("created",)
+    serializer_class = CommentSerializer
+    view_name = "comment"
+
+    def get_object(self):
+        try:
+            comment = Comment.objects.get(pk=self.kwargs.get("pk"))
+            self.check_object_permissions(self.request, comment)
+            return comment
+        except Comment.DoesNotExist:
+            raise Http404
+
+    def get_queryset(self):
+        queryset = Comment.objects.filter().order_by("-created")
+        return queryset
+
+
+class PostCommentsViewSet(ModelViewSet):
+    """
+    View for handling the comment endpoint.
+    """
+
+    permission_classes = [IsAuthenticatedAndAuthorPost]
+    ordering_fields = ("created",)
+    serializer_class = PostCommentsSerializer
+    view_name = "post_comments"
+
+    def get_object(self):
+        try:
+            comment = Comment.objects.get(pk=self.kwargs.get("pk"))
+            self.check_object_permissions(self.request, comment)
+            return comment
+        except Comment.DoesNotExist:
+            raise Http404
+
+    def get_queryset(self):
+        queryset = Comment.objects.filter(post=self.kwargs.get("post")).order_by(
+            "-created"
+        )
         return queryset
 
 
