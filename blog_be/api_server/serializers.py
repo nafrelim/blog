@@ -4,7 +4,7 @@ from rest_framework import serializers
 from .models import Comment, Post
 
 
-class PostSerializer(serializers.HyperlinkedModelSerializer):
+class PostSerializer(serializers.ModelSerializer):
     author = serializers.SlugRelatedField(
         slug_field="username", queryset=User.objects.all()
     )
@@ -30,7 +30,7 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
         ]
 
 
-class CommentSerializer(serializers.HyperlinkedModelSerializer):
+class CommentSerializer(serializers.ModelSerializer):
     comment_author = serializers.SlugRelatedField(
         slug_field="username", queryset=User.objects.all()
     )
@@ -41,10 +41,11 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
         )
         verbose_name = "Comment"
         model = Comment
+        required = ("content", "post", "comment_author")
         fields = ["url", "id", "content", "post", "comment_author", "created"]
 
 
-class PostCommentsSerializer(serializers.HyperlinkedModelSerializer):
+class PostCommentsSerializer(serializers.ModelSerializer):
     comment_author = serializers.SlugRelatedField(
         slug_field="username", queryset=User.objects.all()
     )
@@ -53,7 +54,7 @@ class PostCommentsSerializer(serializers.HyperlinkedModelSerializer):
         url = serializers.HyperlinkedIdentityField(
             view_name="comment-detail",
         )
-        verbose_name = "Comment"
+        verbose_name = "PostComments"
         model = Comment
         fields = ["url", "id", "content", "post", "comment_author", "created"]
 

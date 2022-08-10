@@ -90,7 +90,7 @@ class PostCommentsViewSet(ModelViewSet):
 
     def get_object(self):
         try:
-            comment = Comment.objects.get(pk=self.kwargs.get("pk"))
+            comment = Comment.objects.get(pk=self.kwargs.get("post"))
             self.check_object_permissions(self.request, comment)
             return comment
         except Comment.DoesNotExist:

@@ -1,141 +1,92 @@
 import React, {useState} from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import PostAddIcon from '@mui/icons-material/PostAdd';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from "axios";
-import {API} from "../blog_be";
-import {useNavigate} from "react-router-dom";
-import {Stack, TextareaAutosize} from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogTitle from '@mui/material/DialogTitle';
+import {Stack} from "@mui/material";
 import Error from "./Error";
-import Copyright from "./Copyright";
-import TokenRefresh from "./TokenRefresh";
+import Grid from "@mui/material/Grid";
 
-const theme = createTheme();
+import {API} from "../blog_be";
+import AddPost from "./AddPost";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import IconButton from "@mui/material/IconButton";
 
-const AddPost = () => {
-    const [title, setPost_title] = useState("");
-    const [content, setPost_content] = useState("");
+axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+axios.defaults.xsrfCookieName = 'csrftoken';
+axios.defaults.withCredentials = true;
+
+const AddComment = ({post_id}) => {
+    const [open, setOpen] = React.useState(false);
     const [error, setError] = useState([]);
-    let navigate = useNavigate();
+    const [content, setContent] = useState('');
+    const navigate = useNavigate();
 
-    TokenRefresh();
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
 
-    async function handleSubmit (event) {
-        event.preventDefault();
-        // Save a post when fields are not empty
-        if (title.length > 0 && content.length > 0) {
-            await axios(`${API}/api/post/`, {
-                method: 'POST',
-                headers: {
-                        'accept': 'application/json',
-                        'content-Type': 'application/json',
-                        'authorization': 'Bearer ' + localStorage.getItem('token'),
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    async function handleAdd () {
+        setOpen(false);
+        await axios(`${API}/api/comment/${post_id}/`, {
+            method: 'POST',
+            headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
                 },
-                data: {
-                    'title': title,
-                    'content': content,
-                    'author': localStorage.getItem('username'),
+            data: {
+                "content": content,
+                "comment_author": localStorage.getItem('username'),
+                "post": post_id
+
+            }
+        })
+            .catch(error => setError(prevState => {
+                if (error.response.status == 401 || error.response.status == 403) {
+                    navigate("#/", {replace: true});
                 }
-            })
-                .then(response => {setData(true)})
-                .catch(error => setError(prevState => {
-                    if (error.response.status == 401 || error.response.status == 403) {
-                            navigate("/#", {replace: true});
-                        }
-                    return [...prevState, [0, 'Network error']]
-                }));
-            navigate("/#/post", { replace: true });
-        }
-        else {
-            // Clearing error list
-            setError([])
-            if (title.length ===0) {
-                setError(prevState => {
-                    return [...prevState, [1, "Post title cannot be empty"]]}
-                );
-            }}
-             if (content.length ===0) {
-                setError(prevState => {
-                    return [...prevState, [1, "Post content cannot be empty"]]}
-            );
-        }
+                return [...prevState, [0, 'Network error']]
+            }))
+        navigate("/#/post", { replace: true });
     }
 
-  return (
-    // Display the post-entry form
-    <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <PostAddIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-              Add post
-          </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-                <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                        <TextField
-                            required
-                            placeholder="Post title"
-                            name="title"
-                            value= {title}
-                            style={{ width: 400 }}
-                            onChange={e => setPost_title(e.target.value)}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextareaAutosize
-                            required
-                            minRows={10}
-                            placeholder="Post content"
-                            name="content"
-                            value= {content}
-                            style={{ width: 400 }}
-                            onChange={e => setPost_content(e.target.value)}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                    {/*Displaying a possible list of errors*/}
-                    {
-                        error.length > 0
-                        &&
-                        <Stack sx={{ width: '100%' }} spacing={2}>
-                            <Error error={error}/>
-                        </Stack>
-                    }
-                    </Grid>
-                </Grid>
-                <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    sx={{ mt: 3, mb: 2 }}
-                >
-                    Submit
-                </Button>
-                </Box>
-        </Box>
-        <Copyright sx={{ mt: 5 }} />
-      </Container>
-    </ThemeProvider>
-  );
-}
+        return (
+        <div>
+            {/*Displaying a possible list of errors*/}
+            <Grid item xs={12}>
+                {
+                    error.length > 0
+                    &&
+                    <Stack sx={{ width: '100%' }} spacing={2}>
+                        <Error error={error}/>
+                    </Stack>
+                }
+            </Grid>
+            <IconButton size="lg" varian="solid" onClick={handleClickOpen}> <AddCircleIcon/> </IconButton>
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    Do you want to add comment?
+                </DialogTitle>
+                <DialogActions>
+                    <Button onClick={handleClose}>Disagree</Button>
+                    <Button onClick={handleAdd} autoFocus>Agree</Button>
+                </DialogActions>
+            </Dialog>
+        </div>
+    );
+};
 
 export default AddPost;

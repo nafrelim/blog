@@ -17,6 +17,7 @@ import axios from "axios";
 import TokenRefresh from "./TokenRefresh";
 import CommentList from "./CommentList";
 import AddComment from "./AddComment";
+import Divider from "@mui/material/Divider";
 
 
 const ShowPost = () => {
@@ -74,11 +75,11 @@ const ShowPost = () => {
     return (
         <Box sx={{"marginY": 2 }}>
             {/*Displaying post information*/}
-            <Typography variant="h5" component="h2">
+            <Typography variant="h4" component="h2">
                 {post.title}
             </Typography>
-            <Typography variant="h5" component="h2">
-                <VisibilityIcon /> {count}
+            <Typography variant="h6" component="h2">
+                <VisibilityIcon/> {count}
             </Typography>
             <Typography variant="body1" component="p">
                 {post.content}

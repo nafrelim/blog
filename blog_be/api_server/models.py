@@ -31,8 +31,8 @@ class Post(models.Model):
         h = self.created.strftime("%H:%M")
         return f"title: {self.title}, created: {d} {h} by {self.author.username}"
 
-    def get_absolute_url(self):
-        return reverse("post_detail", args=[str(self.id)])
+    # def get_absolute_url(self):
+    #     return reverse("post_detail", args=[str(self.id)])
 
 
 @receiver(signals.pre_save, sender=Post)
