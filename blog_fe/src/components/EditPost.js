@@ -6,7 +6,6 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import {Stack, TextareaAutosize} from "@mui/material";
 import {useParams, useNavigate} from "react-router-dom";
@@ -18,10 +17,6 @@ import Error from "./Error";
 import Copyright from "./Copyright";
 import TokenRefresh from "./TokenRefresh";
 import Avatar from "@mui/material/Avatar";
-import ButtonGroup from "@mui/material/ButtonGroup";
-
-
-const theme = createTheme();
 
 const EditPost = () => {
     const [title, setPost_title] = useState("");
@@ -97,7 +92,6 @@ const EditPost = () => {
 
     return (
         // Display the post-entry form
-        // <ThemeProvider theme={theme}>
           <Container component="main" maxWidth="xs">
             <CssBaseline />
             <Box
@@ -167,7 +161,6 @@ const EditPost = () => {
                 </Box>
                 <Copyright sx={{mt: 8, mb: 4}}/>
             </Container>
-        // </ThemeProvider>
     );
 };
 

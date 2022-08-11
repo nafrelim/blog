@@ -9,7 +9,7 @@ import Box from '@mui/material/Box';
 import LoginIcon from '@mui/icons-material/Login';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import {API} from "../blog_be";
@@ -17,7 +17,6 @@ import {Stack} from "@mui/material";
 
 import Error from "./Error";
 import Copyright from "./Copyright";
-
 
 const theme = createTheme();
 
@@ -125,9 +124,17 @@ export default function signIn() {
                       type="submit"
                       fullWidth
                       variant="contained"
-                      sx={{mt: 3, mb: 2}}
+                      sx={{ mt: 1, mb: 2, ml:8, mr: 7, width: 100 }}
                   >
                     Sign In
+                  </Button>
+                  <Button
+                    sx={{ mt: 1, mb: 2, width: 100 }}
+                    onClick={() => navigate(`/`, {replace: true})}
+                    autoFocus
+                    variant="contained"
+                  >
+                    Cancel
                   </Button>
                   <Grid container>
                     <Grid item xs>

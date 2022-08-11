@@ -7,39 +7,26 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import {useNavigate, useParams} from "react-router-dom";
 import DeletePost from "./DeletePost";
 import Grid from "@mui/material/Grid";
-import {Stack, TextareaAutosize} from "@mui/material";
-
-import Error from "./Error";
-import Copyright from "./Copyright";
-import {API} from "../blog_be";
+import {Stack} from "@mui/material";
 
 import axios from "axios";
+
+import {API} from "../blog_be";
+import Error from "./Error";
+import Copyright from "./Copyright";
 import TokenRefresh from "./TokenRefresh";
 import CommentList from "./CommentList";
-import Divider from "@mui/material/Divider";
-import SendIcon from "@mui/icons-material/Send";
-import {styled} from "@mui/material/styles";
-import { Navigate } from "react-router-dom";
-
-const Root = styled('div')(({ theme }) => ({
-  width: '100%',
-  ...theme.typography.body2,
-  '& > :not(style) + :not(style)': {
-    marginTop: theme.spacing(2),
-  },
-}));
-
 
 const ShowPost = () => {
     const [post, setPost] = useState({});
     const [count, setCount] = useState('');
     const [error, setError] = useState([]);
     const [author, setAuthor] = useState(false);
-    const [content, setContent] = useState('');
-    const [comments, setComments] = useState([]);
 
     let { id } = useParams();
     let navigate = useNavigate();
+
+    TokenRefresh();
 
     useEffect(() => {
         axios(`${API}/api/post/${id}/`, {

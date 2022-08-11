@@ -128,7 +128,7 @@ const AddPost = () => {
                     variant="contained"
                     sx={{ mt: 1, mb: 2, ml:8, mr: 7, width: 100 }}
                 >
-                Submit
+                Add
                 </Button>
                 <Button
                     sx={{ mt: 1, mb: 2, width: 100 }}
@@ -136,7 +136,7 @@ const AddPost = () => {
                     autoFocus
                     variant="contained"
                 >
-                    Cancel
+                   Cancel
                 </Button>
           </Box>
         </Box>

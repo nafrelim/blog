@@ -9,7 +9,6 @@ import Box from '@mui/material/Box';
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from "axios";
 import {API} from "../blog_be";
 import {useEffect, useState} from "react";
@@ -18,8 +17,6 @@ import {Stack} from "@mui/material";
 
 import Error from "./Error";
 import Copyright from "./Copyright";
-
-const theme = createTheme();
 
 export default function SignUp() {
   const [firstname, setFirstname] = useState("");
@@ -30,6 +27,7 @@ export default function SignUp() {
   const [password2, setPassword2] = useState("");
   const [error, setError] = useState([]);
   const [data, setData] = useState(false);
+
   let navigate = useNavigate();
 
   async function handleSubmit (event) {
@@ -126,7 +124,6 @@ export default function SignUp() {
 
   return (
     // Display the user datata form
-    <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -153,7 +150,7 @@ export default function SignUp() {
                   fullWidth
                   id="username"
                   label="Username"
-                  autoFocus
+                  focused
                   onChange={e => setUsername(e.target.value)}
                 />
               </Grid>
@@ -165,7 +162,6 @@ export default function SignUp() {
                   fullWidth
                   id="firstName"
                   label="First Name"
-                  autoFocus
                   onChange={e => setFirstname(e.target.value)}
                 />
               </Grid>
@@ -176,7 +172,6 @@ export default function SignUp() {
                   id="lastName"
                   label="Last Name"
                   name="lastName"
-                  // autoComplete="family-name"
                   onChange={e => setLastname(e.target.value)}
                 />
               </Grid>
@@ -187,7 +182,6 @@ export default function SignUp() {
                   id="email"
                   label="Email Address"
                   name="email"
-                  // autoComplete="email"
                   onChange={e => setEmail(e.target.value)}
                 />
               </Grid>
@@ -199,7 +193,6 @@ export default function SignUp() {
                   label="Password"
                   type="password"
                   id="password"
-                  // autoComplete="new-password"
                   onChange={e => setPassword(e.target.value)}
                 />
               </Grid>
@@ -211,7 +204,6 @@ export default function SignUp() {
                   label="Repeat password"
                   type="password"
                   id="password2"
-                  // autoComplete="new-password"
                   onChange={e => setPassword2(e.target.value)}
                 />
               </Grid>
@@ -220,9 +212,17 @@ export default function SignUp() {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 3, mb: 2, ml:8, mr: 7, width: 100 }}
             >
               Sign Up
+            </Button>
+            <Button
+                sx={{ mt: 3, mb: 2, width: 100 }}
+                onClick={() => navigate(`/`, {replace: true})}
+                autoFocus
+                variant="contained"
+            >
+               Cancel
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
@@ -244,6 +244,5 @@ export default function SignUp() {
           </Grid>
         <Copyright sx={{ mt: 5 }} />
       </Container>
-    </ThemeProvider>
   );
 }
