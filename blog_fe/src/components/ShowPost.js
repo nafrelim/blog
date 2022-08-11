@@ -7,7 +7,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import {useNavigate, useParams} from "react-router-dom";
 import DeletePost from "./DeletePost";
 import Grid from "@mui/material/Grid";
-import {Stack} from "@mui/material";
+import {Stack, TextareaAutosize} from "@mui/material";
 
 import Error from "./Error";
 import Copyright from "./Copyright";
@@ -16,8 +16,18 @@ import {API} from "../blog_be";
 import axios from "axios";
 import TokenRefresh from "./TokenRefresh";
 import CommentList from "./CommentList";
-import AddComment from "./AddComment";
 import Divider from "@mui/material/Divider";
+import SendIcon from "@mui/icons-material/Send";
+import {styled} from "@mui/material/styles";
+import { Navigate } from "react-router-dom";
+
+const Root = styled('div')(({ theme }) => ({
+  width: '100%',
+  ...theme.typography.body2,
+  '& > :not(style) + :not(style)': {
+    marginTop: theme.spacing(2),
+  },
+}));
 
 
 const ShowPost = () => {
@@ -25,19 +35,19 @@ const ShowPost = () => {
     const [count, setCount] = useState('');
     const [error, setError] = useState([]);
     const [author, setAuthor] = useState(false);
+    const [content, setContent] = useState('');
+    const [comments, setComments] = useState([]);
+
     let { id } = useParams();
     let navigate = useNavigate();
 
     useEffect(() => {
-
-        TokenRefresh();
-
-        axios.get(`${API}/api/post/${id}/`, {
-                mode: 'same-origin',
+        axios(`${API}/api/post/${id}/`, {
+                method: 'GET',
                 headers: {
                     'accept': 'application/json',
                     'content-Type': 'application/json',
-                    'authorization': 'Bearer ' + localStorage.getItem('token'),
+                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
                 }
                 })
                     .then(response => {
@@ -50,8 +60,6 @@ const ShowPost = () => {
                         return [...prevState, [0, 'Network error']]
                     }));
 
-        let count_tmp;
-
         axios.get(`${API}/api/view/${id}/`, {
                 mode: 'same-origin',
                 headers: {
@@ -61,8 +69,7 @@ const ShowPost = () => {
                 }
                 })
             .then(response => {
-                count_tmp = parseInt(response.data.views);
-                setCount(count_tmp);
+                setCount(parseInt(response.data.views));
             })
             .catch(error => setError(prevState => {
                 if (error.response.status == 401 || error.response.status == 403 || error.response.status == 404) {
@@ -70,6 +77,20 @@ const ShowPost = () => {
                     }
                 return [...prevState, [0, 'Network error']]
             }))
+        axios.get(`${API}/api/post_comments/${id}/`, {
+            mode: 'same-origin',
+            headers: {
+                'accept': 'application/json',
+                'content-Type': 'application/json',
+                'authorization': 'Bearer ' + localStorage.getItem('token'),
+            }
+        })
+            .then(response => {
+                setComments(response.data.results)
+            })
+            .catch(error => setError(prevState => {
+                return [...prevState, [0, 'Network error']]
+            }));
     }, []);
 
     return (
@@ -79,7 +100,7 @@ const ShowPost = () => {
                 {post.title}
             </Typography>
             <Typography variant="h6" component="h2">
-                <VisibilityIcon/> {count}
+                <VisibilityIcon fontSize={"small"}/> {count}
             </Typography>
             <Typography variant="body1" component="p">
                 {post.content}
@@ -95,8 +116,15 @@ const ShowPost = () => {
             {
                 author
                 &&
-                <ButtonGroup variant="contained" aria-label="outlined primary button group">
-                    <Button href={"#/edit/" + post.id}> Edit </Button>
+                <ButtonGroup>
+                    <Button
+                        href={"#/edit/" + post.id }
+                        sx={{ mt: 1, mb: 1, mr: 1, width: 100 }}
+                        variant="contained"
+                        autoFocus
+                    >
+                        Edit
+                    </Button>
                     <DeletePost id={post.id}/>
                 </ButtonGroup>
             }

@@ -67,13 +67,11 @@ export default function signIn() {
     } else {
       // Clearing the list of errors only before the next field validation
           if (username.length < 1) {
-              console.log("username cannot be empty")
               setError(prevState => {
                   return ([...prevState, [1, "username cannot be empty"]])
               })
           }
           if (password.length < 1) {
-              console.log("password cannot be empty")
               setError(prevState => {
                   return ([...prevState, [1, "password cannot be empty"]])
               })

@@ -12,6 +12,7 @@ import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 
 import axios from "axios";
@@ -171,8 +172,9 @@ const PostList = () => {
                         <AccordionDetails>
                             <Typography variant="body1" component="p">
                                 {/*Display the first 200 characters of the post*/}
-                                {post.content.slice(0,200)+ ' ...'}
-                                <Button href={"#/post/"+post.id}> Show me </Button>
+                                {post.content.slice(0,200)+ ' ... '}
+                                {/*<ArrowForwardIcon size={"large"} href={"#/post/"+post.id}/>*/}
+                                <Button href={"#/post/"+post.id}><ArrowForwardIcon fontSize={"large"}/></Button>
                             </Typography>
                             <Box sx={{"marginY": 1 }}>
                                 <Typography variant="subtitle2">

@@ -27,48 +27,48 @@ const Main = () => {
                         <StartPage />
                     </Container>
                 }/>
-                <Route exact path="/login" element={
+                <Route exact path="/login/" element={
                     <Container sx={{'center': 'center'}}>
                         <SignIn />
                         {/*<Login />*/}
                     </Container>
                 }/>
-                <Route exact path="/logout" element={
+                <Route exact path="/logout/" element={
                     <Container sx={{'center': 'center'}}>
                         <SignOut />
                     </Container>
                 }/>
-                <Route exact path="/register" element={
+                <Route exact path="/register/" element={
                     <Container sx={{'center': 'center'}}>
                         <SignUp />
                     </Container>
                 }/>
-                <Route exact path="/update_profile/:user" element={
+                <Route exact path="/update_profile/:user/" element={
                     <Container sx={{'center': 'center'}}>
                         <UpdateProfil />
                     </Container>
                 }/>
-                <Route exact path="/post" element={
+                <Route exact path="/post/" element={
                     <Container sx={{'center': 'center'}}>
                         <PostList />
                     </Container>
                 }/>
-                <Route path="/post/:id" onleave={this} element={
+                <Route exact path="/post/:id/" element={
                     <Container sx={{'center': 'center'}}>
                         <ShowPost />
                     </Container>
                 }/>
-                <Route path="/add" element={
+                <Route exact path="/add/" element={
                     <Container sx={{'center': 'center'}}>
                         <AddPost />
                     </Container>
                 }/>
-                <Route path="/edit/:id" element={
+                <Route exact path="/edit/:id/" element={
                     <Container sx={{'center': 'center'}}>
                         <EditPost />
                     </Container>
                 }/>
-                <Route path="/report" element={
+                <Route exact path="/report/" element={
                     <Container sx={{'center': 'center'}}>
                         <Report />
                     </Container>

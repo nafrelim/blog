@@ -32,7 +32,7 @@ class Post(models.Model):
         return f"title: {self.title}, created: {d} {h} by {self.author.username}"
 
     # def get_absolute_url(self):
-    #     return reverse("post_detail", args=[str(self.id)])
+    #     return f"/post/{self.pk}/"
 
 
 @receiver(signals.pre_save, sender=Post)

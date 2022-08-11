@@ -55,7 +55,6 @@ export default function SignUp() {
               })
                   .then(response => {
                       setData(true)
-                      console.log(response.data)
                       localStorage.setItem('token', response.data.access)
                       localStorage.setItem('refresh', response.data.refresh)
                       localStorage.setItem('username', username)

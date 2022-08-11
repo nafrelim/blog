@@ -22,6 +22,7 @@ import TokenRefresh from "./TokenRefresh";
 const theme = createTheme();
 
 export default function SignUp() {
+  const [id, setId] = useState("");
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [username, setUsername] = useState("");
@@ -43,6 +44,7 @@ export default function SignUp() {
             }
         })
             .then(response => {
+                setId(response.data.id)
                 setFirstname(response.data.first_name)
                 setLastname(response.data.last_name)
                 setUsername(response.data.username)
@@ -77,7 +79,6 @@ export default function SignUp() {
                   }
               })
                   .then(response => {
-                      console.log(response.data)
                       navigate("/", {replace: true});
                   })
                   .catch(e => {
@@ -152,15 +153,15 @@ export default function SignUp() {
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
-                  autoComplete="given-name"
-                  name="username"
-                  required
-                  fullWidth
-                  id="username"
-                  label="Username"
-                  autoFocus
-                  value={username}
-                  onChange={e => setUsername(e.target.value)}
+                  // autoComplete="given-name"
+                    focused
+                    name="username"
+                    required
+                    fullWidth
+                    id="username"
+                    label="Username"
+                    value={username}
+                    onChange={e => setUsername(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -200,11 +201,18 @@ export default function SignUp() {
             </Grid>
             <Button
               type="submit"
-              fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 3, mb: 2, ml:8, mr: 7, width: 100 }}
             >
               Submit
+            </Button>
+            <Button
+                sx={{ mt: 3, mb: 2, width: 100 }}
+                onClick={() => navigate(`/`, {replace: true})}
+                autoFocus
+                variant="contained"
+            >
+                Cancel
             </Button>
           </Box>
         </Box>

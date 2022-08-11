@@ -18,6 +18,7 @@ import Error from "./Error";
 import Copyright from "./Copyright";
 import TokenRefresh from "./TokenRefresh";
 import Avatar from "@mui/material/Avatar";
+import ButtonGroup from "@mui/material/ButtonGroup";
 
 
 const theme = createTheme();
@@ -77,7 +78,7 @@ const EditPost = () => {
                     return ([...prevState, [0, 'Network error: ' + error.message +
                     '. If the error persists - there is a network or server error.']])
                 }));
-            navigate("/post", { replace: true });
+            navigate(`/post/${id}`, { replace: true });
         }
         else {
             // Clearing the list of errors only before the next field validation
@@ -96,7 +97,7 @@ const EditPost = () => {
 
     return (
         // Display the post-entry form
-        <ThemeProvider theme={theme}>
+        // <ThemeProvider theme={theme}>
           <Container component="main" maxWidth="xs">
             <CssBaseline />
             <Box
@@ -117,6 +118,7 @@ const EditPost = () => {
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <TextField
+                                    focused
                                     required
                                     placeholder="Post title"
                                     name="post_title"
@@ -148,17 +150,24 @@ const EditPost = () => {
                         </Grid>
                         <Button
                             type="submit"
-                            fullWidth
                             variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
+                            autoFocus
+                            sx={{ mt: 1, mb: 2, ml:8, mr: 7, width: 100 }}
                         >
                             Submit
+                        </Button>
+                        <Button
+                            variant="contained"
+                            sx={{ mt: 1, mb: 2, width: 100 }}
+                            onClick={() => navigate(`/post/${id}`, { replace: true })}
+                        >
+                            Cancel
                         </Button>
                     </Box>
                 </Box>
                 <Copyright sx={{mt: 8, mb: 4}}/>
             </Container>
-        </ThemeProvider>
+        // </ThemeProvider>
     );
 };
 

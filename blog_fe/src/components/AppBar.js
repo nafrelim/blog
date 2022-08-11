@@ -34,15 +34,15 @@ const ResponsiveAppBar = () => {
     };
 
     const handleCloseNavMenuPosts = () => {
-        setAnchorElNav(navigate("post", { replace: true }));
+        setAnchorElNav(navigate("/post", { replace: true }));
     };
 
     const handleCloseNavMenuAdd = () => {
-        setAnchorElNav(navigate("add", { replace: true }));
+        setAnchorElNav(navigate("/add", { replace: true }));
     };
 
     const handleCloseNavMenuReport = () => {
-        setAnchorElNav(navigate("report", { replace: true }));
+        setAnchorElNav(navigate("/report", { replace: true }));
     };
 
     const handleCloseNavMenu = () => {
@@ -103,7 +103,7 @@ const ResponsiveAppBar = () => {
         <AppBar position="static">
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    <Button href={"#/"} sx={{ my: 2, color: 'white', display: 'block' }}>
+                    <Button href={"/#/"} sx={{ my: 2, color: 'white', display: 'block' }}>
                         Home
                     </Button>
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -222,10 +222,6 @@ const ResponsiveAppBar = () => {
                                 <MenuItem onClick={handleCloseUserMenuUpdateProfile}>
                                     <Typography textAlign="center">Update profile</Typography>
                                 </MenuItem>
-
-                                {/*<MenuItem onClick={handleCloseUserRegistration}>*/}
-                                {/*    <Typography textAlign="center">Registration</Typography>*/}
-                                {/*</MenuItem>*/}
                             </Menu>
                     </Box>
                 </Toolbar>

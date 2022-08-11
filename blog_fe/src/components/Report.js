@@ -51,7 +51,7 @@ const Report = () => {
     }, []);
 
     return (
-        <Box sx={{"marginY": 2 }}>
+        <Box sx={{"marginY": 2, "marginX": 3 }}>
             {/*Displaying post information*/}
             <Box sx={{marginY: 2 }}>
                 <Typography variant="h6" >

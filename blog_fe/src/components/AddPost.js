@@ -52,7 +52,7 @@ const AddPost = () => {
                         }
                     return [...prevState, [0, 'Network error']]
                 }));
-            navigate("/#/post", { replace: true });
+            navigate("/post", { replace: true });
         }
         else {
             // Clearing error list
@@ -92,6 +92,7 @@ const AddPost = () => {
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <TextField
+                            focused
                             required
                             placeholder="Post title"
                             name="title"
@@ -124,13 +125,20 @@ const AddPost = () => {
                 </Grid>
                 <Button
                     type="submit"
-                    fullWidth
                     variant="contained"
-                    sx={{ mt: 3, mb: 2 }}
+                    sx={{ mt: 1, mb: 2, ml:8, mr: 7, width: 100 }}
                 >
-                    Submit
+                Submit
                 </Button>
-                </Box>
+                <Button
+                    sx={{ mt: 1, mb: 2, width: 100 }}
+                    onClick={() => navigate(`/`, {replace: true})}
+                    autoFocus
+                    variant="contained"
+                >
+                    Cancel
+                </Button>
+          </Box>
         </Box>
         <Copyright sx={{ mt: 5 }} />
       </Container>

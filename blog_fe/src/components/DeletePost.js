@@ -45,7 +45,7 @@ const DeletePost = ({id}) => {
                 }
                 return [...prevState, [0, 'Network error']]
             }))
-        navigate("/#/post", { replace: true });
+        navigate("/post/", { replace: true });
     }
 
         return (
@@ -60,7 +60,10 @@ const DeletePost = ({id}) => {
                     </Stack>
                 }
             </Grid>
-            <Button variant="outlined" onClick={handleClickOpen}>
+            <Button
+                sx={{ mt: 1, mb: 1, width: 100 }}
+                variant="outlined"
+                onClick={handleClickOpen}>
                 Delete
             </Button>
             <Dialog
@@ -72,9 +75,21 @@ const DeletePost = ({id}) => {
                 <DialogTitle id="alert-dialog-title">
                     Do you want to delete the post?
                 </DialogTitle>
-                <DialogActions>
-                    <Button onClick={handleClose}>Disagree</Button>
-                    <Button onClick={handleDelete} autoFocus>Agree</Button>
+                <DialogActions textAlign={"left"}>
+                    <Button
+                        sx={{ mb: 1, width: 100 }}
+                        onClick={handleClose}
+                        autoFocus
+                        variant="contained"
+                    >
+                        Disagree
+                    </Button>
+                    <Button
+                        sx={{ mb: 1, mr: 7, width: 100 }}
+                        onClick={handleDelete}
+                    >
+                        Agree
+                    </Button>
                 </DialogActions>
             </Dialog>
         </div>

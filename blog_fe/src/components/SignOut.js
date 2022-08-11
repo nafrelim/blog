@@ -20,7 +20,6 @@ const SignOut = () => {
             },
         })
             .then(response => {
-                console.log("wylogowanie")
                 localStorage.removeItem('token')
                 localStorage.removeItem('refresh')
                 localStorage.removeItem('username')
