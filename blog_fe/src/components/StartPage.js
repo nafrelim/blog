@@ -13,14 +13,23 @@ import Error from "./Error";
 import {API} from "../blog_be";
 import Copyright from "./Copyright";
 import TokenRefresh from "./TokenRefresh";
+import {useNavigate} from "react-router-dom";
 
 const StartPage = () => {
+    let navigate = useNavigate();
     const [error, setError] = useState([]);
     const [logged, setLogged] = useState(false);
 
-    TokenRefresh();
-
     useEffect(() => {
+         if (localStorage.getItem('token') === null || localStorage.getItem('refresh') === null) {
+             setLogged(false)
+             navigate('/', {replace: true});
+         }
+         if (TokenRefresh()) {
+             console.log('token refreshed in post list')
+             location.reload()
+         }
+        console.log('start page')
         axios(`${API}/api/post/`, {
             method: "HEAD",
             mode: 'same-origin',

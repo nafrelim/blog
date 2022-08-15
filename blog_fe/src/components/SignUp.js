@@ -53,35 +53,34 @@ export default function SignUp() {
               })
                   .then(response => {
                       setData(true)
-                      localStorage.setItem('token', response.data.access)
-                      localStorage.setItem('refresh', response.data.refresh)
-                      localStorage.setItem('username', username)
+                      localStorage.removeItem('token')
+                      localStorage.removeItem('refresh')
                       navigate("/login", {replace: true});
                   })
                   .catch(e => {
-                      if (e.response.status === 401 || e.response.status === 403) {
+                      if (e?.response?.status === 401 || e?.response?.status === 403) {
                           setError(prevState => {
                               return ([...prevState, [0, e.response.data.detail]])
                           })
                       }
-                      if (e.response.status === 400) {
-                          if (e.response.data['username']) {
+                      if (e?.response?.status === 400) {
+                          if (e?.response?.data['username']) {
                               setError(prevState => {
                                   return ([...prevState, [1, e.response.data['username']]])
                               })
                           }
-                          if (e.response.data['email']) {
+                          if (e?.response?.data['email']) {
                               setError(prevState => {
                                   return ([...prevState, [1, e.response.data['email']]])
                               })
                           }
-                          if (e.response.data['password']) {
+                          if (e?.response?.data['password']) {
                               setError(prevState => {
                                   return ([...prevState, [1, e.response.data['password']]])
                               })
                           }
                       }
-                      if (e.response.status === 500) {
+                      if (e?.response?.status === 500) {
                           setError(prevState => {
                               return ([...prevState, [0, 'Network error: ' + e.response.data.detail +
                               '. Try to login again. If the error persists - there is a network or server error.']])

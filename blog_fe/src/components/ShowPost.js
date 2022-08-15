@@ -16,6 +16,7 @@ import Error from "./Error";
 import Copyright from "./Copyright";
 import TokenRefresh from "./TokenRefresh";
 import CommentList from "./CommentList";
+import jwt_decode from "jwt-decode";
 
 const ShowPost = () => {
     const [post, setPost] = useState({});
@@ -26,9 +27,17 @@ const ShowPost = () => {
     let { id } = useParams();
     let navigate = useNavigate();
 
-    TokenRefresh();
-
     useEffect(() => {
+
+         if (localStorage.getItem('token') === null || localStorage.getItem('refresh') === null) {
+            navigate('/login')
+         }
+         if (TokenRefresh()) {
+             console.log('token refreshed')
+             window.location.reload()
+         }
+        console.log('show post')
+
         axios(`${API}/api/post/${id}/`, {
                 method: 'GET',
                 headers: {
@@ -39,7 +48,7 @@ const ShowPost = () => {
                 })
                     .then(response => {
                         setPost(response.data)
-                        if (response.data['author'] == localStorage.getItem('username') || localStorage.getItem('username') == 'admin') {
+                        if (response.data['author'] == jwt_decode(localStorage.getItem('token')).username || jwt_decode(localStorage.getItem('token')).username == 'admin') {
                             setAuthor(true)
                         }
                     })
@@ -64,20 +73,6 @@ const ShowPost = () => {
                     }
                 return [...prevState, [0, 'Network error']]
             }))
-        axios.get(`${API}/api/post_comments/${id}/`, {
-            mode: 'same-origin',
-            headers: {
-                'accept': 'application/json',
-                'content-Type': 'application/json',
-                'authorization': 'Bearer ' + localStorage.getItem('token'),
-            }
-        })
-            .then(response => {
-                setComments(response.data.results)
-            })
-            .catch(error => setError(prevState => {
-                return [...prevState, [0, 'Network error']]
-            }));
     }, []);
 
     return (

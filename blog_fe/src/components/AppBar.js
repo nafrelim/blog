@@ -16,6 +16,8 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 
 import {API} from "../blog_be";
+import jwt_decode from "jwt-decode";
+import TokenRefresh from "./TokenRefresh";
 
 
 const ResponsiveAppBar = () => {
@@ -70,7 +72,7 @@ const ResponsiveAppBar = () => {
     };
 
     const handleCloseUserMenuUpdateProfile = () => {
-        setAnchorElUser(navigate("/update_profile/"+localStorage.getItem('username')+"/", { replace: true }));
+        setAnchorElUser(navigate("/update_profile/"+jwt_decode(localStorage.getItem('token')).username +"/", { replace: true }));
     };
 
     const handleCloseUserMenuSignUp = () => {
@@ -78,6 +80,15 @@ const ResponsiveAppBar = () => {
     };
 
     useEffect(() => {
+        // if (localStorage.getItem('token') === null || localStorage.getItem('refresh') === null) {
+        //     navigate('/login')
+        // }
+        //
+        // if (TokenRefresh()) {
+        //     console.log('token refreshed in bar')
+        //     location.reload()
+        // }
+        // console.log('bar')
         axios(`${API}/api/post/`, {
             method: "HEAD",
             mode: 'same-origin',
@@ -89,7 +100,7 @@ const ResponsiveAppBar = () => {
 
         })
             .then(response => {
-                if (localStorage.getItem('username') === 'admin') {
+                if (jwt_decode(localStorage.getItem('token')).username === 'admin') {
                     setAdmin(true);
                 } else {
                     setAdmin(false);
@@ -213,15 +224,21 @@ const ResponsiveAppBar = () => {
                                 <MenuItem onClick={handleCloseUserMenuSignIn}>
                                     <Typography textAlign="center">Sign in</Typography>
                                 </MenuItem>
-                                <MenuItem onClick={handleCloseUserMenuSignOut}>
-                                    <Typography textAlign="center">Sign out</Typography>
-                                </MenuItem>
+                                {
+                                    logged &&
+                                    <MenuItem onClick={handleCloseUserMenuSignOut}>
+                                        <Typography textAlign="center">Sign out</Typography>
+                                    </MenuItem>
+                                }
                                 <MenuItem onClick={handleCloseUserMenuSignUp}>
                                     <Typography textAlign="center">Sign up</Typography>
                                 </MenuItem>
-                                <MenuItem onClick={handleCloseUserMenuUpdateProfile}>
-                                    <Typography textAlign="center">Update profile</Typography>
-                                </MenuItem>
+                                {
+                                    logged &&
+                                    <MenuItem onClick={handleCloseUserMenuUpdateProfile}>
+                                        <Typography textAlign="center">Update profile</Typography>
+                                    </MenuItem>
+                                }
                             </Menu>
                     </Box>
                 </Toolbar>

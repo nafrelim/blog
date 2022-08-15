@@ -1,1 +1,2 @@
 web: gunicorn blog_be.wsgi
+clean: python clean_database.py

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -20,7 +20,8 @@ import Copyright from "./Copyright";
 
 const theme = createTheme();
 
-export default function signIn() {
+const signIn = () => {
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState([]);
@@ -45,9 +46,9 @@ export default function signIn() {
       })
           .then(response => {
             setData(true)
+              console.log(response.data)
             localStorage.setItem('token', response.data.access)
             localStorage.setItem('refresh', response.data.refresh)
-            localStorage.setItem('username', username)
             navigate("/post", {replace: true});
           })
           .catch(e => {
@@ -165,3 +166,5 @@ export default function signIn() {
       );
     }
 }
+
+export default signIn;

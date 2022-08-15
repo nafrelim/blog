@@ -49,8 +49,9 @@ def get_report():
     number_of_posts_views = list(
         User.objects.annotate(post_count=Count("post"))
         .annotate(total_views=Coalesce(Sum("post__views"), 0))
+        .annotate(total_comments=Coalesce(Sum("post__comments"), 0))
         .order_by("-total_views")
-        .values("id", "username", "post_count", "total_views")
+        .values("id", "username", "post_count", "total_views", "total_comments")
     )
     result["number_of_posts_views"] = number_of_posts_views
 

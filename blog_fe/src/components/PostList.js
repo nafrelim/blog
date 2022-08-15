@@ -46,6 +46,7 @@ const ordering = [
 
 const PostList = () => {
     let navigate = useNavigate();
+
     const [posts, setPosts] = useState([]);
     const [number_of_posts, setNumber_of_posts] = useState(0);
     const [error, setError] = useState([]);
@@ -56,22 +57,20 @@ const PostList = () => {
     const [authors, setAuthors] = useState([])
     const [author, setAuthor] = useState('all');
 
-    if (localStorage.getItem('username') === '') {
-        return (
-            <div>
-                <p> Witaj i zaloguj się </p>
-            </div>
-        )
-    }
     const handleChangePage = (event, value) => {
         setPage(value);
     };
-
     // list of posts
+
     useEffect(() => {
-
-        TokenRefresh();
-
+        if (localStorage.getItem('token') === null || localStorage.getItem('refresh') === null) {
+            navigate('/login')
+         }
+         if (TokenRefresh()) {
+             console.log('token refreshed in post list')
+             location.reload()
+         }
+        console.log('post list')
         axios.get(`${API}/api/post/?search=`+search+'&ordering='+order+'&page='+page+'&author='+author, {
             mode: 'same-origin',
             headers: {
@@ -84,16 +83,35 @@ const PostList = () => {
                 setPosts(response.data.results)
                 setNumber_of_posts(response.data.count)
             })
-            .catch(error => setError(prevState => {
-                if (error.response.status == 401 || error.response.status == 403) {
+            .catch(e => setError(prevState => {
+                if (e?.response?.status == 403) {
                     navigate("/", {replace: true});
                 }
-                return [...prevState, [0, 'Network error']]
+                navigate("/post/", {replace: true});
             }))
-        }, [order, page, search, author]);
+        axios.get(`${API}/api/parameters`, {
+            mode: 'same-origin',
+            headers: {
+                'accept': 'application/json',
+                'content-Type': 'application/json',
+                'authorization': 'Bearer ' + localStorage.getItem('token'),
+            },
+            })
+            .then(response => {
+                setPosts_on_page(parseInt(response.data[0].posts_on_page));
+                setAuthors(response.data[0].authors);
+            })
+            .catch((e) => setError(prevState => {
+                if (e?.response?.status === 403) {
+                  setError(prevState => {
+                      return ([...prevState, [0, e.response.data.detail]])
+                  })
+                }
+            }))
+        }, [page]);
 
     useEffect(() => {
-        axios.get(`${API}/api/parameters`, {
+        axios.get(`${API}/api/post/?search=`+search+'&ordering='+order+'&page='+page+'&author='+author, {
             mode: 'same-origin',
             headers: {
                 'accept': 'application/json',
@@ -102,13 +120,20 @@ const PostList = () => {
             },
         })
             .then(response => {
-                setPosts_on_page(parseInt(response.data[0].posts_on_page));
-                setAuthors(response.data[0].authors);
+                setPosts(response.data.results)
+                setNumber_of_posts(response.data.count)
             })
-            .catch(() => setError(prevState => {
-                return [...prevState, [0, 'Network error']]
+            .catch(e => setError(prevState => {
+                if (e.response?.status == 403) {
+                    navigate("/", {replace: true});
+                }
+                navigate("/post/", {replace: true});
+                // if (error.response.status == 401) {
+                //     navigate("/login", {replace: true});
+                // }
+                // return [...prevState, [0, 'Network error']]
             }))
-    }, [order, page, search, author]);
+        }, [order, search, author, page]);
 
     return (
         <Box>
@@ -124,6 +149,7 @@ const PostList = () => {
                     id="search"
                     label="Search"
                     variant="outlined"
+                    value={search}
                     onChange={e => setSearch(e.target.value)}
                 />
                 <TextField
@@ -200,7 +226,7 @@ const PostList = () => {
             {/*Displaying a possible list of errors*/}
             <Grid item xs={12}>
                 {
-                    error.length > 0
+                    error?.length > 0
                     &&
                     <Stack sx={{ width: '100%' }} spacing={2}>
                         <Error error={error}/>

@@ -1,3 +1,4 @@
+APScheduler
 Django
 django-allauth
 django-cors-headers

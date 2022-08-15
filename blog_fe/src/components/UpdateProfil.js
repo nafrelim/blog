@@ -32,9 +32,14 @@ export default function SignUp() {
   let navigate = useNavigate();
 
   useEffect(() => {
-
-      TokenRefresh();
-
+     if (localStorage.getItem('token') === null || localStorage.getItem('refresh') === null) {
+            navigate('/login')
+         }
+         if (TokenRefresh()) {
+             console.log('token refreshed')
+             window.location.reload()
+         }
+      console.log('update profile')
       axios(`${API}/auth/user/${user}/`, {
             method: 'GET',
             headers: {

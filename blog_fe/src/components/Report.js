@@ -11,9 +11,18 @@ import axios from "axios";
 import Error from "./Error";
 import Copyright from "./Copyright";
 import {API} from "../blog_be";
+import TokenRefresh from "./TokenRefresh";
+import Divider from "@mui/material/Divider";
 
 const Report = () => {
     let navigate = useNavigate();
+    if (localStorage.getItem('token') === null) {
+        navigate('/login')
+    }
+    if (TokenRefresh()) {
+        location.reload()
+    }
+
 
     const [report, setReport] = useState({});
     const [error, setError] = useState([]);
@@ -40,11 +49,18 @@ const Report = () => {
                         setMin_add_15(response.data[0].min_add_15)
                         setAuthors(response.data[0].number_of_posts_views)
                     })
-                    .catch(error => setError(prevState => {
-                        if (error.response.status == 401 || error.response.status == 403) {
-                            navigate("/", {replace: true});
+                    .catch(e => setError(prevState => {
+                        if (e.response.status === 403) {
+                          setError(prevState => {
+                              return ([...prevState, [0, e.response.data.detail]])
+                          })
                         }
-                        return [...prevState, [0, 'Network error']]
+                        if (e.response.status === 500) {
+                          setError(prevState => {
+                              return ([...prevState, [0, 'Network error: ' + e.response.data.detail +
+                              '. Try to login again. If the error persists - there is a network or server error.']])
+                          })
+                      }
                     }));
     }, []);
 
@@ -71,6 +87,7 @@ const Report = () => {
                     The sum of all post views: {report.sum_views}
                 </Typography>
             </Box>
+            <Divider color={"black"} sx = {{borderBottomWidth: 1, "mb": 2}}/>
             <Box sx={{marginY: 2 }}>
                 <Typography variant="h6" >
                 Most viewed posts:
@@ -85,6 +102,7 @@ const Report = () => {
                     })
                 }
             </Box>
+            <Divider color={"black"} sx = {{borderBottomWidth: 2, "mb": 2}}/>
             <Box sx={{marginY: 2 }}>
                 <Typography variant="h6" >
                 Least viewed posts:
@@ -99,6 +117,7 @@ const Report = () => {
                     })
                 }
             </Box>
+            <Divider color={"black"} sx = {{borderBottomWidth: 2, "mb": 2}}/>
             <Box sx={{marginY: 2 }}>
                 <Typography variant="h6" >
                 Posts up to 15% less than the maximum number of views:
@@ -113,6 +132,7 @@ const Report = () => {
                     })
                 }
             </Box>
+            <Divider color={"black"} sx = {{borderBottomWidth: 2, "mb": 2}}/>
             <Box sx={{marginY: 2 }}>
                 <Typography variant="h6" >
                 Posts with views up to 15% above the minimum number of views:
@@ -127,25 +147,57 @@ const Report = () => {
                     })
                 }
             </Box>
+            <Divider textAlign="left" color={"black"} sx = {{borderBottomWidth: 2, "mb": 2}}/>
             <Box sx={{marginY: 2 }}>
+
                 <Typography variant="h6" >
-                Basic data on the basis of individual authors:
+                According to the authors
                 </Typography >
-                {
-                    Array.from(authors).map(author => {
-                        return (
-                            <Typography  key={author.id} variant="body2" sx={{marginX: 2, height: 18}}>
-                                {author.username}: {author.post_count} posts, {author.total_views} views
-                            </Typography>
-                        )
-                    })
-                }
+                <Typography variant="body1" >
+                Most posts:
+                </Typography >
+                    {
+                        Array.from(authors).map(author => {
+                            return (
+                                <Typography  key={author.id} variant="body2" sx={{marginX: 2, height: 18}}>
+                                    {author.username}: {author.post_count}
+                                </Typography>
+                            )
+                        })
+                    }
+                <Divider color={"black"} sx = {{borderBottomWidth: 1, "mt": 2, "mb": 2}}/>
+                <Typography variant="body1">
+                    Most views:
+                </Typography>
+                    {
+                        Array.from(authors).map(author => {
+                            return (
+                                <Typography  key={author.id} variant="body2" sx={{marginX: 2, height: 18}}>
+                                    {author.username}: {author.total_views}
+                                </Typography>
+                            )
+                        })
+                    }
+                <Divider color={"black"} sx = {{borderBottomWidth: 1, "mt": 2, "mb": 2}}/>
+                <Typography variant="body1">
+                    Most comments:
+                </Typography>
+                    {
+                        Array.from(authors).map(author => {
+                            return (
+                                <Typography  key={author.id} variant="body2" sx={{marginX: 2, height: 18}}>
+                                    {author.username}: {author.total_comments}
+                                </Typography>
+                            )
+                        })
+                    }
+                <Divider color={"black"} sx = {{borderBottomWidth: 1, "mt": 2, "mb": 2}}/>
             </Box>
 
             {/*Displaying a possible list of errors*/}
             <Grid item xs={12}>
                 {
-                    error.length > 0
+                    error?.length > 0
                     &&
                     <Stack sx={{ width: '100%' }} spacing={2}>
                         <Error error={error}/>

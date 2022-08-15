@@ -26,8 +26,14 @@ const EditPost = () => {
     let navigate = useNavigate();
 
     useEffect(() => {
-
-        TokenRefresh();
+        if (localStorage.getItem('token') === null || localStorage.getItem('refresh') === null) {
+            navigate('/login')
+         }
+         if (TokenRefresh()) {
+             console.log('token refreshed')
+             window.location.reload()
+         }
+        console.log('edit post')
 
         axios(`${API}/api/post/${id}/`, {
             method: 'GET',

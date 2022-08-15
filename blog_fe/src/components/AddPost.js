@@ -17,6 +17,7 @@ import {Stack, TextareaAutosize} from "@mui/material";
 import Error from "./Error";
 import Copyright from "./Copyright";
 import TokenRefresh from "./TokenRefresh";
+import jwt_decode from "jwt-decode";
 
 const theme = createTheme();
 
@@ -26,7 +27,14 @@ const AddPost = () => {
     const [error, setError] = useState([]);
     let navigate = useNavigate();
 
-    TokenRefresh();
+    if (localStorage.getItem('token') === null || localStorage.getItem('refresh') === null) {
+            navigate('/login')
+         }
+         if (TokenRefresh()) {
+             console.log('token refreshed in add post')
+             location.reload()
+         }
+        console.log('add post')
 
     async function handleSubmit (event) {
         event.preventDefault();
@@ -42,7 +50,7 @@ const AddPost = () => {
                 data: {
                     'title': title,
                     'content': content,
-                    'author': localStorage.getItem('username'),
+                    'author': jwt_decode(localStorage.getItem('token')).username,
                 }
             })
                 .then(response => {setData(true)})
