@@ -21,5 +21,5 @@ class Command(BaseCommand):
             )
         else:
             self.stdout.write(
-                self.style.ERROR(f"Too few posts! You must enter 100 or more.")
+                self.style.ERROR(f"Too few posts! You must enter 50 or more.")
             )

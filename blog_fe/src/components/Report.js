@@ -20,14 +20,17 @@ const Report = () => {
         navigate('/login')
     }
     if (TokenRefresh()) {
+        console.log('token refreshed in reports')
         location.reload()
     }
-
+    console.log('reports')
 
     const [report, setReport] = useState({});
     const [error, setError] = useState([]);
-    const [top_5, setTop_5] = useState([]);
-    const [last_5, setLast_5] = useState({});
+    const [top_5_viewed_posts, setTop_5_viewed_posts] = useState([]);
+    const [last_5_viewed_posts, setLast_5_viewed_posts] = useState([]);
+    const [top_5_commented_posts, setTop_5_commented_posts] = useState([]);
+    const [last_5_commented_posts, setLast_5_commented_posts] = useState([]);
     const [max_sub_15, setMax_sub_15] = useState({});
     const [min_add_15, setMin_add_15] = useState({});
     const [authors, setAuthors] = useState({});
@@ -43,14 +46,16 @@ const Report = () => {
                 })
                     .then(response => {
                         setReport(response.data[0])
-                        setTop_5(response.data[0].top_5)
-                        setLast_5(response.data[0].last_5)
+                        setTop_5_viewed_posts(response.data[0].top_5_viewed_posts)
+                        setLast_5_viewed_posts(response.data[0].last_5_viewed_posts)
                         setMax_sub_15(response.data[0].max_sub_15)
                         setMin_add_15(response.data[0].min_add_15)
-                        setAuthors(response.data[0].number_of_posts_views)
+                        setAuthors(response.data[0].number_of_posts_views_comments)
+                        setTop_5_commented_posts(response.data[0].top_5_commented_posts)
+                        setLast_5_commented_posts(response.data[0].last_5_commented_posts)
                     })
                     .catch(e => setError(prevState => {
-                        if (e.response.status === 403) {
+                        if (e?.response?.status === 403) {
                           setError(prevState => {
                               return ([...prevState, [0, e.response.data.detail]])
                           })
@@ -86,14 +91,17 @@ const Report = () => {
                 <Typography variant="body2" sx={{marginX: 2, height: 18}}>
                     The sum of all post views: {report.sum_views}
                 </Typography>
+                <Typography variant="body2" sx={{marginX: 2, height: 18}}>
+                    The sum of all post comments: {report.sum_comments}
+                </Typography>
             </Box>
-            <Divider color={"black"} sx = {{borderBottomWidth: 1, "mb": 2}}/>
+            <Divider color={"black"} sx = {{borderBottomWidth: 2, "mb": 2}}/>
             <Box sx={{marginY: 2 }}>
                 <Typography variant="h6" >
                 Most viewed posts:
                 </Typography >
                 {
-                    Array.from(top_5).map(post => {
+                    Array.from(top_5_viewed_posts).map(post => {
                         return (
                             <Typography  key={post.id} variant="body2" sx={{marginX: 2, height: 18}}>
                                 "{post.title}", {post.views} views, <Button href={"#/post/"+post.id}> Show me </Button>
@@ -108,10 +116,40 @@ const Report = () => {
                 Least viewed posts:
                 </Typography >
                 {
-                    Array.from(last_5).map(post => {
+                    Array.from(last_5_viewed_posts).map(post => {
                         return (
                             <Typography  key={post.id} variant="body2" sx={{marginX: 2, height: 18}}>
                                 "{post.title}", {post.views} views, <Button href={"#/post/"+post.id}> Show me </Button>
+                            </Typography>
+                        )
+                    })
+                }
+            </Box>
+            <Divider color={"black"} sx = {{borderBottomWidth: 2, "mb": 2}}/>
+            <Box sx={{marginY: 2 }}>
+                <Typography variant="h6" >
+                Most commented posts:
+                </Typography >
+                {
+                    Array.from(top_5_commented_posts).map(post => {
+                        return (
+                            <Typography  key={post.id} variant="body2" sx={{marginX: 2, height: 18}}>
+                                "{post.title}", {post.num_comments} comments, <Button href={"#/post/"+post.id}> Show me </Button>
+                            </Typography>
+                        )
+                    })
+                }
+            </Box>
+            <Divider color={"black"} sx = {{borderBottomWidth: 2, "mb": 2}}/>
+            <Box sx={{marginY: 2 }}>
+                <Typography variant="h6" >
+                Least commented posts:
+                </Typography >
+                {
+                    Array.from(last_5_commented_posts).map(post => {
+                        return (
+                            <Typography  key={post.id} variant="body2" sx={{marginX: 2, height: 18}}>
+                                "{post.title}", {post.num_comments} comments, <Button href={"#/post/"+post.id}> Show me </Button>
                             </Typography>
                         )
                     })
@@ -151,13 +189,13 @@ const Report = () => {
             <Box sx={{marginY: 2 }}>
 
                 <Typography variant="h6" >
-                According to the authors
+                According to the quantity
                 </Typography >
                 <Typography variant="body1" >
                 Most posts:
                 </Typography >
                     {
-                        Array.from(authors).map(author => {
+                        Array.from(authors).sort((a, b) => b.post_count - a.post_count).map(author => {
                             return (
                                 <Typography  key={author.id} variant="body2" sx={{marginX: 2, height: 18}}>
                                     {author.username}: {author.post_count}
@@ -170,7 +208,7 @@ const Report = () => {
                     Most views:
                 </Typography>
                     {
-                        Array.from(authors).map(author => {
+                        Array.from(authors).sort((a, b) => b.total_views - a.total_views).map(author => {
                             return (
                                 <Typography  key={author.id} variant="body2" sx={{marginX: 2, height: 18}}>
                                     {author.username}: {author.total_views}
@@ -183,7 +221,7 @@ const Report = () => {
                     Most comments:
                 </Typography>
                     {
-                        Array.from(authors).map(author => {
+                        Array.from(authors).sort((a, b) => b.total_comments - a.total_comments).map(author => {
                             return (
                                 <Typography  key={author.id} variant="body2" sx={{marginX: 2, height: 18}}>
                                     {author.username}: {author.total_comments}

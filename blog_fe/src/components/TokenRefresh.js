@@ -5,7 +5,7 @@ import jwt_decode from "jwt-decode";
 
 const TokenRefresh = () => {
     let refresh_sub = 2
-    let refresh_add = 4
+    let refresh_add = 2
     let expired_sub = false
     let expired_add = false
     let expired = false
