@@ -79,35 +79,29 @@ const ResponsiveAppBar = () => {
         setAnchorElUser(navigate("/register", { replace: true }));
     };
 
-    useEffect(() => {
-        // if (localStorage.getItem('token') === null || localStorage.getItem('refresh') === null) {
-        //     navigate('/login')
-        // }
-        //
-        // if (TokenRefresh()) {
-        //     console.log('token refreshed in bar')
-        //     location.reload()
-        // }
-        // console.log('bar')
-        axios(`${API}/api/post/`, {
-            method: "HEAD",
-            mode: 'same-origin',
-            headers: {
-                'accept': 'application/json',
-                'content-Type': 'application/json',
-                'authorization': 'Bearer ' + localStorage.getItem('token'),
-            }
 
-        })
-            .then(response => {
-                if (jwt_decode(localStorage.getItem('token')).username === 'admin') {
-                    setAdmin(true);
-                } else {
-                    setAdmin(false);
+    useEffect(() => {
+            axios(`${API}/api/post/`, {
+                method: "HEAD",
+                mode: 'same-origin',
+                headers: {
+                    'accept': 'application/json',
+                    'content-Type': 'application/json',
+                    'authorization': 'Bearer ' + localStorage.getItem('token'),
                 }
-                setLogged(true);
+
             })
-            .catch(() => {setLogged(false)})
+                .then(response => {
+                    if (jwt_decode(localStorage.getItem('token')).username === 'admin') {
+                        setAdmin(true);
+                    } else {
+                        setAdmin(false);
+                    }
+                    setLogged(true);
+                })
+                .catch(() => {
+                    setLogged(false)
+                })
     });
 
     return (

@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import parse from "html-react-parser";
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -28,14 +29,14 @@ const ShowPost = () => {
     let navigate = useNavigate();
 
     useEffect(() => {
-
-         if (localStorage.getItem('token') === null || localStorage.getItem('refresh') === null) {
+        if (TokenRefresh()) {
+             console.log('token refreshed in post list')
+             location.reload()
+        }
+        if (localStorage.getItem('token') === null || localStorage.getItem('refresh') === null) {
             navigate('/login')
-         }
-         if (TokenRefresh()) {
-             console.log('token refreshed')
-             window.location.reload()
-         }
+        }
+
         console.log('show post')
 
         axios(`${API}/api/post/${id}/`, {
@@ -67,11 +68,17 @@ const ShowPost = () => {
             .then(response => {
                 setCount(parseInt(response.data.views));
             })
-            .catch(error => setError(prevState => {
-                if (error.response.status == 401 || error.response.status == 403 || error.response.status == 404) {
-                        navigate("/", {replace: true});
-                    }
-                return [...prevState, [0, 'Network error']]
+            .catch(e => setError(prevState => {
+                if (e?.response?.status === 403) {
+                    setError(prevState => {
+                        return ([...prevState, [0, e.response.data.detail]])
+                    })
+                }
+                if (e?.response?.status === 500) {
+                    setError(prevState => {
+                            return ([...prevState, [0, 'Network error: ' + e.response.data.detail +
+                            '. Try to login again. If the error persists - there is a network or server error.']])
+                        })}
             }))
     }, []);
 
@@ -84,8 +91,8 @@ const ShowPost = () => {
             <Typography variant="h6" component="h2">
                 <VisibilityIcon fontSize={"small"}/> {count}
             </Typography>
-            <Typography variant="body1" component="p">
-                {post.content}
+            <Typography variant="body1" component="div">
+                {parse(String(post.content))}
             </Typography>
             <Box sx={{"marginY": 1 }}>
                 <Typography variant="subtitle2">
@@ -116,7 +123,7 @@ const ShowPost = () => {
             {/*Displaying a possible list of errors*/}
             <Grid item xs={12}>
                 {
-                    error.length > 0
+                    error?.length > 0
                     &&
                     <Stack sx={{ width: '100%' }} spacing={2}>
                         <Error error={error}/>

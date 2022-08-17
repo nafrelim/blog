@@ -21,15 +21,16 @@ const StartPage = () => {
     const [logged, setLogged] = useState(false);
 
     useEffect(() => {
-         if (localStorage.getItem('token') === null || localStorage.getItem('refresh') === null) {
-             setLogged(false)
-             navigate('/', {replace: true});
-         }
-         if (TokenRefresh()) {
+        if (TokenRefresh()) {
              console.log('token refreshed in post list')
              location.reload()
-         }
+        }
+        if (localStorage.getItem('token') === null || localStorage.getItem('refresh') === null) {
+            navigate('/')
+        }
+
         console.log('start page')
+
         axios(`${API}/api/post/`, {
             method: "HEAD",
             mode: 'same-origin',
@@ -42,8 +43,13 @@ const StartPage = () => {
             .then(response => {
                 setLogged(true);
             })
-            .catch(error => {
-                if (error.response.status == 500) {
+            .catch(e => {
+                if (e?.response?.status === 403) {
+                    setError(prevState => {
+                        return ([...prevState, [0, e.response.data.detail]])
+                    })
+                }
+                if (error?.response?.status === 500) {
                     setError('Network error: ' + error.message)
                 }
             })

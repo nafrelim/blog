@@ -16,14 +16,6 @@ import Divider from "@mui/material/Divider";
 
 const Report = () => {
     let navigate = useNavigate();
-    if (localStorage.getItem('token') === null) {
-        navigate('/login')
-    }
-    if (TokenRefresh()) {
-        console.log('token refreshed in reports')
-        location.reload()
-    }
-    console.log('reports')
 
     const [report, setReport] = useState({});
     const [error, setError] = useState([]);
@@ -36,6 +28,16 @@ const Report = () => {
     const [authors, setAuthors] = useState({});
 
     useEffect(() => {
+        if (TokenRefresh()) {
+             console.log('token refreshed in post list')
+             location.reload()
+        }
+        if (localStorage.getItem('token') === null || localStorage.getItem('refresh') === null) {
+            navigate('/login')
+        }
+
+        console.log('reports')
+
         axios.get(`${API}/api/report/`, {
                 mode: 'same-origin',
                 headers: {
@@ -55,17 +57,14 @@ const Report = () => {
                         setLast_5_commented_posts(response.data[0].last_5_commented_posts)
                     })
                     .catch(e => setError(prevState => {
-                        if (e?.response?.status === 403) {
-                          setError(prevState => {
-                              return ([...prevState, [0, e.response.data.detail]])
-                          })
+                        if (e?.response?.status == 401) {
+                         navigate("/login", {replace: true});
                         }
-                        if (e.response.status === 500) {
+                        if (e?.response?.status === 500) {
                           setError(prevState => {
                               return ([...prevState, [0, 'Network error: ' + e.response.data.detail +
                               '. Try to login again. If the error persists - there is a network or server error.']])
-                          })
-                      }
+                          })}
                     }));
     }, []);
 

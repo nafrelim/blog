@@ -46,18 +46,18 @@ const signIn = () => {
       })
           .then(response => {
             setData(true)
-              console.log(response.data)
             localStorage.setItem('token', response.data.access)
             localStorage.setItem('refresh', response.data.refresh)
             navigate("/post", {replace: true});
           })
           .catch(e => {
-              if (e.response.status === 401) {
+              console.error('error: ', e.response, typeof e)
+              if (e.response?.status === 401) {
                   setError(prevState => {
                       return ([...prevState, [0, e.response.data.detail]])
                   })
               }
-              if (e.response.status === 500) {
+              if (e.response?.status === 500) {
                   setError(prevState => {
                       return ([...prevState, [0, 'Network error: ' + e.response.data.detail +
                       '. Try to login again. If the error persists - there is a network or server error.']])

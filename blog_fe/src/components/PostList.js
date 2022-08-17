@@ -20,6 +20,7 @@ import {API} from "../blog_be";
 import Error from "./Error";
 import Copyright from "./Copyright";
 import TokenRefresh from "./TokenRefresh";
+import parse from "html-react-parser";
 
 const ordering = [
   {
@@ -62,15 +63,18 @@ const PostList = () => {
     };
     // list of posts
 
+
     useEffect(() => {
-        if (localStorage.getItem('token') === null || localStorage.getItem('refresh') === null) {
-            navigate('/login')
-         }
-         if (TokenRefresh()) {
+        if (TokenRefresh()) {
              console.log('token refreshed in post list')
              location.reload()
-         }
+        }
+        if (localStorage.getItem('token') === null || localStorage.getItem('refresh') === null) {
+            navigate('/login')
+        }
+
         console.log('post list')
+
         axios.get(`${API}/api/post/?search=`+search+'&ordering='+order+'&page='+page+'&author='+author, {
             mode: 'same-origin',
             headers: {
@@ -124,23 +128,29 @@ const PostList = () => {
                 setNumber_of_posts(response.data.count)
             })
             .catch(e => setError(prevState => {
-                if (e.response?.status == 403) {
-                    navigate("/", {replace: true});
+                console.error('error: ', e)
+                if (e?.response?.status === 403) {
+                    setError(prevState => {
+                        return ([...prevState, [0, e.response.data.detail]])
+                    })
                 }
-                navigate("/post/", {replace: true});
-                // if (error.response.status == 401) {
+                // if (e?.response?.status === 401) {
                 //     navigate("/login", {replace: true});
                 // }
-                // return [...prevState, [0, 'Network error']]
+                if (e?.response?.status === 500) {
+                    setError(prevState => {
+                            return ([...prevState, [0, 'Network error: ' + e.response.data.detail +
+                            '. Try to login again. If the error persists - there is a network or server error.']])
+                        })}
             }))
         }, [order, search, author, page]);
 
     return (
         <Box>
             <Box
-                component="form"
+                // component="form"
                 sx={{
-                    '& > :not(style)': { m: 1, width: '35ch' },
+                    '& > :not(style)': { mt: 1, mb: 1, ml:4, width: '43ch' },
                 }}
                 noValidate
                 autoComplete="off"
@@ -196,8 +206,7 @@ const PostList = () => {
                         <AccordionDetails>
                             <Typography variant="body1" component="p">
                                 {/*Display the first 200 characters of the post*/}
-                                {post.content.slice(0,200)+ ' ... '}
-                                {/*<ArrowForwardIcon size={"large"} href={"#/post/"+post.id}/>*/}
+                                {post.content.replace(/(<([^>]+)>)|&nbsp;/gi,"").slice(0,200)+ ' ... '}
                                 <Button href={"#/post/"+post.id}><ArrowForwardIcon fontSize={"large"}/></Button>
                             </Typography>
                             <Box sx={{"marginY": 1 }}>

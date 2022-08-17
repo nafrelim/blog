@@ -17,22 +17,29 @@ import Error from "./Error";
 import Copyright from "./Copyright";
 import TokenRefresh from "./TokenRefresh";
 import Avatar from "@mui/material/Avatar";
+import Editor from "./Editor";
 
 const EditPost = () => {
     const [title, setPost_title] = useState("");
     const [content, setPost_content] = useState("");
+    const [c, setC] = useState(content);
     const [error, setError] = useState([]);
     let { id } = useParams();
     let navigate = useNavigate();
 
+    const handleEditor = (e) => {
+        setPost_content(e)
+    }
+
     useEffect(() => {
+        if (TokenRefresh()) {
+             console.log('token refreshed in post list')
+             location.reload()
+        }
         if (localStorage.getItem('token') === null || localStorage.getItem('refresh') === null) {
             navigate('/login')
-         }
-         if (TokenRefresh()) {
-             console.log('token refreshed')
-             window.location.reload()
-         }
+        }
+
         console.log('edit post')
 
         axios(`${API}/api/post/${id}/`, {
@@ -46,21 +53,28 @@ const EditPost = () => {
             .then(response => {
                 setPost_title(response.data.title);
                 setPost_content(response.data.content);
+                setC(response.data.content);
+
             })
-            .catch(error => setError(prevState => {
-                if (error.response.status == 401 || error.response.status == 403 || error.response.status == 404) {
-                    navigate("/", {replace: true});
+            .catch(e => setError(prevState => {
+                if (e?.response?.status === 403) {
+                    setError(prevState => {
+                        return ([...prevState, [0, e.response.data.detail]])
+                    })
                 }
-                return [...prevState, [0, 'Network error']]
+                if (e?.response?.status === 500) {
+                    setError(prevState => {
+                            return ([...prevState, [0, 'Network error: ' + e.response.data.detail +
+                            '. Try to login again. If the error persists - there is a network or server error.']])
+                        })}
             }))
-        },
-        []);
+    },[]);
 
     async function handleSubmit (event) {
         event.preventDefault();
 
         // Save a post when fields are not empty
-        if (title.length > 0 && content.length > 0) {
+        if (title.length > 0 && content?.length > 0) {
             setError([])
             await axios(`${API}/api/post/${id}/`,
                 {
@@ -84,12 +98,12 @@ const EditPost = () => {
         else {
             // Clearing the list of errors only before the next field validation
             setError([])
-            if (title.length ===0) {
+            if (title?.length ===0) {
                 setError(prevState => {
                     return [...prevState, [1, "Post title cannot be empty"]]}
                 );
             }}
-            if (content.length ===0) {
+            if (content?.length ===0) {
                 setError(prevState => {
                     return [...prevState, [1, "Post content cannot be empty"]]}
                 );
@@ -123,24 +137,25 @@ const EditPost = () => {
                                     placeholder="Post title"
                                     name="post_title"
                                     value= {title}
-                                    style={{ width: 400 }}
+                                    style={{ width: 700 }}
                                     onChange={e => setPost_title(e.target.value)}
                                 />
                             </Grid>
                             <Grid item xs={12}>
-                                <TextareaAutosize
-                                    required
-                                    minRows={10}
-                                    placeholder="Post content"
-                                    value= {content}
-                                    style={{ width: 400 }}
-                                    onChange={e => setPost_content(e.target.value)}
-                                />
+                                <Editor contents={c} onEditor={handleEditor}/>
+                                {/*<TextareaAutosize*/}
+                                {/*    required*/}
+                                {/*    minRows={10}*/}
+                                {/*    placeholder="Post content"*/}
+                                {/*    value= {content}*/}
+                                {/*    style={{ width: 400 }}*/}
+                                {/*    onChange={e => setPost_content(e.target.value)}*/}
+                                {/*/>*/}
                             </Grid>
                             <Grid item xs={12}>
                                 {/*Displaying a possible list of errors*/}
                                 {
-                                    error.length > 0
+                                    error?.length > 0
                                     &&
                                     <Stack sx={{ width: '100%' }} spacing={2}>
                                         <Error error={error}/>
@@ -152,7 +167,7 @@ const EditPost = () => {
                             type="submit"
                             variant="contained"
                             autoFocus
-                            sx={{ mt: 1, mb: 2, ml:8, mr: 7, width: 100 }}
+                            sx={{ mt: 1, mb: 2, ml:28, mr: 7, width: 100 }}
                         >
                             Submit
                         </Button>

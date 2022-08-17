@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,11 +13,13 @@ import axios from "axios";
 import {API} from "../blog_be";
 import {useNavigate} from "react-router-dom";
 import {Stack, TextareaAutosize} from "@mui/material";
+import jwt_decode from "jwt-decode";
 
 import Error from "./Error";
 import Copyright from "./Copyright";
 import TokenRefresh from "./TokenRefresh";
-import jwt_decode from "jwt-decode";
+import Editor from "./Editor";
+
 
 const theme = createTheme();
 
@@ -27,14 +29,21 @@ const AddPost = () => {
     const [error, setError] = useState([]);
     let navigate = useNavigate();
 
-    if (localStorage.getItem('token') === null || localStorage.getItem('refresh') === null) {
+    const handleEditor = (e) => {
+        setPost_content(e)
+    }
+
+
+    useEffect(() => {
+       if (localStorage.getItem('token') === null || localStorage.getItem('refresh') === null) {
             navigate('/login')
-         }
-         if (TokenRefresh()) {
-             console.log('token refreshed in add post')
-             location.reload()
-         }
+        }
+        if (TokenRefresh()) {
+            console.log('token refreshed in add post')
+            location.reload()
+        }
         console.log('add post')
+    } ,[])
 
     async function handleSubmit (event) {
         event.preventDefault();
@@ -79,7 +88,7 @@ const AddPost = () => {
 
   return (
     // Display the post-entry form
-    <ThemeProvider theme={theme}>
+    // <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -105,25 +114,17 @@ const AddPost = () => {
                             placeholder="Post title"
                             name="title"
                             value= {title}
-                            style={{ width: 400 }}
+                            style={{ width: 700 }}
                             onChange={e => setPost_title(e.target.value)}
                         />
                     </Grid>
                     <Grid item xs={12}>
-                        <TextareaAutosize
-                            required
-                            minRows={10}
-                            placeholder="Post content"
-                            name="content"
-                            value= {content}
-                            style={{ width: 400 }}
-                            onChange={e => setPost_content(e.target.value)}
-                        />
+                        <Editor contents={""} onEditor={handleEditor}/>
                     </Grid>
                     <Grid item xs={12}>
                     {/*Displaying a possible list of errors*/}
                     {
-                        error.length > 0
+                        error?.length > 0
                         &&
                         <Stack sx={{ width: '100%' }} spacing={2}>
                             <Error error={error}/>
@@ -134,14 +135,14 @@ const AddPost = () => {
                 <Button
                     type="submit"
                     variant="contained"
-                    sx={{ mt: 1, mb: 2, ml:8, mr: 7, width: 100 }}
+                    autoFocus
+                    sx={{ mt: 1, mb: 2, ml:28, mr: 7, width: 100 }}
                 >
                 Add
                 </Button>
                 <Button
                     sx={{ mt: 1, mb: 2, width: 100 }}
                     onClick={() => navigate(`/`, {replace: true})}
-                    autoFocus
                     variant="contained"
                 >
                    Cancel
@@ -150,7 +151,7 @@ const AddPost = () => {
         </Box>
         <Copyright sx={{ mt: 5 }} />
       </Container>
-    </ThemeProvider>
+    // </ThemeProvider>
   );
 }
 

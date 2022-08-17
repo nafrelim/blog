@@ -32,14 +32,16 @@ export default function SignUp() {
   let navigate = useNavigate();
 
   useEffect(() => {
-     if (localStorage.getItem('token') === null || localStorage.getItem('refresh') === null) {
+      if (TokenRefresh()) {
+             console.log('token refreshed in post list')
+             location.reload()
+        }
+        if (localStorage.getItem('token') === null || localStorage.getItem('refresh') === null) {
             navigate('/login')
-         }
-         if (TokenRefresh()) {
-             console.log('token refreshed')
-             window.location.reload()
-         }
+        }
+
       console.log('update profile')
+
       axios(`${API}/auth/user/${user}/`, {
             method: 'GET',
             headers: {
@@ -55,13 +57,18 @@ export default function SignUp() {
                 setUsername(response.data.username)
                 setEmail(response.data.email)
             })
-            .catch(error => setError(prevState => {
-                if (error.response.status == 401 || error.response.status == 403 || error.response.status == 404) {
-                    navigate("/", {replace: true});
+            .catch(e => setError(prevState => {
+                if (e?.response?.status === 403) {
+                    setError(prevState => {
+                        return ([...prevState, [0, e.response.data.detail]])
+                    })
                 }
-                return [...prevState, [0, 'Network error']]
+                if (e?.response?.status === 500) {
+                    setError(prevState => {
+                            return ([...prevState, [0, 'Network error: ' + e.response.data.detail +
+                            '. Try to login again. If the error persists - there is a network or server error.']])
+                        })}
             }))
-
   }, []);
 
   function handleSubmit (event) {
@@ -87,11 +94,20 @@ export default function SignUp() {
                       navigate("/", {replace: true});
                   })
                   .catch(e => {
-                      if (e.response.status === 401 || e.response.status === 403) {
-                          setError(prevState => {
-                              return ([...prevState, [0, e.response.data.detail]])
-                          })
+                      if (e?.response?.status === 403) {
+                         setError(prevState => {
+                             return ([...prevState, [0, e.response.data.detail]])
+                        })
                       }
+                      if (e?.response?.status === 401) {
+                        navigate("/login", {replace: true});
+                      }
+                      if (e.response.status === 500) {
+                          setError(prevState => {
+                              return ([...prevState, [0, 'Network error: ' + e.response.data.detail +
+                              '. Try to login again. If the error persists - there is a network or server error.']])
+                          })
+                       }
                       if (e.response.status === 400) {
                           if (e.response.data['username']) {
                               setError(prevState => {
@@ -103,12 +119,6 @@ export default function SignUp() {
                                   return ([...prevState, [1, e.response.data['email']]])
                               })
                           }
-                      }
-                      if (e.response.status === 500) {
-                          setError(prevState => {
-                              return ([...prevState, [0, 'Network error: ' + e.response.data.detail +
-                              '. Try to login again. If the error persists - there is a network or server error.']])
-                          })
                       }
                   })
       } else {
