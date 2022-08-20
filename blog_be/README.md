@@ -4,10 +4,12 @@ The application provides the main API using the address [http://localhost:8000/]
 
 > If the application was running on a different port, this port must be changed in the invocation address.
 
-1. Endpoint **api/post** provides a post list
-2. Endpoint **api/view** provides a view list of posts (post ID and number of views)
-3. Endpoint **api/auth** endpoint provides services for logging in, logging out, JWT token handling, user service (creating, changing, obtaining information)
-4. Endpoint **api/report** provides a blog report
+1. Endpoint **auth** allows you to log in (receive a JWT token), log out, create a user, refresh the token, obtain and, if necessary, update user data and change the password
+2. Endpoint **api/post** provides a post list
+3. Endpoint **api/view** provides a view list of posts (post ID and number of views)
+4. Endpoint **api/comment** provides commentaries for posts
+5. Endpoint **api/report** provides a blog report
+6. Endpoint **api/parameters** provides additional information (list of authors) and parameters (number of posts per page)
 
 ## Url addresses supporting applications
 
@@ -19,19 +21,23 @@ The application provides the main API using the address [http://localhost:8000/]
 ## Login/Logout to API
 
 Logging (via **/auth/login/** endpoint) enables functions to be performed. You can not do anything without logging in.
-You can log in as **admin** (all functions available on all endpoints - POST, DEL, PATCH, PUT) or as **author1** or **author2** and then you can perform the following functions on the endpoint /api/post/:
+You can log in as **admin** (all functions available on all endpoints - POST, DEL, PATCH, PUT) or as **author1**, **author2**, **author3** or **author4** and then you can perform the following functions on the endpoint /api/post/:
 
 * display all posts
 * add one posts
 * edit her/his posts
 * delete her/his posts
 
-The logged in author can also read (only!) Information from the endpoint /api/view/.
+The logged in author can also read (only!) information from the endpoint /api/view/.
 
 Logout via **/auth/logut/** or **/auth/logut_all/** (logout all sessions of user)  
 
 ## Permisions
 Generally, except for api/register/ and api/login/, endpoints are available only to logged in users.
+
+Only the admin user can use the report (endpoint /api/report/) and change his password (endpoint /auth/change_password/).
+
+The logged in user can only edit his user data (endpoint /auth/upadate_profile/).
 
 ## Services available on endpoints
 
@@ -64,7 +70,22 @@ Endpoint allows you to create reading and modifying the number of views of your 
 * PUT (only for admin user)
 * PATCH (only for admin user)
 
-#### /api/report/
+### API/COMMENT
+
+Endpoint allows you to create reading and modifying the number of views of your posts
+
+#### /api/comment/
+
+* GET
+
+#### /api/comment/[id]/
+
+* POST
+* GET
+* DELETE (only for admin user and author of the post)
+
+#### /api/post_comment/[id]/
+A comment list for the post.
 
 * GET
 
@@ -79,11 +100,6 @@ Endpoint allows you to create, read, modify, delete posts. It does not allow ope
 ### API/PARAMETERS/
 
 Parameters needed for the blog_fe application.
-
-#### /api/parameters/
-
-* GET
-
 
 #### /api/parameters/
 

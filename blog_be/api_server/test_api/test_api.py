@@ -67,7 +67,7 @@ def test_add_post_author_logged(client, set_up):
     user = User.objects.get(username="author1")
     client.force_authenticate(user=user, token=None)
     blog_before = Post.objects.count()
-    title, content, views = create_post()
+    title, content, views, created = create_post()
     new_post = {
         "title": title,
         "content": content,
@@ -87,7 +87,7 @@ def test_add_post_author_logged(client, set_up):
 
 @pytest.mark.django_db
 def test_add_post_author_logged_out(client, set_up):
-    title, content, views = create_post()
+    title, content, views, created = create_post()
     new_post = {
         "title": title,
         "content": content,

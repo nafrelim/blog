@@ -18,11 +18,11 @@ The application is called **blog** and includes three main components:
 
 ### Frontend app - blog_fe
 
-The main purpose of the application is to enable viewing of the posts contained in the database. A more detailed description of the application functions can be found in the README document in the blog_fe folder.
+The main purpose of the application is to enable viewing of the posts contained in the database. A more detailed description of the application functions can be found in the [README](./blog_fe/README.md) document in the blog_fe folder.
 
 ### Backend app - blog_be
 
-The main purpose of the application is to expose data from the database in the form of the REST API interface and enable all operations, such as listing posts, downloading a single post, creating a post, editing it and deleting it. A more detailed description of the application functions can be found in the README document in the blog_be folder.
+The main purpose of the application is to expose data from the database in the form of the REST API interface and enable all operations, such as listing posts, downloading a single post, creating a post, editing it and deleting it. A more detailed description of the application functions can be found in the [README](./blog_be/README.md) document in the blog_be folder.
 
 # 2. Technologies used
 
@@ -45,7 +45,7 @@ The application is based on the Python language and the following additional mod
 * JWT - authorization, authentication
 * spectacular + swagger - OpenAPI documentation
 * faker - generating data for tests and filling the database with sample records
-* silk - bakcend and http debugger
+* silk - backend and http debugger
 
 ### 2.3 Database
 
@@ -118,16 +118,16 @@ Follow the steps below one by one to install blog_be apolication.
 * [ ]  modify the .env.dev (renaming the file to .env) file in order to enter the database connection data,
 for example:
 ```
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'HOST':  'localhost',
-        'PORT':  5432,
-        'NAME':  'database_name',
-        'USER':  'postgres',
-        'PASSWORD':  'postgres',
-    }
-}
+DB_HOST=localhost
+DB_PORT=5050
+DOCKER_DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=postgres
+DB_NAME=blog
+BE_PORT=8000
+DOCKER_BE_PORT=8080
+DEBUG=True
+SECRET_KEY=7b34gzz96^5mukh+fme16obi2p#04*iv!prxn%k(()ab4%2e&)
 ```
 
 Fill in the relevant fields in this file with the data that you saved when creating the database.
@@ -144,14 +144,14 @@ Fill in the relevant fields in this file with the data that you saved when creat
 
 #### Entering test data into the database
 
-Calling the following procedure is optional and results in introducing 30 posts with sample content to the database and creating an additional test **admin** account (password: !234567890), if the superuser account has been given a different name.
+Calling the following procedure is optional and results in introducing posts with sample content to the database and creating an additional test **admin** account (password: !234567890), if the superuser account has been given a different name.
 
 * [ ]  from the blog_be folder, run in the terminal  command `python manage.py populateblog <posts>` , where <posts> is the number of posts generated (min. 50)
 * [ ]  They are created:
 
 * admin user with password !234567890
-* users author1 and author2 with password !234567890
-* a certain number of posts, half for author1 and half for author2
+* users author1, author2, author3 and author4 with password !234567890
+* a certain number of posts, comments to them and the number of views on posts are randomly assigned to different authors
 
 #### Run the application
 
@@ -185,7 +185,7 @@ Follow the steps below one by one to install blog_fe application.
 
 #### Run the application
 
-From the blog_fe folder, execute the command `npm start` in the terminal - the application will be available at [http://localhost:8080/#/post](http://localhost:8080/#/post).
+From the blog_fe folder, execute the command `npm start` in the terminal - the application will be available at [http://localhost:8080/](http://localhost:8080/).
 
 > Warning! If you run the application on a different port, you should change (specify this port) in the **blog_fe\webpack.config.js** file
 

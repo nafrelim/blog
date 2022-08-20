@@ -18,5 +18,7 @@ def set_up():
     create_admin()
     author = create_author("author1")
     for _ in range(0, 10):
-        title, content, views = create_post()
-        Post.objects.create(title=title, content=content, views=views, author=author)
+        title, content, views, created = create_post()
+        Post.objects.create(
+            title=title, content=content, views=views, author=author, created=created
+        )

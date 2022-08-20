@@ -2,7 +2,7 @@
 
 The application is launched using the address [http://localhost:8080/](http://localhost:8080/) (after local deployment) or using the address [https://nafrelim-blog.herokuapp.com](https://nafrelim-blog.herokuapp.com/). If the application was running on a different port, this port must be changed in the invocation address.
 
-> For the add, edit and delete functions to work properly, you must log in to the bloge_be application (**see:** information in the blog_be. README file.
+> For the add, edit and delete functions to work properly, you must log in to the bloge_be application (**see:** information in the [blog_be README file](../blog_be/README.md)).
 
 At the top of the screen you can see a menu where we can always go back to the post list view (**POSTS**), or add a post (**ADD**).
 

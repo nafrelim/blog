@@ -76,7 +76,7 @@ const Editor = ({contents, onEditor}) => {
       config={config}
       tabIndex={3} // tabIndex of textarea
       onBlur={contentChange} // preferred to use only this option to update the content for performance reasons
-      // onChange={contentChange}
+      //  onChange={contentChange}
     />
   );
 };
