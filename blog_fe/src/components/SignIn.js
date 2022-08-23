@@ -81,9 +81,9 @@ const signIn = () => {
 
   if (!data) {
       return (
-          <ThemeProvider theme={theme}>
-            <Container component="main" maxWidth="xs">
-              <CssBaseline/>
+            <Container
+                maxWidth="sm"
+            >
               <Box
                   sx={{
                     marginTop: 8,
@@ -98,7 +98,19 @@ const signIn = () => {
                 <Typography component="h1" variant="h5">
                   Sign in
                 </Typography>
-                <Box component="form" onSubmit={handleSubmit} noValidate sx={{mt: 1}}>
+              </Box>
+              <Box
+                      component="form"
+                      noValidate
+                      onSubmit={handleSubmit}
+                      sx={{
+                        marginTop: 8,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                      }}
+                >
+                  <Box sx={{ mb: 3}}>
                   <TextField
                       margin="normal"
                       required
@@ -121,22 +133,36 @@ const signIn = () => {
                       autoComplete="current-password"
                       onChange={e => setPassword(e.target.value)}
                   />
-                  <Button
-                      type="submit"
+                  </Box>
+                  <Box
+                      sx={{
+                            marginTop: 8,
+                            display: 'flex',
+                            flexDirection: 'raw',
+                            alignItems: 'center',
+                            mt: 1, mb: 2
+                      }}
                       fullWidth
-                      variant="contained"
-                      sx={{ mt: 1, mb: 2, ml:8, mr: 7, width: 100 }}
-                  >
-                    Sign In
-                  </Button>
-                  <Button
-                    sx={{ mt: 1, mb: 2, width: 100 }}
-                    onClick={() => navigate(`/`, {replace: true})}
-                    autoFocus
-                    variant="contained"
-                  >
-                    Cancel
-                  </Button>
+                 >
+                      <Button
+                          type="submit"
+                          fullWidth
+                          variant="contained"
+                          sx={{mr:7, width: 100 }}
+                          // sx={{ mt: 1, mb: 2, ml:8, mr: 7, width: 100 }}
+                      >
+                        Sign In
+                      </Button>
+                      <Button
+                        sx={{width: 100 }}
+                        // sx={{ mt: 1, mb: 2, width: 100 }}
+                        onClick={() => navigate(`/`, {replace: true})}
+                        autoFocus
+                        variant="contained"
+                      >
+                        Cancel
+                      </Button>
+                  </Box>
                   <Grid container>
                     <Grid item xs>
                       {/*<Link href="#" variant="body2">*/}
@@ -149,7 +175,6 @@ const signIn = () => {
                       </Link>
                     </Grid>
                   </Grid>
-                </Box>
                  <Grid item xs={12}>
                      {
                         error.length > 0
@@ -162,7 +187,6 @@ const signIn = () => {
               </Box>
               <Copyright sx={{mt: 8, mb: 4}}/>
             </Container>
-          </ThemeProvider>
       );
     }
 }

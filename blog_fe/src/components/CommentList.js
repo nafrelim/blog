@@ -81,18 +81,19 @@ export default function CommentList({post_id}) {
         </Typography>
 
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-
-                <Grid item xs={12}>
+                <Box
+                >
                         <TextareaAutosize
                             required
                             placeholder="Add comment"
                             minRows={4}
+                            min
                             name="content"
                             value= {content}
-                            style={{ minWidth: 400}}
+                            style={{ minWidth: 300}}
                             onChange={e => setContent(e.target.value)}
                         />
-                    </Grid>
+                    </Box>
                 <Button
                     type="submit"
                     size="small"

@@ -148,8 +148,7 @@ export default function SignUp() {
   return (
     // Display the user datata form
 
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
+      <Container maxWidth="xs">
         <Box
           sx={{
             marginTop: 8,
@@ -164,7 +163,11 @@ export default function SignUp() {
           <Typography component="h1" variant="h5">
             Edit your profile
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box
+              component="form"
+              noValidate
+              onSubmit={handleSubmit}
+              sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField

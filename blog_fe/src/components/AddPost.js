@@ -89,9 +89,7 @@ const AddPost = () => {
 
   return (
     // Display the post-entry form
-      <Container
-            maxWidth="sm"
-        >
+       <Container maxWidth="md">
         <Box
           sx={{
             marginTop: 8,
@@ -107,17 +105,16 @@ const AddPost = () => {
               Add post
           </Typography>
         </Box>
-        <Box
-              component="form"
-              noValidate
-              onSubmit={handleSubmit}
-              sx={{
-                marginTop: 8,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-              }}
-        >
+            <Box
+                  component="form"
+                  onSubmit={handleSubmit}
+                  sx={{
+                    marginTop: 8,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                  }}
+            >
                 <Box sx={{ mb: 3}}>
                     <TextField
                         focused

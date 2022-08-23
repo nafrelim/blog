@@ -21,6 +21,7 @@ import Error from "./Error";
 import Copyright from "./Copyright";
 import TokenRefresh from "./TokenRefresh";
 import parse from "html-react-parser";
+import Container from "@mui/material/Container";
 
 const ordering = [
   {
@@ -146,11 +147,14 @@ const PostList = () => {
         }, [order, search, author, page]);
 
     return (
-        <Box>
+        <Container>
             <Box
                 // component="form"
                 sx={{
-                    '& > :not(style)': { mt: 1, mb: 1, ml:4, width: '43ch' },
+                    display: 'flex',
+                    // flexDirection: 'column',
+                    alignItems: 'center',
+                    '& > :not(style)': { mt: 1, mb: 1, mr: 1},
                 }}
                 noValidate
                 autoComplete="off"
@@ -243,7 +247,7 @@ const PostList = () => {
                 }
             </Grid>
             <Copyright sx={{mt: 8, mb: 4}}/>
-        </Box>
+        </Container>
     );
 };
 

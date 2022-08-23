@@ -18,7 +18,7 @@ const Editor = ({contents, onEditor}) => {
     minHeight: 300,
     maxHeight: 500,
     // minWidth: 10,
-    minWidth: 400,
+    minWidth: 300,
     buttons:
       "paragraph,bold,strikethrough,underline,italic,|,superscript,subscript,|,ul,ol,|,|,font,fontsize,brush,align,|,link,|, enter, undo,redo",
     editorCssClass: "alic",
