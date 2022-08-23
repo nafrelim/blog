@@ -19,6 +19,7 @@ import Error from "./Error";
 import Copyright from "./Copyright";
 import TokenRefresh from "./TokenRefresh";
 import Editor from "./Editor";
+import ButtonGroup from "@mui/material/ButtonGroup";
 
 
 const theme = createTheme();
@@ -88,9 +89,9 @@ const AddPost = () => {
 
   return (
     // Display the post-entry form
-    // <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
+      <Container
+            maxWidth="sm"
+        >
         <Box
           sx={{
             marginTop: 8,
@@ -105,23 +106,32 @@ const AddPost = () => {
           <Typography component="h1" variant="h5">
               Add post
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-                <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                        <TextField
-                            focused
-                            required
-                            placeholder="Post title"
-                            name="title"
-                            value= {title}
-                            style={{ width: 700 }}
-                            onChange={e => setPost_title(e.target.value)}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
+        </Box>
+        <Box
+              component="form"
+              noValidate
+              onSubmit={handleSubmit}
+              sx={{
+                marginTop: 8,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+        >
+                <Box sx={{ mb: 3}}>
+                    <TextField
+                        focused
+                        required
+                        placeholder="Post title"
+                        name="title"
+                        value= {title}
+                        fullWidth
+                        onChange={e => setPost_title(e.target.value)}
+                    />
+                    <Box sx={{ mt: 3 }}>
                         <Editor contents={""} onEditor={handleEditor}/>
-                    </Grid>
-                    <Grid item xs={12}>
+                    </Box>
+                <Box sx={{ mt: 1 }}>
                     {/*Displaying a possible list of errors*/}
                     {
                         error?.length > 0
@@ -130,28 +140,39 @@ const AddPost = () => {
                             <Error error={error}/>
                         </Stack>
                     }
-                    </Grid>
-                </Grid>
-                <Button
-                    type="submit"
-                    variant="contained"
-                    autoFocus
-                    sx={{ mt: 1, mb: 2, ml:28, mr: 7, width: 100 }}
+                    </Box>
+                </Box>
+                <Box
+                  sx={{
+                        marginTop: 8,
+                        display: 'flex',
+                        flexDirection: 'raw',
+                        alignItems: 'center',
+                        mt: 1, mb: 2
+                  }}
+                  fullWidth
                 >
-                Add
-                </Button>
-                <Button
-                    sx={{ mt: 1, mb: 2, width: 100 }}
-                    onClick={() => navigate(`/`, {replace: true})}
-                    variant="contained"
-                >
-                   Cancel
-                </Button>
+                    <Button
+                        type="submit"
+                        variant="contained"
+                        autoFocus
+                        sx={{mr: 7, width: 100 }}
+                        // sx={{ mt: 1, mb: 2, ml:28, mr: 7, width: 100 }}
+                    >
+                    Add
+                    </Button>
+                    <Button
+                        sx={{width: 100 }}
+                        // sx={{ mt: 1, mb: 2, width: 100 }}
+                        onClick={() => navigate(`/`, {replace: true})}
+                        variant="contained"
+                    >
+                       Cancel
+                    </Button>
+                </Box>
           </Box>
-        </Box>
         <Copyright sx={{ mt: 5 }} />
       </Container>
-    // </ThemeProvider>
   );
 }
 

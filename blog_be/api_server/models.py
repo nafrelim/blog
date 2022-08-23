@@ -31,9 +31,6 @@ class Post(models.Model):
         h = self.created.strftime("%H:%M")
         return f"title: {self.title}, created: {d} {h} by {self.author.username}"
 
-    # def get_absolute_url(self):
-    #     return f"/post/{self.pk}/"
-
 
 @receiver(signals.pre_save, sender=Post)
 def populate_slug(sender, instance, **kwargs):

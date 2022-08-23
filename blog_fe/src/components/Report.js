@@ -13,6 +13,7 @@ import Copyright from "./Copyright";
 import {API} from "../blog_be";
 import TokenRefresh from "./TokenRefresh";
 import Divider from "@mui/material/Divider";
+import Container from "@mui/material/Container";
 
 const Report = () => {
     let navigate = useNavigate();
@@ -69,29 +70,32 @@ const Report = () => {
     }, []);
 
     return (
-        <Box sx={{"marginY": 2, "marginX": 3 }}>
+        <Container
+            maxWidth="900"
+        >
+        <Box sx={{"marginY": 2}}>
             {/*Displaying post information*/}
-            <Box sx={{marginY: 2 }}>
+            <Box sx={{marginY: 2}}>
                 <Typography variant="h6" >
                 Basic post data:
                 </Typography >
-                <Typography variant="body2" sx={{marginX: 2, height: 18}}>
-                    Total number of posts: {report.number_of_posts}
+                <Typography variant="body2" sx={{marginX: 2, marginY: 1}}>
+                    • Total number of posts: {report.number_of_posts}
                 </Typography>
-                <Typography variant="body2" sx={{marginX: 2, height: 18}}>
-                    Maximum number of views for the post: {report.max_views}
+                <Typography variant="body2" sx={{marginX: 2, marginY: 2}}>
+                    • Maximum number of views for the post: {report.max_views}
                 </Typography>
-                <Typography variant="body2" sx={{marginX: 2, height: 18}}>
-                    Minimum number of views for the post: {report.min_views}
+                <Typography variant="body2" sx={{marginX: 2, marginY: 2}}>
+                    • Minimum number of views for the post: {report.min_views}
                 </Typography>
-                <Typography variant="body2" sx={{marginX: 2, height: 18}}>
-                    Average number of views for the post: {report.avg_views}
+                <Typography variant="body2" sx={{marginX: 2, marginY: 2}}>
+                    • Average number of views for the post: {report.avg_views}
                 </Typography>
-                <Typography variant="body2" sx={{marginX: 2, height: 18}}>
-                    The sum of all post views: {report.sum_views}
+                <Typography variant="body2" sx={{marginX: 2, marginY: 2}}>
+                    • The sum of all post views: {report.sum_views}
                 </Typography>
-                <Typography variant="body2" sx={{marginX: 2, height: 18}}>
-                    The sum of all post comments: {report.sum_comments}
+                <Typography variant="body2" sx={{marginX: 2, marginY: 2}}>
+                    • The sum of all post comments: {report.sum_comments}
                 </Typography>
             </Box>
             <Divider color={"black"} sx = {{borderBottomWidth: 2, "mb": 2}}/>
@@ -102,9 +106,17 @@ const Report = () => {
                 {
                     Array.from(top_5_viewed_posts).map(post => {
                         return (
-                            <Typography  key={post.id} variant="body2" sx={{marginX: 2, height: 18}}>
-                                "{post.title}", {post.views} views, <Button href={"#/post/"+post.id}> Show me </Button>
-                            </Typography>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'left',
+                                  }}
+                            >
+                                <Typography  key={post.id} variant="body2" sx={{marginX: 2}}>
+                                    • "{post.title}", {post.views} views, <Button href={"#/post/"+post.id}> Show me </Button>
+                                </Typography>
+                            </Box>
                         )
                     })
                 }
@@ -117,9 +129,17 @@ const Report = () => {
                 {
                     Array.from(last_5_viewed_posts).map(post => {
                         return (
-                            <Typography  key={post.id} variant="body2" sx={{marginX: 2, height: 18}}>
-                                "{post.title}", {post.views} views, <Button href={"#/post/"+post.id}> Show me </Button>
-                            </Typography>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'left',
+                                  }}
+                            >
+                                <Typography  key={post.id} variant="body2" sx={{marginX: 2}}>
+                                    • "{post.title}", {post.views} views, <Button href={"#/post/"+post.id}> Show me </Button>
+                                </Typography>
+                            </Box>
                         )
                     })
                 }
@@ -132,9 +152,17 @@ const Report = () => {
                 {
                     Array.from(top_5_commented_posts).map(post => {
                         return (
-                            <Typography  key={post.id} variant="body2" sx={{marginX: 2, height: 18}}>
-                                "{post.title}", {post.num_comments} comments, <Button href={"#/post/"+post.id}> Show me </Button>
-                            </Typography>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'left',
+                                  }}
+                            >
+                                <Typography  key={post.id} variant="body2" sx={{marginX: 2}}>
+                                    • "{post.title}", {post.num_comments} comments, <Button href={"#/post/"+post.id}> Show me </Button>
+                                </Typography>
+                            </Box>
                         )
                     })
                 }
@@ -147,9 +175,17 @@ const Report = () => {
                 {
                     Array.from(last_5_commented_posts).map(post => {
                         return (
-                            <Typography  key={post.id} variant="body2" sx={{marginX: 2, height: 18}}>
-                                "{post.title}", {post.num_comments} comments, <Button href={"#/post/"+post.id}> Show me </Button>
-                            </Typography>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'left',
+                                  }}
+                            >
+                                <Typography  key={post.id} variant="body2" sx={{marginX: 2}}>
+                                    • "{post.title}", {post.num_comments} comments, <Button href={"#/post/"+post.id}> Show me </Button>
+                                </Typography>
+                            </Box>
                         )
                     })
                 }
@@ -162,9 +198,17 @@ const Report = () => {
                 {
                     Array.from(max_sub_15).map(post => {
                         return (
-                            <Typography  key={post.id} variant="body2" sx={{marginX: 2, height: 18}}>
-                                "{post.title}", {post.views} views, <Button href={"#/post/"+post.id}> Show me </Button>
-                            </Typography>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'left',
+                                  }}
+                            >
+                                <Typography  key={post.id} variant="body2" sx={{marginX: 2}}>
+                                    • "{post.title}", {post.views} views, <Button href={"#/post/"+post.id}> Show me </Button>
+                                </Typography>
+                            </Box>
                         )
                     })
                 }
@@ -177,16 +221,23 @@ const Report = () => {
                 {
                     Array.from(min_add_15).map(post => {
                         return (
-                            <Typography  key={post.id} variant="body2" sx={{marginX: 2, height: 18}}>
-                                "{post.title}", {post.views} views, <Button href={"#/post/"+post.id}> Show me </Button>
-                            </Typography>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'left',
+                                  }}
+                            >
+                                <Typography  key={post.id} variant="body2" sx={{marginX: 2}}>
+                                    • "{post.title}", {post.views} views, <Button href={"#/post/"+post.id}> Show me </Button>
+                                </Typography>
+                            </Box>
                         )
                     })
                 }
             </Box>
             <Divider textAlign="left" color={"black"} sx = {{borderBottomWidth: 2, "mb": 2}}/>
             <Box sx={{marginY: 2 }}>
-
                 <Typography variant="h6" >
                 According to the quantity
                 </Typography >
@@ -196,9 +247,18 @@ const Report = () => {
                     {
                         Array.from(authors).sort((a, b) => b.post_count - a.post_count).map(author => {
                             return (
-                                <Typography  key={author.id} variant="body2" sx={{marginX: 2, height: 18}}>
-                                    {author.username}: {author.post_count}
-                                </Typography>
+                                <Box
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'left',
+                                    marginY: 2,
+                                  }}
+                                >
+                                    <Typography  key={author.id} variant="body2" sx={{marginX: 2}}>
+                                        • <b>{author.username}</b>: {author.post_count}
+                                    </Typography>
+                                </Box>
                             )
                         })
                     }
@@ -209,9 +269,18 @@ const Report = () => {
                     {
                         Array.from(authors).sort((a, b) => b.total_views - a.total_views).map(author => {
                             return (
-                                <Typography  key={author.id} variant="body2" sx={{marginX: 2, height: 18}}>
-                                    {author.username}: {author.total_views}
-                                </Typography>
+                                <Box
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'left',
+                                    marginY: 2,
+                                  }}
+                                >
+                                    <Typography  key={author.id} variant="body2" sx={{marginX: 2}}>
+                                        • <b>{author.username}</b>: {author.total_views}
+                                    </Typography>
+                                </Box>
                             )
                         })
                     }
@@ -222,9 +291,18 @@ const Report = () => {
                     {
                         Array.from(authors).sort((a, b) => b.total_comments - a.total_comments).map(author => {
                             return (
-                                <Typography  key={author.id} variant="body2" sx={{marginX: 2, height: 18}}>
-                                    {author.username}: {author.total_comments}
-                                </Typography>
+                                <Box
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'left',
+                                    marginY: 2,
+                                  }}
+                                >
+                                    <Typography  key={author.id} variant="body2" sx={{marginX: 2}}>
+                                        • <b>{author.username}</b>: {author.total_comments}
+                                    </Typography>
+                                </Box>
                             )
                         })
                     }
@@ -243,6 +321,7 @@ const Report = () => {
             </Grid>
             <Copyright sx={{mt: 8, mb: 4}}/>
         </Box>
+    </Container>
 )}
 
 export default  Report

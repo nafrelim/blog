@@ -86,10 +86,10 @@ export default function CommentList({post_id}) {
                         <TextareaAutosize
                             required
                             placeholder="Add comment"
-                            minRows={3}
+                            minRows={4}
                             name="content"
                             value= {content}
-                            style={{ width: 700 }}
+                            style={{ minWidth: 400}}
                             onChange={e => setContent(e.target.value)}
                         />
                     </Grid>

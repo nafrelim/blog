@@ -82,7 +82,7 @@ Endpoint allows you to create reading and modifying the number of views of your 
 
 * POST
 * GET
-* DELETE (only for admin user and author of the post)
+* DELETE (only for admin user and author of the comment)
 
 #### /api/post_comment/[id]/
 A comment list for the post.

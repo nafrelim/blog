@@ -85,15 +85,17 @@ const ShowPost = () => {
     return (
         <Box sx={{"marginY": 2 }}>
             {/*Displaying post information*/}
-            <Typography variant="h4" component="h2">
-                {post.title}
-            </Typography>
-            <Typography variant="h6" component="h2">
-                <VisibilityIcon fontSize={"small"}/> {count}
-            </Typography>
-            <Typography variant="body1" component="div">
-                {parse(String(post.content))}
-            </Typography>
+            <Box>
+                <Typography variant="h4" component="h2">
+                    {post.title}
+                </Typography>
+                <Typography variant="h6" component="h2">
+                    <VisibilityIcon fontSize={"small"}/> {count}
+                </Typography>
+                <Typography variant="body1" component="div">
+                    {parse(String(post.content))}
+                </Typography>
+                </Box>
             <Box sx={{"marginY": 1 }}>
                 <Typography variant="subtitle2">
                     Author: {post.author}

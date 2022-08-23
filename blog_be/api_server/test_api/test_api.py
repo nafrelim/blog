@@ -1,6 +1,6 @@
 import pytest
-from api_server.models import Post
-from api_server.utils import create_admin, create_author, create_post
+from api_server.models import Comment, Post
+from api_server.utils import create_admin, create_author, create_comment, create_post
 from django.contrib.auth.models import User
 
 """
@@ -314,4 +314,118 @@ def test_put_views_admin_logged(client, set_up):
 def test_put_views_author_logged_out(client, set_up):
     post = Post.objects.first()
     response = client.get(f"/api/view/{post.id}/", format="json")
+    assert response.status_code == 401
+
+
+"""
+For /api/comment/ the get, post. deete methods are available, but delete only for logged in admin and author of the comment 
+"""
+
+
+@pytest.mark.django_db
+def test_add_comment_author_logged(client, set_up):
+    user = User.objects.get(username="author1")
+    client.force_authenticate(user=user, token=None)
+    blog_before = Comment.objects.count()
+    content, created = create_comment()
+    post = Post.objects.first()
+    new_comment = {
+        "post": post.id,
+        "content": content,
+        "comment_author": user.username,
+    }
+    response = client.post("/api/comment/", new_comment, format="json")
+    assert response.status_code == 201
+    assert Comment.objects.count() == blog_before + 1
+    for key, value in new_comment.items():
+        assert key in response.data
+        if isinstance(value, list):
+            # Compare contents regardless of their order
+            assert len(response.data[key]) == len(value)
+        else:
+            assert response.data[key] == value
+
+
+@pytest.mark.django_db
+def test_add_comment_author_logged_out(client, set_up):
+    content, created = create_comment()
+    post = Post.objects.first()
+    new_post = {"content": content, "author": "author1", "post": post.id}
+    response = client.post("/api/comment/", new_post, format="json")
+    assert response.status_code == 401
+
+
+@pytest.mark.django_db
+def test_get_comment_list_author_logged(client, set_up):
+    user = User.objects.get(username="author1")
+    client.force_authenticate(user=user, token=None)
+    response = client.get("/api/comment/", format="json")
+    assert response.status_code == 200
+    assert Comment.objects.count() == response.data["count"]
+
+
+@pytest.mark.django_db
+def test_get_comment_list_author_logged_out(client, set_up):
+    response = client.get("/api/comment/", format="json")
+    assert response.status_code == 401
+
+
+@pytest.mark.django_db
+def test_get_comment_detail_logged(client, set_up):
+    user = User.objects.get(username="author1")
+    client.force_authenticate(user=user, token=None)
+    comment = Comment.objects.first()
+    response = client.get(f"/api/comment/{comment.id}/", {}, format="json")
+    assert response.status_code == 200
+    for field in ("post", "content", "comment_author", "created"):
+        assert field in response.data
+
+
+@pytest.mark.django_db
+def test_get_comment_detail_logged_out(client, set_up):
+    comment = Comment.objects.first()
+    response = client.get(f"/api/comment/{comment.id}/", {}, format="json")
+    assert response.status_code == 401
+
+
+@pytest.mark.django_db
+def test_put_and_patch_comment_author_logged(client, set_up):
+    user = User.objects.get(username="author1")
+    client.force_authenticate(user=user, token=None)
+    content, created = create_comment()
+    post = Post.objects.first()
+    comment = Comment.objects.first()
+    new_comment = {
+        "post": post.id,
+        "content": content,
+        "comment_author": user.username,
+    }
+    response = client.put("/api/comment/", new_comment)
+    assert response.status_code == 405
+    new_comment = {
+        "content": content,
+    }
+    response = client.put("/api/comment/", new_comment)
+    assert response.status_code == 405
+
+
+"""
+For /api/post_comments/ the get methon only is available for logged in user 
+"""
+
+
+@pytest.mark.django_db
+def test_get_comment_list_of_post_author_logged(client, set_up):
+    user = User.objects.get(username="author1")
+    client.force_authenticate(user=user, token=None)
+    post = Post.objects.first()
+    response = client.get(f"/api/post_comments/{post.id}/", format="json")
+    assert response.status_code == 200
+    assert Comment.objects.filter(post=post).count() == response.data["count"]
+
+
+@pytest.mark.django_db
+def test_get_comment_list_of_post_author_logged_out(client, set_up):
+    post = Post.objects.first()
+    response = client.get(f"/api/post_comments/{post.id}/")
     assert response.status_code == 401

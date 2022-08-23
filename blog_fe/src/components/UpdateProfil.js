@@ -147,7 +147,7 @@ export default function SignUp() {
 
   return (
     // Display the user datata form
-    <ThemeProvider theme={theme}>
+
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -242,6 +242,6 @@ export default function SignUp() {
           </Grid>
         <Copyright sx={{ mt: 5 }} />
       </Container>
-    </ThemeProvider>
+
   );
 }

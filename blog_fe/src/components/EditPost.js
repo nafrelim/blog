@@ -112,8 +112,10 @@ const EditPost = () => {
 
     return (
         // Display the post-entry form
-          <Container component="main" maxWidth="xs">
-            <CssBaseline />
+        <Container
+            maxWidth="sm"
+        >
+         <Box sx={{"marginY": 2 }}>
             <Box
               sx={{
                 marginTop: 8,
@@ -128,59 +130,71 @@ const EditPost = () => {
               <Typography component="h1" variant="h5">
                   Edit post
               </Typography>
-             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12}>
-                                <TextField
-                                    focused
-                                    required
-                                    placeholder="Post title"
-                                    name="post_title"
-                                    value= {title}
-                                    style={{ width: 700 }}
-                                    onChange={e => setPost_title(e.target.value)}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Editor contents={c} onEditor={handleEditor}/>
-                                {/*<TextareaAutosize*/}
-                                {/*    required*/}
-                                {/*    minRows={10}*/}
-                                {/*    placeholder="Post content"*/}
-                                {/*    value= {content}*/}
-                                {/*    style={{ width: 400 }}*/}
-                                {/*    onChange={e => setPost_content(e.target.value)}*/}
-                                {/*/>*/}
-                            </Grid>
-                            <Grid item xs={12}>
-                                {/*Displaying a possible list of errors*/}
-                                {
-                                    error?.length > 0
-                                    &&
-                                    <Stack sx={{ width: '100%' }} spacing={2}>
-                                        <Error error={error}/>
-                                    </Stack>
-                                }
-                            </Grid>
-                        </Grid>
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            autoFocus
-                            sx={{ mt: 1, mb: 2, ml:28, mr: 7, width: 100 }}
-                        >
-                            Submit
-                        </Button>
-                        <Button
-                            variant="contained"
-                            sx={{ mt: 1, mb: 2, width: 100 }}
-                            onClick={() => navigate(`/post/${id}`, { replace: true })}
-                        >
-                            Cancel
-                        </Button>
+            </Box>
+            <Box
+                component="form"
+                noValidate
+                onSubmit={handleSubmit}
+                sx={{
+                    marginTop: 8,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                  }}
+            >
+                    <Box sx={{ mb: 3}}>
+                        <TextField
+                            focused
+                            required
+                            placeholder="Post title"
+                            name="post_title"
+                            value= {title}
+                            fullWidth
+                            onChange={e => setPost_title(e.target.value)}
+                        />
+                    <Box sx={{ mt: 3 }}>
+                        <Editor contents={c} onEditor={handleEditor}/>
                     </Box>
-                </Box>
+                    <Box sx={{ mt: 1 }}>
+                        {/*Displaying a possible list of errors*/}
+                        {
+                            error?.length > 0
+                            &&
+                            <Stack sx={{ width: '100%' }} spacing={2}>
+                                <Error error={error}/>
+                            </Stack>
+                        }
+                    </Box>
+                 </Box>
+                    <Box
+                          sx={{
+                                marginTop: 8,
+                                display: 'flex',
+                                flexDirection: 'raw',
+                                alignItems: 'center',
+                                mt: 1, mb: 2
+                          }}
+                          fullWidth
+                        >
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                autoFocus
+                                sx={{mr: 7, width: 100 }}
+                            >
+                                Submit
+                            </Button>
+                            <Button
+                                variant="contained"
+                                sx={{width: 100 }}
+                                onClick={() => navigate(`/post/${id}`, { replace: true })}
+                            >
+                                Cancel
+                            </Button>
+                        </Box>
+                    </Box>
                 <Copyright sx={{mt: 8, mb: 4}}/>
+            </Box>
             </Container>
     );
 };

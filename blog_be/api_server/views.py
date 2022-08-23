@@ -13,7 +13,8 @@ from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 from .models import Comment, Post
 from .permissions import (
-    IsAuthenticatedAndAuthorPost,
+    IsAuthenticatedAndCommentAuthor,
+    IsAuthenticatedAndPostAuthor,
     IsAuthenticatedAndSafeMethodOrAdmin,
 )
 from .reports import get_report
@@ -32,7 +33,7 @@ class PostViewSet(ModelViewSet):
     View for handling the post endpoint.
     """
 
-    permission_classes = [IsAuthenticatedAndAuthorPost]
+    permission_classes = [IsAuthenticatedAndPostAuthor]
     filter_backends = (SearchFilter, OrderingFilter)
     search_fields = ("title",)
     ordering_fields = ("created", "updated", "author")
@@ -60,7 +61,7 @@ class CommentViewSet(ModelViewSet):
     View for handling the comment endpoint.
     """
 
-    permission_classes = [IsAuthenticatedAndAuthorPost]
+    permission_classes = [IsAuthenticatedAndCommentAuthor]
     ordering_fields = ("created",)
     serializer_class = CommentSerializer
     view_name = "comment"
@@ -83,7 +84,7 @@ class PostCommentsViewSet(ModelViewSet):
     View for handling the comment endpoint.
     """
 
-    permission_classes = [IsAuthenticatedAndAuthorPost]
+    permission_classes = [IsAuthenticatedAndPostAuthor]
     ordering_fields = ("created",)
     serializer_class = PostCommentsSerializer
     view_name = "post_comments"
@@ -145,7 +146,7 @@ class ParametersView(APIView):
     Generating parameters needed in the blog_fe application.
     """
 
-    permission_classes = [IsAuthenticatedAndAuthorPost]
+    permission_classes = [IsAuthenticatedAndPostAuthor]
 
     def get(self, request):
         result = {
