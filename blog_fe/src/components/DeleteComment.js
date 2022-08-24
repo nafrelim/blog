@@ -1,6 +1,4 @@
 import React, {useState} from 'react';
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -9,6 +7,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import {Stack} from "@mui/material";
 import Error from "./Error";
 import Grid from "@mui/material/Grid";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import {API} from "../blog_be";
 
@@ -16,7 +16,7 @@ axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.withCredentials = true;
 
-const DeletePost = ({id}) => {
+const DeleteComment = ({comment_id}) => {
     const [open, setOpen] = React.useState(false);
     const [error, setError] = useState([]);
     const navigate = useNavigate();
@@ -31,7 +31,7 @@ const DeletePost = ({id}) => {
 
     async function handleDelete () {
         setOpen(false);
-        await axios(`${API}/api/post/${id}/`, {
+        await axios(`${API}/api/comment/${comment_id}/`, {
             method: 'DELETE',
             headers: {
                     'Accept': 'application/json',
@@ -45,7 +45,7 @@ const DeletePost = ({id}) => {
                 }
                 return [...prevState, [0, 'Network error']]
             }))
-        navigate("/post/", { replace: true });
+        location.reload()
     }
 
         return (
@@ -61,7 +61,8 @@ const DeletePost = ({id}) => {
                 }
             </Grid>
             <Button
-                sx={{ mt: 1, mb: 1, width: 100 }}
+                sx={{ ml:1, mt: 1, mb: 1, width: 52, height:20 }}
+                size="small"
                 variant="outlined"
                 onClick={handleClickOpen}>
                 Delete
@@ -73,9 +74,9 @@ const DeletePost = ({id}) => {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    Do you want to delete the post?
+                    Do you want to delete the comment?
                 </DialogTitle>
-                <DialogActions textAlign={"left"}>
+                <DialogActions>
                     <Button
                         sx={{ mb: 1, width: 100 }}
                         onClick={handleClose}
@@ -96,4 +97,4 @@ const DeletePost = ({id}) => {
     );
 };
 
-export default DeletePost;
+export default DeleteComment;

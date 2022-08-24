@@ -129,7 +129,6 @@ const PostList = () => {
                 setNumber_of_posts(response.data.count)
             })
             .catch(e => setError(prevState => {
-                console.error('error: ', e)
                 if (e?.response?.status === 403) {
                     setError(prevState => {
                         return ([...prevState, [0, e.response.data.detail]])
@@ -149,7 +148,6 @@ const PostList = () => {
     return (
         <Container>
             <Box
-                // component="form"
                 sx={{
                     display: 'flex',
                     // flexDirection: 'column',
@@ -184,6 +182,7 @@ const PostList = () => {
                     select
                     label="Filter by authors"
                     value={author}
+                    style={{ minWidth: 120}}
                     onChange={e => setAuthor(e.target.value)}
                 >
                     <MenuItem value={'all'}> {'all'} </MenuItem>

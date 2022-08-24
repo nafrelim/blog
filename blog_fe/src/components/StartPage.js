@@ -22,7 +22,6 @@ const StartPage = () => {
 
     useEffect(() => {
         if (TokenRefresh()) {
-             console.log('token refreshed in post list')
              location.reload()
         }
         if (localStorage.getItem('token') === null || localStorage.getItem('refresh') === null) {

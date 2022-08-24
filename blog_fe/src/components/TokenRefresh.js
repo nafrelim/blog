@@ -10,8 +10,6 @@ const TokenRefresh = () => {
     let expired_add = false
     let expired = false
 
-    // console.log('date: ', parseInt(Date.now() / 1000))
-
     if (localStorage.getItem('token') == null || localStorage.getItem('refresh') == null) {
         if (localStorage.getItem('refresh') == null) {
             localStorage.removeItem('token');
@@ -68,35 +66,6 @@ const TokenRefresh = () => {
     if (localStorage.getItem('token') != null) {
         console.log('token: ', (localStorage.getItem('token') != null))
     }
-
-    // if (expired_add) {
-    //     console.log('in expired_add and not refresh')
-    //     axios.post(`${API}/auth/refresh/`,
-    //         {
-    //             'refresh': localStorage.getItem('refresh')
-    //         },
-    //         {
-    //             headers: {
-    //                 'accept': 'application/json',
-    //                 'content-Type': 'application/json',
-    //             },
-    //
-    //         })
-    //         .then(response => {
-    //             console.log('nie odświerzył i skasował tokeny')
-    //             localStorage.removeItem('token');
-    //             localStorage.removeItem('refresh');
-    //             return false
-    //         })
-    //         .catch(() => {
-    //             console.log('skasował token - token odświerzania nieaktywny')
-    //             localStorage.removeItem('token');
-    //             localStorage.removeItem('refresh');
-    //             return false
-    //         })
-    //     return false
-    // }
-
 }
 
 export default TokenRefresh;

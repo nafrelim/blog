@@ -51,7 +51,6 @@ const signIn = () => {
             navigate("/post", {replace: true});
           })
           .catch(e => {
-              console.error('error: ', e.response, typeof e)
               if (e.response?.status === 401) {
                   setError(prevState => {
                       return ([...prevState, [0, e.response.data.detail]])

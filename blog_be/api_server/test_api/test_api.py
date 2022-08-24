@@ -318,7 +318,7 @@ def test_put_views_author_logged_out(client, set_up):
 
 
 """
-For /api/comment/ the get, post. deete methods are available, but delete only for logged in admin and author of the comment 
+For /api/comment/ the get, post. deete methods are available, but delete only for logged admin or author of the comment 
 """
 
 
@@ -394,7 +394,7 @@ def test_put_and_patch_comment_author_logged(client, set_up):
     client.force_authenticate(user=user, token=None)
     content, created = create_comment()
     post = Post.objects.first()
-    comment = Comment.objects.first()
+    # comment = Comment.objects.first()
     new_comment = {
         "post": post.id,
         "content": content,

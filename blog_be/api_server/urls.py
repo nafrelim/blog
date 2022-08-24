@@ -19,7 +19,9 @@ post_detail = PostViewSet.as_view(
 
 comment_list = CommentViewSet.as_view({"get": "list", "post": "create"})
 
-comment_detail = CommentViewSet.as_view({"get": "retrieve", "delete": "destroy"})
+comment_detail = CommentViewSet.as_view(
+    {"get": "retrieve", "delete": "destroy", "patch": "partial_update"}
+)
 
 post_comments_list = PostCommentsViewSet.as_view({"get": "list"})
 

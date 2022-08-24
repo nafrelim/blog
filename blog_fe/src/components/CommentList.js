@@ -1,19 +1,20 @@
-import * as React from 'react';
+import React, {useEffect, useState} from "react";
 import { styled } from '@mui/material/styles';
 import Divider from '@mui/material/Divider';
 import Typography from "@mui/material/Typography";
-import {useEffect, useState} from "react";
+
 import axios from "axios";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import SendIcon from '@mui/icons-material/Send';
-import Grid from "@mui/material/Grid";
+import ButtonGroup from "@mui/material/ButtonGroup";
 import {TextareaAutosize} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 
 import {API} from "../blog_be";
-import Error from "./Error";
 import jwt_decode from "jwt-decode";
+import DeleteComment from "./DeleteComment";
+import EditComment from "./EditComment";
 
 const Root = styled('div')(({ theme }) => ({
   width: '100%',
@@ -27,6 +28,7 @@ export default function CommentList({post_id}) {
     const [error, setError] = useState([]);
     const [content, setContent] = useState('');
     const [comments, setComments] = useState([]);
+    const [author, setAuthor] = useState('');
 
     let navigate = useNavigate();
 
@@ -52,10 +54,11 @@ export default function CommentList({post_id}) {
                 }
                 return [...prevState, [0, 'Network error']]
             }))
-        window.location.reload();
+        location.reload();
     }
 
     useEffect(() => {
+        setAuthor(jwt_decode(localStorage.getItem('token')).username)
         axios.get(`${API}/api/post_comments/${post_id}/`, {
             mode: 'same-origin',
             headers: {
@@ -79,21 +82,18 @@ export default function CommentList({post_id}) {
         <Typography variant="h6" sx={{"mb": 5, "mt": 5}}>
                 Comments
         </Typography>
-
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-                <Box
-                >
-                        <TextareaAutosize
-                            required
-                            placeholder="Add comment"
-                            minRows={4}
-                            min
-                            name="content"
-                            value= {content}
-                            style={{ minWidth: 300}}
-                            onChange={e => setContent(e.target.value)}
-                        />
-                    </Box>
+                <Box>
+                    <TextareaAutosize
+                        required
+                        placeholder="Add comment"
+                        minRows={4}
+                        name="content"
+                        value= {content}
+                        style={{ minWidth: 300}}
+                        onChange={e => setContent(e.target.value)}
+                    />
+                </Box>
                 <Button
                     type="submit"
                     size="small"
@@ -103,15 +103,21 @@ export default function CommentList({post_id}) {
                 >
                     Add
                 </Button>
-
         </Box>
-
         {
             comments.map((comment) =>
                 <Box key={comment.id}>
                     <Divider textAlign="left">
                         <Typography variant="caption text">
                             {comment.comment_author},  {comment.created?.slice(8,10)+comment.created?.slice(4,8)+comment.created?.slice(0,4)}
+                            {
+                                (author === comment.comment_author)
+                                &&
+                                <ButtonGroup>
+                                    <EditComment comment_id={comment.id} content={comment.content}/>
+                                    <DeleteComment comment_id={comment.id}/>
+                                </ButtonGroup>
+                            }
                         </Typography>
                     </Divider>
                     <Typography variant="body2">

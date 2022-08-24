@@ -6,18 +6,20 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogTitle from '@mui/material/DialogTitle';
-import {Stack} from "@mui/material";
+import {Stack, TextareaAutosize} from "@mui/material";
 import Error from "./Error";
 import Grid from "@mui/material/Grid";
 
 import {API} from "../blog_be";
+import Box from "@mui/material/Box";
 
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.withCredentials = true;
 
-const DeletePost = ({id}) => {
-    const [open, setOpen] = React.useState(false);
+const EditComment = ({comment_id, content}) => {
+    const [comment, setComment] = useState(content);
+    const [open, setOpen] = useState(false);
     const [error, setError] = useState([]);
     const navigate = useNavigate();
 
@@ -29,15 +31,18 @@ const DeletePost = ({id}) => {
         setOpen(false);
     };
 
-    async function handleDelete () {
+    async function handleEdit () {
         setOpen(false);
-        await axios(`${API}/api/post/${id}/`, {
-            method: 'DELETE',
+        await axios(`${API}/api/comment/${comment_id}/`, {
+            method: 'PATCH',
             headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + localStorage.getItem('token'),
                 },
+            data: {
+                'content': comment,
+            }
         })
             .catch(error => setError(prevState => {
                 if (error.response.status == 401 || error.response.status == 403) {
@@ -45,10 +50,10 @@ const DeletePost = ({id}) => {
                 }
                 return [...prevState, [0, 'Network error']]
             }))
-        navigate("/post/", { replace: true });
+        location.reload()
     }
 
-        return (
+    return (
         <div>
             {/*Displaying a possible list of errors*/}
             <Grid item xs={12}>
@@ -61,10 +66,11 @@ const DeletePost = ({id}) => {
                 }
             </Grid>
             <Button
-                sx={{ mt: 1, mb: 1, width: 100 }}
+                sx={{ ml:1, mt: 1, mb: 1, width: 52, height:20 }}
+                size="small"
                 variant="outlined"
                 onClick={handleClickOpen}>
-                Delete
+                Edit
             </Button>
             <Dialog
                 open={open}
@@ -72,23 +78,37 @@ const DeletePost = ({id}) => {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">
-                    Do you want to delete the post?
+                <DialogTitle sx={{ m: 0, p: 1 }}>
+                    Edit comment
                 </DialogTitle>
-                <DialogActions textAlign={"left"}>
+                <Box
+                    sx={{ml: 1, mr:1}}
+                >
+                    <TextareaAutosize
+                        required
+                        placeholder="Edit comment"
+                        style={{ minWidth: 300}}
+                        name="content"
+                        value= {comment}
+                        onChange={e => setComment(e.target.value)}
+                    />
+                </Box>
+                <DialogActions>
                     <Button
                         sx={{ mb: 1, width: 100 }}
                         onClick={handleClose}
                         autoFocus
+                        size="small"
                         variant="contained"
                     >
-                        Disagree
+                        Cancel
                     </Button>
                     <Button
-                        sx={{ mb: 1, mr: 9, width: 100 }}
-                        onClick={handleDelete}
+                        sx={{ mb: 1, width: 100 }}
+                        onClick={handleEdit}
+                        size="small"
                     >
-                        Agree
+                        Accept
                     </Button>
                 </DialogActions>
             </Dialog>
@@ -96,4 +116,4 @@ const DeletePost = ({id}) => {
     );
 };
 
-export default DeletePost;
+export default EditComment;
