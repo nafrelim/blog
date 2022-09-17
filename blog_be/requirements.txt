@@ -5,12 +5,14 @@ django-cors-headers
 djangorestframework
 djangorestframework-simplejwt
 django-environ
-django-heroku
+django-on-heroku
 django-rest-swagger
 django-rest-swagger-django3fix
 django-silk
 dj-rest-auth
+dj-database-url
 drf-spectacular
+environ
 faker
 gunicorn
 psycopg2-binary

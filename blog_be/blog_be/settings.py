@@ -14,7 +14,8 @@ from datetime import timedelta
 from pathlib import Path
 
 import dj_database_url
-import django_heroku
+import django_on_heroku
+
 import environ
 from django.conf.global_settings import CSRF_TRUSTED_ORIGINS
 
@@ -253,7 +254,7 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
 }
 
-django_heroku.settings(locals())
+django_on_heroku.settings(locals())
 
 if "DATABASE_URL" in os.environ:
     DATABASES = {"default": dj_database_url.config()}
