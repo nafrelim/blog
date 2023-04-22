@@ -24,9 +24,9 @@ module.exports = {
     compress: true,
     port: process.env.PORT || 8080,
     allowedHosts: [
-      '.heroku.com',
-      'nafrelim-blog.herokuapp.com',
-      // 'localhost',
+      // '.heroku.com',
+      //'nafrelim-blog.herokuapp.com',
+      'localhost',
     ],
     historyApiFallback: true,
     hot: true,

@@ -94,6 +94,7 @@ const PostList = () => {
                 }
                 navigate("/post/", {replace: true});
             }))
+
         axios.get(`${API}/api/parameters`, {
             mode: 'same-origin',
             headers: {

@@ -13,7 +13,8 @@ COPY . .
 #RUN python manage.py makemigrations
 #RUN python manage.py migrate
 #RUN python manage.py populateblog 100
-EXPOSE ${DOCKER_BE_PORT}
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8888", "pytest"]
+
+EXPOSE ${BE_PORT}
+#CMD ["python", "manage.py", "runserver", "0.0.0.0:${BE_PORT}", "pytest"]
 #RUN python manage.py runserver
 

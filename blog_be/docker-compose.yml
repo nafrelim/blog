@@ -1,5 +1,8 @@
 version: "3.9"
 
+networks:
+  be-network:
+    driver: bridge
 services:
   db:
     container_name: db
@@ -14,13 +17,15 @@ services:
       - db:/var/lib/postgresql/data
     ports:
       - ${DB_PORT}:${DOCKER_DB_PORT}
+    networks:
+      - be-network
   blog:
     container_name: be
     image: blog_be
     build:
       context: .
       dockerfile: ./Dockerfile
-    command: python manage.py runserver 0.0.0.0:${DOCKER_BE_PORT}
+    command: python manage.py runserver localhost:${DOCKER_BE_PORT}
     environment:
       - TZ=Europe/Warsaw
 #    volumes:
@@ -29,6 +34,8 @@ services:
       - ${BE_PORT}:${DOCKER_BE_PORT}
     depends_on:
       - db
+    networks:
+      - be-network
 volumes:
   db:
     driver: local

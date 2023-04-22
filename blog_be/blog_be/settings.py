@@ -178,11 +178,11 @@ JSON_EDITOR = True
 SHOW_REQUEST_HEADERS = True
 
 ALLOWED_HOSTS = ["*"]
-CSRF_TRUSTED_ORIGINS = ["http://localhost", "http://localhost:8080"]
+CSRF_TRUSTED_ORIGINS = ["http://localhost", "http://localhost:8080", "http://localhost:8000"]
 CSRF_COOKIE_HTTPONLY = False
 CSRF_USE_SESSIONS = False
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:8080", "http://localhost"]
+CORS_ALLOWED_ORIGINS = ["http://localhost:8080", "http://localhost:8000", "http://localhost"]
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
