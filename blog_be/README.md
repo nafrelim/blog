@@ -14,6 +14,12 @@ Run `piptools sync` only inside this project's virtual environment: it removes
 installed packages that are not in the lockfile. Docker installs from the same
 `requirements.txt`. Django 6.1 requires PostgreSQL 15 or newer.
 
+Copy `.env.dev` to `.env` and fill in the required values locally. `.env.dev`
+keeps secret fields empty and remains in Git; `.env` is ignored. Docker
+Compose loads `.env` into the backend container at runtime, and the Docker
+build excludes local environment files. The image generates static assets
+during its build.
+
 ## Endpoints REST API
 
 The application provides the main API using the address [http://localhost:8000/](http://localhost:8000/) (after local deployment).

@@ -6,6 +6,9 @@ WORKDIR /blog
 COPY requirements.txt ./
 RUN pip install -r requirements.txt
 COPY . .
+RUN SECRET_KEY=build-only DEBUG=False DB_HOST=localhost DOCKER_DB_PORT=5432 \
+    DB_NAME=build DB_USER=build DB_PASSWORD=build \
+    python manage.py collectstatic --noinput
 #ADD manage.py /blog-be
 #ADD /authentication /blog-be
 #ADD /api_server /blog-be
