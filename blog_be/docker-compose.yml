@@ -1,43 +1,43 @@
-version: "3.9"
-
-networks:
-  be-network:
-    driver: bridge
 services:
   db:
-    container_name: db
-    image: postgres
-    restart: always
+    image: postgres:16
     environment:
-      - POSTGRES_DB=${DB_NAME}
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - TZ=Europe/Warsaw
+      POSTGRES_DB: ${DB_NAME:?Set DB_NAME in .env}
+      POSTGRES_USER: ${DB_USER:?Set DB_USER in .env}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
     volumes:
-      - db:/var/lib/postgresql/data
-    ports:
-      - ${DB_PORT}:${DOCKER_DB_PORT}
-    networks:
-      - be-network
-  blog:
-    container_name: be
-    image: blog_be
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  blog_be:
     build:
       context: .
-      dockerfile: ./Dockerfile
     env_file:
       - .env
-    command: python manage.py runserver localhost:${DOCKER_BE_PORT}
+    command: python manage.py runserver 0.0.0.0:8000
     environment:
-      - TZ=Europe/Warsaw
-#    volumes:
-#      - .:/blog
+      DB_HOST: db
+      DB_PORT: "5432"
     ports:
-      - ${BE_PORT}:${DOCKER_BE_PORT}
+      - "${BE_PORT:-8000}:8000"
     depends_on:
-      - db
-    networks:
-      - be-network
+      db:
+        condition: service_healthy
+
+  blog_fe:
+    build:
+      context: ../blog_fe
+    environment:
+      BLOG_API_URL: ${BLOG_API_URL:-http://localhost:8000}
+      PORT: "8080"
+    ports:
+      - "${FE_PORT:-8080}:8080"
+    depends_on:
+      - blog_be
+
 volumes:
-  db:
-    driver: local
+  postgres_data:

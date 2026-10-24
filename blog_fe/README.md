@@ -1,6 +1,18 @@
+## Running locally or with Docker
+
+The [root README](../README.md) explains both run modes. For a local frontend,
+run `npm ci` and `npm start` from `blog_fe/`. The development server listens on
+port 8080 by default; set `PORT` to change it. The browser uses
+`BLOG_API_URL` for backend requests (default: `http://localhost:8000`). For
+example, `BLOG_API_URL=http://localhost:8001 npm start` points it to another
+local backend port. In Docker Compose, `BLOG_API_URL` comes from
+`blog_be/.env`; it must be a URL the browser can reach, not the Docker service
+name. The frontend container serves on port 8080 internally and `FE_PORT`
+selects its published host port.
+
 ## Launching the application
 
-The application is launched using the address [http://localhost:8080/](http://localhost:8080/) (after local deployment) or using the address [https://nafrelim-blog.herokuapp.com](https://nafrelim-blog.herokuapp.com/). If the application was running on a different port, this port must be changed in the invocation address.
+By default, the application is available at [http://localhost:8080/](http://localhost:8080/). If you change `FE_PORT` (Docker) or `PORT` (local), use that port in the browser address.
 
 > For the add, edit and delete functions to work properly, you must log in to the bloge_be application (**see:** information in the [blog_be README file](../blog_be/README.md)).
 

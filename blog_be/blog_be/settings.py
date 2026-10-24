@@ -103,7 +103,7 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         "HOST": env("DB_HOST"),
-        "PORT": env("DOCKER_DB_PORT"),
+        "PORT": env("DB_PORT", default="5432"),
         "NAME": env("DB_NAME"),
         "USER": env("DB_USER"),
         "PASSWORD": env("DB_PASSWORD"),
@@ -182,13 +182,14 @@ DOC_EXPANSION = "full"
 JSON_EDITOR = True
 SHOW_REQUEST_HEADERS = True
 
-ALLOWED_HOSTS = ["*"]
-CSRF_TRUSTED_ORIGINS = ["http://localhost", "http://localhost:8080", "http://localhost:8000"]
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["localhost", "127.0.0.1"])
+FRONTEND_ORIGINS = env.list("FRONTEND_ORIGINS", default=["http://localhost:8080"])
+CSRF_TRUSTED_ORIGINS = FRONTEND_ORIGINS
 CSRF_COOKIE_HTTPONLY = False
 CSRF_USE_SESSIONS = False
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:8080", "http://localhost:8000", "http://localhost"]
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = FRONTEND_ORIGINS
+CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOW_METHODS = [

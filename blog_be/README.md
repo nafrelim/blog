@@ -20,6 +20,23 @@ Compose loads `.env` into the backend container at runtime, and the Docker
 build excludes local environment files. The image generates static assets
 during its build.
 
+## Local and Docker development
+
+The [root README](../README.md) has commands for both supported modes. In
+local mode, Django reads `DB_HOST` and `DB_PORT` from `.env` and connects to a
+PostgreSQL server installed on the host. In Docker mode, Compose starts a
+separate PostgreSQL instance and overrides the backend's database endpoint
+with `db:5432`. Its database is stored in a named volume and is not published
+to the host. `DB_NAME`, `DB_USER`, and `DB_PASSWORD` configure the selected
+database in either mode. `DATABASE_URL`, when supplied to Django, still takes
+precedence over these separate settings.
+
+`BE_PORT` and `FE_PORT` select the host ports in Compose. Keep `BLOG_API_URL`
+and `FRONTEND_ORIGINS` aligned with them: the former is compiled into the
+browser's frontend bundle, while the latter controls Django's allowed browser
+origins. For local `runserver`, supply `BE_PORT` explicitly on its command
+line. Do not use a production secret in `.env.dev` or commit `.env`.
+
 ## Endpoints REST API
 
 The application provides the main API using the address [http://localhost:8000/](http://localhost:8000/) (after local deployment).

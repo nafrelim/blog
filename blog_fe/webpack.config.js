@@ -1,4 +1,5 @@
 const path = require("path");
+const webpack = require("webpack");
 const entryPath = "src"
 var CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 
@@ -13,6 +14,9 @@ module.exports = {
   },
   plugins: [
         new CaseSensitivePathsPlugin(),
+        new webpack.DefinePlugin({
+          "process.env.BLOG_API_URL": JSON.stringify(process.env.BLOG_API_URL || "http://localhost:8000"),
+        }),
     ],
   mode: "development",
   devtool: "source-map",
@@ -22,6 +26,7 @@ module.exports = {
     //   publicPath: "/",
     // },
     compress: true,
+    host: "0.0.0.0",
     port: process.env.PORT || 8080,
     allowedHosts: [
       // '.heroku.com',
