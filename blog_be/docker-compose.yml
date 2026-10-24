@@ -25,6 +25,8 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
+    env_file:
+      - .env
     command: python manage.py runserver localhost:${DOCKER_BE_PORT}
     environment:
       - TZ=Europe/Warsaw

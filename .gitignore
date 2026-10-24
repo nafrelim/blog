@@ -1,0 +1,9 @@
+# Local environment files. Keep only the sanitized backend template in Git.
+.env
+.env.*
+!blog_be/.env.dev
+
+# IDE state and generated output.
+.idea/
+*.iml
+blog_be/staticfiles/
