@@ -5,11 +5,6 @@ from drf_spectacular.views import (
     SpectacularRedocView,
     SpectacularSwaggerView,
 )
-from rest_framework.schemas import get_schema_view
-from rest_framework_swagger.views import get_swagger_view
-
-swagger_schema_view = get_swagger_view(title="CTV BLOG API")
-schema_view = get_schema_view(title="CTV BLOG API")
 
 urlpatterns = [
     path("admin/", admin.site.urls),

@@ -1,3 +1,19 @@
+## Python dependencies
+
+Use Python 3.14. `requirements.in` lists direct dependencies and
+`requirements.txt` is the generated, pinned dependency set. Run these
+commands from `blog_be/` in the project virtual environment:
+
+```sh
+.venv/bin/python -m pip install --upgrade pip-tools
+.venv/bin/python -m piptools compile --upgrade requirements.in
+.venv/bin/python -m piptools sync requirements.txt
+```
+
+Run `piptools sync` only inside this project's virtual environment: it removes
+installed packages that are not in the lockfile. Docker installs from the same
+`requirements.txt`. Django 6.1 requires PostgreSQL 15 or newer.
+
 ## Endpoints REST API
 
 The application provides the main API using the address [http://localhost:8000/](http://localhost:8000/) (after local deployment).
@@ -140,4 +156,3 @@ User data update.
 User password update.
 
 * POST (only for the logged in user and only for his profile)
-

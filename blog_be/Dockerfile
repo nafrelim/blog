@@ -1,9 +1,9 @@
-FROM python:3
+FROM python:3.14
 ENV PYTHONUNBUFFERED=1
 
 WORKDIR /blog
 
-COPY requirements.txt .
+COPY requirements.txt ./
 RUN pip install -r requirements.txt
 COPY . .
 #ADD manage.py /blog-be
@@ -17,4 +17,3 @@ COPY . .
 EXPOSE ${BE_PORT}
 #CMD ["python", "manage.py", "runserver", "0.0.0.0:${BE_PORT}", "pytest"]
 #RUN python manage.py runserver
-

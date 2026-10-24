@@ -1,0 +1,19 @@
+Django>=6.1,<6.2
+APScheduler
+dj-database-url
+django-allauth
+django-cors-headers
+django-environ
+django-silk
+djangorestframework
+djangorestframework-simplejwt
+drf-spectacular
+Faker
+gunicorn
+psycopg2-binary
+whitenoise
+
+# Local dependency management and API tests.
+pip-tools
+pytest
+pytest-django
