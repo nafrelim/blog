@@ -6,11 +6,10 @@ import Box from '@mui/material/Box';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from "axios";
 import {API} from "../blog_be";
 import {useNavigate} from "react-router-dom";
-import {Stack, TextareaAutosize} from "@mui/material";
+import {Stack} from "@mui/material";
 import jwt_decode from "jwt-decode";
 
 import Error from "./Error";
@@ -18,8 +17,6 @@ import Copyright from "./Copyright";
 import TokenRefresh from "./TokenRefresh";
 import Editor from "./Editor";
 
-
-const theme = createTheme();
 
 const AddPost = () => {
     const [title, setPost_title] = useState("");
@@ -47,27 +44,29 @@ const AddPost = () => {
         event.preventDefault();
         // Save a post when fields are not empty
         if (title.length > 0 && content.length > 0) {
-            await axios(`${API}/api/post/`, {
-                method: 'POST',
-                headers: {
+            setError([]);
+            try {
+                await axios(`${API}/api/post/`, {
+                    method: 'POST',
+                    headers: {
                         'accept': 'application/json',
                         'content-Type': 'application/json',
                         'authorization': 'Bearer ' + localStorage.getItem('token'),
-                },
-                data: {
-                    'title': title,
-                    'content': content,
-                    'author': jwt_decode(localStorage.getItem('token')).username,
+                    },
+                    data: {
+                        'title': title,
+                        'content': content,
+                        'author': jwt_decode(localStorage.getItem('token')).username,
+                    }
+                });
+                navigate("/post", { replace: true });
+            } catch (error) {
+                if (error.response?.status === 401 || error.response?.status === 403) {
+                    navigate("/login", { replace: true });
+                    return;
                 }
-            })
-                .then(response => {setData(true)})
-                .catch(error => setError(prevState => {
-                    if (error.response.status == 401 || error.response.status == 403) {
-                            navigate("/#", {replace: true});
-                        }
-                    return [...prevState, [0, 'Network error']]
-                }));
-            navigate("/post", { replace: true });
+                setError([[0, error.response?.data?.detail || 'Could not add post. Please try again.']]);
+            }
         }
         else {
             // Clearing error list

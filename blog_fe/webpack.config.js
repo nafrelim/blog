@@ -1,5 +1,6 @@
 const path = require("path");
 const webpack = require("webpack");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 const entryPath = "src"
 var CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 
@@ -14,6 +15,7 @@ module.exports = {
   },
   plugins: [
         new CaseSensitivePathsPlugin(),
+        new HtmlWebpackPlugin({ template: "./public/index.html" }),
         new webpack.DefinePlugin({
           "process.env.BLOG_API_URL": JSON.stringify(process.env.BLOG_API_URL || "http://localhost:8000"),
         }),
